@@ -7,7 +7,7 @@ st.write("# Hello, form! :wave:")
 
 today = datetime.date.today()
 
-with st.form('greet_form', clear_on_submit=True):
+with st.form('greet_form'):
     first_name = st.text_input('First Name')
     last_name = st.text_input('Last Name')
     state = st.selectbox("Home State", ['', 'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'])
@@ -26,8 +26,10 @@ with st.form('greet_form', clear_on_submit=True):
         elif state == '':
             st.warning("Please select a state")
             st.stop()
-        elif birthday == '' or birthday == None:
+        elif birthday == today or birthday == None:
             st.warning("Please select a birth date")
             st.stop()
         else:
             st.write(f"Hello, {first_name} {last_name} from {state}. You are {age} years old")
+            st.write(f"{today} is today. {birthday} is your birthday")
+            st.snow()
