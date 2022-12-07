@@ -11,7 +11,7 @@ with st.form('greet_form'):
     first_name = st.text_input('First Name')
     last_name = st.text_input('Last Name')
     state = st.selectbox("Home State", ['', 'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'])
-    birthday = st.date_input('Birth Date')
+    birthday = st.date_input('Birth Date', min_value=datetime.date(1900, 1, 1))
 
     age = math.floor((today - birthday) / datetime.timedelta(days=365))
 
@@ -31,5 +31,6 @@ with st.form('greet_form'):
             st.stop()
         else:
             st.write(f"Hello, {first_name} {last_name} from {state}. You are {age} years old")
-            st.write(f"{today} is today. {birthday} is your birthday")
             st.snow()
+            first_name = ''
+            last_name = ''
