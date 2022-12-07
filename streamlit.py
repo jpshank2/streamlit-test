@@ -19,7 +19,7 @@ def run_query(query):
         cur.execute(query)
         return cur.fetchall()
 
-rows = run_query("SELECT TOP 100 * FROM BMSS_SSMS_JSON;")
+rows = run_query("SELECT TOP 10 * FROM BMSS_SSMS_JSON;")
 
 for row in rows:
     st.write(f"{row[0]} has a :{row[1]}:")
