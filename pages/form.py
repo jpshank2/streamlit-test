@@ -5,7 +5,7 @@ import math, datetime
 
 st.write("# Hello, form! :wave:")
 
-today = datetime.datetime.now()
+today = datetime.date.now()
 
 with st.form('greet_form', clear_on_submit=True):
     first_name = st.text_input('First Name')
