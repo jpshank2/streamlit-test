@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import snowflake.connector
 
-st.write("# Hello, build! :wave:")
+st.write("# Hello, home! :wave:")
 
 @st.experimental_singleton
 def init_connection():
@@ -19,7 +19,14 @@ def run_query(query):
         cur.execute(query)
         return cur.fetchall()
 
-rows = run_query("SELECT TOP 10 * FROM BMSS_SSMS_JSON;")
+try:
+    rows = run_query("SELECT TOP 10 * FROM BMSS_SSMS_JSON;")
 
-for row in rows:
-    st.write(f"{row[0]} has a :{row[1]}:")
+    for row in rows:
+        st.write(f"{row[0]} has a :{row[1]}:")
+
+except Exception as e:
+    st.write(e)
+
+finally:
+    conn.close()
