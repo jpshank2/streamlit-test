@@ -13,7 +13,7 @@ with st.form('greet_form', clear_on_submit=True):
     state = st.selectbox("Home State", ['', 'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'])
     birthday = st.date_input('Birth Date')
 
-    age = math.floor((today - birthday) / pd.timedelta(days=365))
+    age = math.floor((today - birthday) / datetime.timedelta(days=365))
 
     submitted = st.form_submit_button("Greet!")
     if submitted:
