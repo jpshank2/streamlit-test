@@ -1,9 +1,9 @@
 import streamlit as st
-from crontab import CronTab
 import smtplib, datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+@st.experimental_memo(ttl=43200)
 def emailMe():
     try:
         msg = MIMEMultipart('alternative')
@@ -31,9 +31,7 @@ st.snow()
 
 st.write("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
 
-cron = CronTab(user=None)
-
-job = cron.new(command=emailMe)
-job.hour.every(12)
-
-cron.write()
+try:
+    emailMe()
+except Exception as e:
+    st.error(e)

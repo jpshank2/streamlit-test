@@ -5,7 +5,7 @@ import snowflake.connector
 
 st.write("# Hello, wip! :wave:")
 
-@st.experimental_singleton
+#@st.experimental_singleton
 def init_connection():
     return snowflake.connector.connect(
         **st.secrets["snowflake"], client_session_keep_alive=True
@@ -15,7 +15,6 @@ conn = init_connection()
 
 @st.experimental_memo(ttl=600)
 def run_query(query):
-    
     conn = init_connection()
 
     with conn.cursor() as cur:
