@@ -15,11 +15,11 @@ def init_connection():
 
 @st.experimental_memo(ttl=600)
 def run_query(query):
+    global conn
     conn = init_connection()
 
     with conn.cursor() as cur:
         cur.execute(query)
-        conn.close()
         return cur.fetchall()
 
 try:
@@ -30,3 +30,6 @@ try:
 
 except Exception as e:
     st.write(e)
+
+finally:
+    conn.close()
