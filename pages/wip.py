@@ -19,6 +19,7 @@ def run_query(query):
 
     with conn.cursor() as cur:
         cur.execute(query)
+        conn.close()
         return cur.fetchall()
 
 try:
@@ -29,6 +30,3 @@ try:
 
 except Exception as e:
     st.write(e)
-
-finally:
-    conn.close()
