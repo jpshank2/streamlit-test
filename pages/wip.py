@@ -11,7 +11,7 @@ def init_connection():
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 
-conn = init_connection()
+# conn = init_connection()
 
 @st.experimental_memo(ttl=600)
 def run_query(query):
