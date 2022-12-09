@@ -1,9 +1,8 @@
 import streamlit as st
-import smtplib, datetime
+import smtplib, datetime, schedule
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-@st.experimental_memo(ttl=43200)
 def emailMe():
     try:
         msg = MIMEMultipart('alternative')
@@ -32,6 +31,6 @@ st.snow()
 st.write("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
 
 try:
-    emailMe()
+    schedule.every(12).hours.do(emailMe)
 except Exception as e:
     st.error(e)
