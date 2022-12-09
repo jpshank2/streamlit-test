@@ -31,6 +31,6 @@ with st.form('greet_form'):
             st.stop()
         else:
             st.write(f"Hello, {first_name} {last_name} from {state}. You are {age} years old")
-            st.snow()
+            st.balloons()
             first_name = ''
             last_name = ''
