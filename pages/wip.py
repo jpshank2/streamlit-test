@@ -66,7 +66,7 @@ try:
     else:
         office_partner_AR = rows[rows['OFFICE'] == levels[0]]
         office_partner_AR = office_partner_AR[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
-        levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_office_AR.CLIENTPARTNER.unique()]))
+        levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_partner_AR.CLIENTPARTNER.unique()]))
 
         office_AR_DF = office_partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
         yVal = 'CLIENTPARTNER'
