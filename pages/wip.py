@@ -63,7 +63,7 @@ try:
         if level == 'All':
             levels[idx] = slice(None)
 
-    st.write(levels[0])
+    st.write(type(levels[0]))
     st.write(levels[1])
     st.write(levels[2])
 
