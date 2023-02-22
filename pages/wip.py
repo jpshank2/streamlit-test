@@ -44,7 +44,7 @@ try:
     office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
     # office_office_AR.set_index('OFFICE')
     # office_office_AR.columns = ['Office', 'DEBTTRANUNPAID']
-    office_office_AR = office_office_AR.groupby('OFFICE', as_index=True).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum'))#.reset_index()
+    office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum'))#.reset_index()
 
     st.write(office_office_AR)
 
@@ -53,7 +53,7 @@ try:
     # office_client_AR = office_client_AR.groupby('Client', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
     
     levels = [
-        st.selectbox('Office', ['All'] + [i for i in office_office_AR.index.unique()])
+        st.selectbox('Office', ['All'] + [i for i in office_office_AR.OFFICE.unique()])
     ]
 
     # for idx, level in enumerate(levels):
