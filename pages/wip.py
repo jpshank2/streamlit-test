@@ -40,7 +40,7 @@ try:
     officeIndex = pd.MultiIndex.from_frame(office_AR)
     office_AR.index = officeIndex
     office_AR.index.set_names(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], inplace=True)
-    office_AR = office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    # office_AR = office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
     levels = [
         st.selectbox('Level 1', ['All'] + [i for i in office_AR.index.get_level_values(0).unique()]),
         st.selectbox('Level 2', ['All'] + [i for i in office_AR.index.get_level_values(1).unique()]),
