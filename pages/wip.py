@@ -51,7 +51,7 @@ try:
     # office_client_AR = office_client_AR.groupby('Client', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
     
     levels = [
-        st.selectbox('Office', ['All'] + [i for i in office_office_AR.index.get_level_values(0).unique()])
+        st.selectbox('Office', ['All'] + [i for i in office_office_AR.index.unique()])
     ]
 
     # for idx, level in enumerate(levels):
