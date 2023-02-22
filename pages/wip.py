@@ -72,7 +72,7 @@ try:
         yVal = 'CLIENTPARTNER'
 
         if levels[1] != 'All':
-            office_AR_DF = rows[rows['OFFICE'] == levels[0] & rows['CLIENTPARTNER'] == levels[1]]
+            office_AR_DF = rows[(rows['OFFICE'] == levels[0]) & (rows['CLIENTPARTNER'] == levels[1])]
             office_AR_DF = office_AR_DF[['CLIENT', 'DEBTTRANUNPAID']]
             office_AR_DF = office_AR_DF.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
             yVal = 'CLIENT'
