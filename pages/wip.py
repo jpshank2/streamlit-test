@@ -19,7 +19,11 @@ def run_query(query):
         cur.execute(query)
         rows = cur.fetchall()
         columns = [column[0] for column in cur.description]
-        return columns#pd.DataFrame(cur.fetchall())
+        results = list
+        for row in rows:
+            results.append(dict(zip(columns, row)))
+        
+        return pd.DataFrame(results)
 
 try:
     rows = run_query("SELECT top 10 * from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex;")
