@@ -26,9 +26,9 @@ def run_query(query):
         return pd.DataFrame(results)
 
 try:
-    rows = run_query("SELECT * from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex;")
+    rows = run_query("SELECT AR.*, C.*, D.AGING_PERIOD from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE WHERE DEBTTRANUNPAID <> 0;")
 
-    # Print results.
+    # Print resultant columns.
     st.write(rows.columns)
 
     office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']].copy()
@@ -37,7 +37,11 @@ try:
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
-    partner_AR = partner_AR[partner_AR['OUTSTANDING_AR'] != 0]
+    # partner_AR = partner_AR[partner_AR['OUTSTANDING_AR'] != 0]
     st.bar_chart(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR')
+
+    aging_AR = rows[['AGING_PERIOD', 'DEBTTRANUNPAID']].copy()
+    aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    st.write(aging_AR)
 except Exception as e:
     print(st.write(e))
