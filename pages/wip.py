@@ -62,7 +62,7 @@ try:
 
     if levels[0] == 'All':
         office_AR_DF = office_office_AR
-        yVal = 'Office'
+        yVal = 'OFFICE'
     else:
         office_AR_DF = rows[rows['OFFICE'] == levels[0]]
         office_AR_DF = office_AR_DF[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
