@@ -19,7 +19,7 @@ def run_query(query):
         cur.execute(query)
         rows = cur.fetchall()
         columns = [column[0] for column in cur.description]
-        results = list
+        results = list()
         for row in rows:
             results.append(dict(zip(columns, row)))
         
