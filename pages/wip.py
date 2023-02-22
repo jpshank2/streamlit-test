@@ -19,10 +19,13 @@ def run_query(query):
         cur.execute(query)
         return cur.fetch_pandas_all()
 
-rows = run_query("SELECT top 10 * from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex;")
+try:
+    rows = run_query("SELECT top 10 * from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex;")
 
-# Print results.
-# st.dataframe(rows)
-for row in rows:
-    st.write(f"{row}")
+    # Print results.
+    # st.dataframe(rows)
 
+    for row in rows:
+        st.write(f"{row}")
+except Exception as e:
+    print(st.write(e))
