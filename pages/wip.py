@@ -63,14 +63,10 @@ try:
     #     if level == 'All':
     #         levels[idx] = slice(None)
 
-    st.write(type(levels[0]))
-    st.write(levels[1])
-    st.write(levels[2])
-
-    if levels[0] == None:
+    if levels[0] == 'All':
         office_AR_DF = office_office_AR
         yVal = 'Office'
-    elif levels[1] == None:
+    elif levels[1] == 'All':
         office_AR_DF = office_partner_AR
         yVal = 'Client Partner'
     else:
