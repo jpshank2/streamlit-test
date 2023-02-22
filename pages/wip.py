@@ -59,7 +59,10 @@ try:
         )
     )
 
-    st.bar_chart(office_AR, x='OFFICE', y='DEBTTRANUNPAID')
+    st.bar_chart(office_AR.xs(
+            (levels[0], levels[1], levels[2]),
+            level=['OFFICE', 'CLIENTPARTNER', 'CLIENT']
+        ), x='OFFICE', y='DEBTTRANUNPAID')
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
