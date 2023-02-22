@@ -59,9 +59,9 @@ try:
         st.selectbox('Client', ['All'] + [i for i in office_AR_VIZ.index.get_level_values(2).unique()])
     ]
 
-    for idx, level in enumerate(levels):
-        if level == 'All':
-            levels[idx] = slice(None)
+    # for idx, level in enumerate(levels):
+    #     if level == 'All':
+    #         levels[idx] = slice(None)
 
     st.write(type(levels[0]))
     st.write(levels[1])
