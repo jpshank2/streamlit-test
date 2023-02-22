@@ -30,9 +30,13 @@ try:
 
     # Print results.
     st.write(rows.columns)
-    office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']].copy()
 
+    office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']].copy()
     office_AR = office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
     st.bar_chart(office_AR, x='OFFICE', y='OUTSTANDING_AR')
+
+    partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
+    partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    st.bar_chart(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR')
 except Exception as e:
     print(st.write(e))
