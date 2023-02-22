@@ -43,7 +43,8 @@ try:
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
     # partner_AR = partner_AR[partner_AR['OUTSTANDING_AR'] != 0]
-    st.bar_chart(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR')
+    # st.bar_chart(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR')
+    st.write(px.bar(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR', orientation='h'))
 
     aging_AR = rows[['AGING_PERIOD_SORT', 'OG_PERIOD', 'DEBTTRANUNPAID']].copy()
     aging_AR['AGING_PERIOD'] = np.where(aging_AR['AGING_PERIOD_SORT'] < 4, aging_AR['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
