@@ -22,6 +22,7 @@ def run_query(query):
 rows = run_query("SELECT top 10 * from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex;")
 
 # Print results.
+st.dataframe(rows)
 for row in rows:
     st.write(f"{row}")
 
