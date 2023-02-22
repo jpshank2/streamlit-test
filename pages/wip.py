@@ -63,6 +63,7 @@ try:
     if levels[0] == 'All':
         office_AR_DF = office_office_AR
         yVal = 'OFFICE'
+        title = 'AR by Office w/ drilldown'
     else:
         office_partner_AR = rows[rows['OFFICE'] == levels[0]]
         office_partner_AR = office_partner_AR[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
@@ -70,14 +71,16 @@ try:
 
         office_AR_DF = office_partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
         yVal = 'CLIENTPARTNER'
+        title = levels[0] + ' AR by Client Partner w/ drilldown'
 
         if levels[1] != 'All':
             office_AR_DF = rows[(rows['OFFICE'] == levels[0]) & (rows['CLIENTPARTNER'] == levels[1])]
             office_AR_DF = office_AR_DF[['CLIENT', 'DEBTTRANUNPAID']]
             office_AR_DF = office_AR_DF.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
             yVal = 'CLIENT'
+            title = f'{levels[1]}\'s {levels[0]} AR by Client w/ drilldown'
             
-    st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title='AR by Office w/ drilldown'))
+    st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title))
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
