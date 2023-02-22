@@ -64,13 +64,13 @@ try:
 
     if levels[0] == 'All':
         office_AR_DF = office_office_AR
-        yVal = 'OFFICE'
+        yVal = 'Office'
     elif levels[1] == 'All':
         office_AR_DF = office_partner_AR
-        yVal = 'CLIENTPARTNER'
+        yVal = 'Client Partner'
     else:
         office_AR_DF = office_client_AR
-        yVal = 'CLIENT'
+        yVal = 'Client'
 
     st.write(px.bar(office_AR_DF
         # office_AR_VIZ.xs(
