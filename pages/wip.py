@@ -40,13 +40,19 @@ try:
     officeIndex = pd.MultiIndex.from_frame(rows[['OFFICE', 'CLIENTPARTNER', 'CLIENT']])
     office_AR_VIZ.index = officeIndex
     office_AR_VIZ.index.set_names(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], inplace=True)
+
     office_office_AR = office_AR_VIZ[['OFFICE', 'DEBTTRANUNPAID']]
-    office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+    office_office_AR.columns = ['Office', 'DEBTTRANUNPAID']
+    office_office_AR = office_office_AR.groupby('Office', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+
     office_partner_AR = office_AR_VIZ[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
-    office_partner_AR = office_partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+    office_partner_AR.columns = ['Client Partner', 'DEBTTRANUNPAID']
+    office_partner_AR = office_partner_AR.groupby('Client Partner', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+
     office_client_AR = office_AR_VIZ[['CLIENT', 'DEBTTRANUNPAID']]
-    office_client_AR = office_client_AR.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-    # office_AR_VIZ = office_AR_VIZ.groupby(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    office_client_AR.columns = ['Client', 'DEBTTRANUNPAID']
+    office_client_AR = office_client_AR.groupby('Client', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+    
     levels = [
         st.selectbox('Office', ['All'] + [i for i in office_AR_VIZ.index.get_level_values(0).unique()]),
         st.selectbox('Client Partner', ['All'] + [i for i in office_AR_VIZ.index.get_level_values(1).unique()]),
