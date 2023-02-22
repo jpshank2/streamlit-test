@@ -30,8 +30,8 @@ try:
 
     # Print results.
     st.write(rows)
-
-    # for row in rows:
-    #     st.write(f"{row}")
+    office_AR = rows['OFFICE', 'DEBTTRANUNPAID']
+    office_AR = office_AR.groupby('OFFICE', as_index=False).agg(Oustanding_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    st.write(office_AR)
 except Exception as e:
     print(st.write(e))
