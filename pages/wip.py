@@ -54,7 +54,7 @@ try:
 
     st.dataframe(
         office_AR.xs(
-            (levels[0], levels[1]),
+            (levels[0], levels[1], levels[2]),
             level=['OFFICE', 'CLIENTPARTNER', 'CLIENT']
         )
     )
