@@ -58,9 +58,14 @@ try:
         st.selectbox('Client Partner', ['All'] + [i for i in office_AR_VIZ.index.get_level_values(1).unique()]),
         st.selectbox('Client', ['All'] + [i for i in office_AR_VIZ.index.get_level_values(2).unique()])
     ]
+
     for idx, level in enumerate(levels):
         if level == 'All':
             levels[idx] = slice(None)
+
+    st.write(levels[0])
+    st.write(levels[1])
+    st.write(levels[2])
 
     if levels[0] == 'All':
         office_AR_DF = office_office_AR
