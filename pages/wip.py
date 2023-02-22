@@ -67,10 +67,10 @@ try:
     st.write(levels[1])
     st.write(levels[2])
 
-    if levels[0] == 'All':
+    if levels[0] == None:
         office_AR_DF = office_office_AR
         yVal = 'Office'
-    elif levels[1] == 'All':
+    elif levels[1] == None:
         office_AR_DF = office_partner_AR
         yVal = 'Client Partner'
     else:
