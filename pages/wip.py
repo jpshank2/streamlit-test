@@ -30,8 +30,9 @@ try:
 
     # Print results.
     st.write(rows.columns)
-    office_AR = rows['OFFICE', 'DEBTTRANUNPAID']
-    office_AR = office_AR.groupby('OFFICE', as_index=False).agg(Oustanding_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    office_AR = rows['OFFICE', 'DEBTTRANUNPAID'].copy()
+    
+    # office_AR = office_AR.groupby('OFFICE', as_index=False).agg(Oustanding_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
     st.write(office_AR)
 except Exception as e:
     print(st.write(e))
