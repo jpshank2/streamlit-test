@@ -37,6 +37,7 @@ try:
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    partner_AR = partner_AR[partner_AR['OUSTANDING_AR' != 0]]
     st.bar_chart(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR')
 except Exception as e:
     print(st.write(e))
