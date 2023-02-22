@@ -80,7 +80,7 @@ try:
             yVal = 'CLIENT'
             title = f'{levels[1]}\'s {levels[0]} AR by Client w/ drilldown'
             
-    st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title))
+    st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title, text='OUTSTANDING_AR'))
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
