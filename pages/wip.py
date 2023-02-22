@@ -42,9 +42,9 @@ try:
     # office_AR_VIZ.index.set_names(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], inplace=True)
 
     office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
-    office_office_AR.set_index('OFFICE')
-    office_office_AR.columns = ['Office', 'DEBTTRANUNPAID']
-    office_office_AR = office_office_AR.groupby('Office', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum'))#.reset_index()
+    # office_office_AR.set_index('OFFICE')
+    # office_office_AR.columns = ['Office', 'DEBTTRANUNPAID']
+    office_office_AR = office_office_AR.groupby('OFFICE', as_index=True).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum'))#.reset_index()
 
     st.write(office_office_AR)
 
