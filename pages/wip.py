@@ -44,7 +44,7 @@ try:
     office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
     # office_office_AR.set_index('OFFICE')
     # office_office_AR.columns = ['Office', 'DEBTTRANUNPAID']
-    office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum'))#.reset_index()
+    office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
 
     st.write(office_office_AR)
 
@@ -64,13 +64,19 @@ try:
         office_AR_DF = office_office_AR
         yVal = 'OFFICE'
     else:
-        office_AR_DF = rows[rows['OFFICE'] == levels[0]]
-        office_AR_DF = office_AR_DF[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
-        office_AR_DF.index = office_AR_DF['CLIENTPARTNER']
-        levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_AR_DF.index.get_level_values(0).unique()]))
-        office_AR_DF.columns = ['Client Partner', 'DEBTTRANUNPAID']
-        office_AR_DF = office_AR_DF.groupby('Client Partner', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-        yVal = 'Client Partner'
+        office_partner_AR = rows[rows['OFFICE'] == levels[0]]
+        office_partner_AR = office_partner_AR[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
+        levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_office_AR.CLIENTPARTNER.unique()]))
+
+        office_AR_DF = office_partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+        yVal = 'CLIENTPARTNER'
+        # office_AR_DF = rows[rows['OFFICE'] == levels[0]]
+        # office_AR_DF = office_AR_DF[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
+        # office_AR_DF.index = office_AR_DF['CLIENTPARTNER']
+        # levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_AR_DF.index.get_level_values(0).unique()]))
+        # office_AR_DF.columns = ['Client Partner', 'DEBTTRANUNPAID']
+        # office_AR_DF = office_AR_DF.groupby('Client Partner', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+        # yVal = 'Client Partner'
 
     # elif levels[1] == 'All':
     #     office_AR_DF = office_partner_AR
