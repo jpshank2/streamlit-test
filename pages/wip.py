@@ -37,7 +37,7 @@ try:
     st.write(rows.columns)
 
     office_AR = rows[['OFFICE', 'DEBTTRANUNPAID', 'CLIENTPARTNER', 'CLIENT']].copy()
-    officeIndex = pd.MultiIndex.from_frame(office_AR)
+    officeIndex = pd.MultiIndex.from_frame(rows[['OFFICE', 'CLIENTPARTNER', 'CLIENT']])
     office_AR.index = officeIndex
     office_AR.index.set_names(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], inplace=True)
     # office_AR = office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
