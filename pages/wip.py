@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import snowflake.connector
+import plotly.express as px
 
 st.write("# Hello, AR! :wave:")
 
@@ -45,9 +46,10 @@ try:
     st.bar_chart(partner_AR, x='CLIENTPARTNER', y='OUTSTANDING_AR')
 
     aging_AR = rows[['AGING_PERIOD_SORT', 'OG_PERIOD', 'DEBTTRANUNPAID']].copy()
-    aging_AR['AGING_PERIOD'] = np.where(aging_AR['AGING_PERIOD_SORT'] < 4, aging_AR['OG_PERIOD'] + ' - AR', 'Overdue 90+ AR')
+    aging_AR['AGING_PERIOD'] = np.where(aging_AR['AGING_PERIOD_SORT'] < 4, aging_AR['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
     aging_AR = aging_AR[['AGING_PERIOD', 'DEBTTRANUNPAID']]
     aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD'))
     st.write(aging_AR)
 except Exception as e:
     print(st.write(e))
