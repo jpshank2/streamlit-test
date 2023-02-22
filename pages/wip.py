@@ -40,7 +40,7 @@ try:
     officeIndex = pd.MultiIndex.from_frame(rows[['OFFICE', 'CLIENTPARTNER', 'CLIENT']])
     office_AR.index = officeIndex
     office_AR.index.set_names(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], inplace=True)
-    office_AR = office_AR.groupby(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+    # office_AR = office_AR.groupby(['OFFICE', 'CLIENTPARTNER', 'CLIENT'], as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
     levels = [
         st.selectbox('Level 1', ['All'] + [i for i in office_AR.index.get_level_values(0).unique()]),
         st.selectbox('Level 2', ['All'] + [i for i in office_AR.index.get_level_values(1).unique()]),
@@ -59,10 +59,15 @@ try:
         )
     )
 
-    st.bar_chart(office_AR.xs(
+    # st.bar_chart(office_AR.xs(
+    #         (levels[0], levels[1], levels[2]),
+    #         level=['OFFICE', 'CLIENTPARTNER', 'CLIENT']
+    #     ), x='OFFICE', y='OUTSTANDING_AR')
+
+    st.write(px.bar(office_AR.xs(
             (levels[0], levels[1], levels[2]),
             level=['OFFICE', 'CLIENTPARTNER', 'CLIENT']
-        ), x='OFFICE', y='OUTSTANDING_AR')
+        ), x='DEBTTRANUNPAID', y='OFFICE', orientation='h', barmode='group'))
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
