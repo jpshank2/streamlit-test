@@ -3,33 +3,25 @@ import numpy as np
 import pandas as pd
 import snowflake.connector
 
-st.write("# Hello, wip! :wave:")
+st.write("# Hello, AR! :wave:")
 
-#@st.experimental_singleton
+@st.cache_resource
 def init_connection():
     return snowflake.connector.connect(
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 
-# conn = init_connection()
+conn = init_connection()
 
-@st.experimental_memo(ttl=600)
+@st.cache_data(ttl=3600)
 def run_query(query):
-    global conn
-    conn = init_connection()
-
     with conn.cursor() as cur:
         cur.execute(query)
-        return cur.fetchall()
+        return pd.DataFrame(cur.fetchall())
 
-try:
-    rows = run_query("SELECT TOP 10 * FROM SSMS_JSON;")
+rows = run_query("SELECT top 10 * from TRANS_AR AR INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex;")
 
-    for row in rows:
-        st.write(f"{row[0]} has a :{row[1]}:")
+# Print results.
+for row in rows:
+    st.write(f"{row[0]} has a :{row[1]}:")
 
-except Exception as e:
-    st.write(e)
-
-finally:
-    conn.close()
