@@ -34,7 +34,7 @@ try:
         WHERE DEBTTRANUNPAID <> 0;""")
 
     # Print resultant columns.
-    st.write(rows.columns)
+    # st.write(rows.columns)
 
     # office_AR_VIZ = rows[['OFFICE', 'DEBTTRANUNPAID', 'CLIENTPARTNER', 'CLIENT']].copy()
     # officeIndex = pd.MultiIndex.from_frame(rows[['OFFICE', 'CLIENTPARTNER', 'CLIENT']])
@@ -46,7 +46,7 @@ try:
     # office_office_AR.columns = ['Office', 'DEBTTRANUNPAID']
     office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
 
-    st.write(office_office_AR)
+    # st.write(office_office_AR)
 
     # office_client_AR = office_AR_VIZ[['CLIENT', 'DEBTTRANUNPAID']]
     # office_client_AR.columns = ['Client', 'DEBTTRANUNPAID']
@@ -78,27 +78,7 @@ try:
             yVal = 'CLIENT'
             
 
-        # office_AR_DF = rows[rows['OFFICE'] == levels[0]]
-        # office_AR_DF = office_AR_DF[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
-        # office_AR_DF.index = office_AR_DF['CLIENTPARTNER']
-        # levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_AR_DF.index.get_level_values(0).unique()]))
-        # office_AR_DF.columns = ['Client Partner', 'DEBTTRANUNPAID']
-        # office_AR_DF = office_AR_DF.groupby('Client Partner', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-        # yVal = 'Client Partner'
-
-    # elif levels[1] == 'All':
-    #     office_AR_DF = office_partner_AR
-    #     yVal = 'Client Partner'
-    # else:
-    #     office_AR_DF = office_client_AR
-    #     yVal = 'Client'
-
-    st.write(px.bar(office_AR_DF
-        # office_AR_VIZ.xs(
-        #     (levels[0], levels[1], levels[2]),
-        #     level=['OFFICE', 'CLIENTPARTNER', 'CLIENT']
-        # )
-        , x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group'))
+    st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group'))
 
     partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
     partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
@@ -111,7 +91,7 @@ try:
     aging_AR = aging_AR[['AGING_PERIOD', 'DEBTTRANUNPAID']]
     aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
     st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD'))
-    st.write(aging_AR)
+    # st.write(aging_AR)
 
 
     # First, let's set up the multi index with 2 levels:
