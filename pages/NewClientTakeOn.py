@@ -2,7 +2,27 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import math, datetime
+import snowflake.connector
 
+@st.cache_resource
+def init_connection():
+    return snowflake.connector.connect(
+        **st.secrets["snowflake"], client_session_keep_alive=True
+    )
+
+conn = init_connection()
+
+@st.cache_data(ttl=3600)
+def run_query(query):
+    with conn.cursor() as cur:
+        cur.execute(query)
+        rows = cur.fetchall()
+        columns = [column[0] for column in cur.description]
+        results = list()
+        for row in rows:
+            results.append(dict(zip(columns, row)))
+        
+        return pd.DataFrame(results)
 st.write("# Hello, form! :wave:")
 
 today = datetime.date.today()
