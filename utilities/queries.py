@@ -8,7 +8,8 @@ def run_query(query, _conn, rows):
     finalList = list()
     for i in range(iterations):
         offset = i * 10000
-        query += f' LIMIT 10000 OFFSET {offset}'
+        query += f' LIMIT 10000 OFFSET {offset};'
+        print(query)
         with _conn.cursor() as cur:
             cur.execute(query)
             rows = cur.fetchall()
