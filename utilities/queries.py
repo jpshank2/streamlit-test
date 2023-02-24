@@ -17,4 +17,4 @@ def get_row_nums(table, _conn):
     with _conn.cursor() as cur:
         cur.execute(f"SELECT COUNT(*) FROM {table}")
         rows = cur.fetchall()
-        return rows
+        return rows[0][0]
