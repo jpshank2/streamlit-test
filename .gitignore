@@ -1,3 +1,4 @@
 /secrets.toml
 /config.toml
 /Dockerfile
+/docker-compose.yml
