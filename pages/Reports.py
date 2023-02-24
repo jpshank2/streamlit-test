@@ -28,7 +28,7 @@ def init_connection():
 
 conn = init_connection()
 
-st.markdown('### AR Reports {#AR}')
+st.markdown('<h3 id="AR">AR Reports</h3>', unsafe_allow_html=True)
 create_ar_reports(st, conn)
 
 # @st.cache_data(ttl=3600)
