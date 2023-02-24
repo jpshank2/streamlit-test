@@ -66,4 +66,4 @@ def create_wip_reports(st, conn):
         # st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods'))
         
     except Exception as e:
-        print(st.write(e))
+        st.write(e)
