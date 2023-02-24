@@ -7,7 +7,7 @@ from AR import create_ar_reports
 
 st.markdown("# Hello, Reports! :wave:")
 
-st.markdown('[AR Reports](#ar-reports-ar)')
+st.markdown('[AR Reports](#ar-reports)')
 
 st.markdown('## random text to see if link actually works')
 st.write("""I'm baby disrupt activated charcoal vaporware fashion axe. Pabst pinterest forage dreamcatcher, +1 same hashtag church-key. Post-ironic banh mi stumptown lumbersexual jianbing, kombucha tonx disrupt tote bag microdosing. Jianbing seitan wolf celiac, raw denim chia williamsburg. Kinfolk taxidermy sartorial prism yes plz, lomo chambray mlkshk food truck retro cold-pressed flannel microdosing marfa. Ascot vexillologist cronut authentic narwhal semiotics prism, mlkshk cred skateboard vinyl. Retro iPhone pop-up bruh snackwave YOLO palo santo plaid.
