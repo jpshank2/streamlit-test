@@ -2,22 +2,13 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import plotly.express as px
-
-@st.cache_data(ttl=3600)
-def run_query(query, _conn):
-    with _conn.cursor() as cur:
-        cur.execute(query)
-        rows = cur.fetchall()
-        columns = [column[0] for column in cur.description]
-        results = list()
-        for row in rows:
-            results.append(dict(zip(columns, row)))
-        
-        return pd.DataFrame(results)
+import utilities.queries as q
 
 def create_wip_reports(st, conn):
     try:
-        rows = run_query("""SELECT TOP 20 WIP.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rowNums = q.get_row_nums('TRANS_WIP', conn)
+        st.write(rowNums)
+        rows = q.run_query("""SELECT TOP 20 WIP.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE;""", conn)
