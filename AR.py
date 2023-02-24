@@ -15,13 +15,13 @@ def run_query(query, conn):
         
         return pd.DataFrame(results)
 
-def create_ar_reports(st):
+def create_ar_reports(st, conn):
     try:
         rows = run_query("""SELECT AR.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_AR AR 
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE 
-            WHERE DEBTTRANUNPAID <> 0;""")
+            WHERE DEBTTRANUNPAID <> 0;""", conn)
 
         office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
         office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()

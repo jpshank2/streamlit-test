@@ -29,7 +29,7 @@ def init_connection():
 conn = init_connection()
 
 st.write('AR Reports{#AR}')
-create_ar_reports(st)
+create_ar_reports(st, conn)
 
 # @st.cache_data(ttl=3600)
 # def run_query(query):
