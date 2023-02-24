@@ -1,8 +1,8 @@
-from streamlit import cache_data
+from streamlit import cache_resource
 from pandas import DataFrame
 from math import ceil
 
-@cache_data(ttl=3600)
+@cache_resource(ttl=3600)
 def run_query(query, _conn, rows):
     try:
         # iterations = ceil(rows / 10000)
