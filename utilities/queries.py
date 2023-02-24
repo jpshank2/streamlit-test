@@ -9,10 +9,10 @@ def run_query(query, _conn, rows):
         finalList = list()
         for i in range(iterations):
             offset = i * 10000
-            query += f'\nLIMIT 10000 OFFSET {offset};'
+            iter_query = query + f'\nLIMIT 10000 OFFSET {offset};'
             print(query)
             with _conn.cursor() as cur:
-                cur.execute(query)
+                cur.execute(iter_query)
                 rows = cur.fetchall()
                 columns = [column[0] for column in cur.description]
                 results = list()
@@ -21,8 +21,8 @@ def run_query(query, _conn, rows):
                 
                 finalList.append(results)
     except Exception as e:
-        query += '\nLIMIT 10000 OFFSET 0;'
-        return {'query': query, 'e': e}
+        iter_query = query + f'\nLIMIT 10000 OFFSET 0;'
+        return {'query': iter_query, 'e': e}
             
     return DataFrame(finalList)
     
