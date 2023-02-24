@@ -36,7 +36,9 @@ def init_connection():
 conn = init_connection()
 
 st.markdown('### AR Reports')
+go_to_top()
 create_ar_reports(st, conn)
 
 st.markdown('### WIP Reports')
+go_to_top()
 create_wip_reports(st, conn)
