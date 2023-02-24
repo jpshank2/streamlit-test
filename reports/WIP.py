@@ -8,10 +8,10 @@ def create_wip_reports(st, conn):
     try:
         rowNums = q.get_row_nums('TRANS_WIP', conn)
         st.write(rowNums)
-        rows = q.run_query("""SELECT TOP 20 WIP.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = q.run_query("""SELECT WIP.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
-                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE;""", conn)
+                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE""", conn, rowNums)
         
         st.write(rows)
 
