@@ -4,7 +4,7 @@ from math import ceil
 
 @cache_data(ttl=3600)
 def run_query(query, _conn, rows):
-    iterations = rows / 10000
+    iterations = ceil(rows / 10000)
     finalList = list()
     for i in range(iterations):
         offset = i * 10000
