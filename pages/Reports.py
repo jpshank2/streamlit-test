@@ -28,7 +28,7 @@ def init_connection():
 
 conn = init_connection()
 
-st.write('AR Reports{#AR}')
+st.write('AR Reports {#AR}')
 create_ar_reports(st, conn)
 
 # @st.cache_data(ttl=3600)

@@ -4,8 +4,8 @@ import pandas as pd
 import plotly.express as px
 
 @st.cache_data(ttl=3600)
-def run_query(query, conn):
-    with conn.cursor() as cur:
+def run_query(query, _conn):
+    with _conn.cursor() as cur:
         cur.execute(query)
         rows = cur.fetchall()
         columns = [column[0] for column in cur.description]
