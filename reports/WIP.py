@@ -17,7 +17,7 @@ def run_query(query, _conn):
 
 def create_wip_reports(st, conn):
     try:
-        rows = run_query("""SELECT WIP.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = run_query("""SELECT TOP 20 WIP.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE;""", conn)
