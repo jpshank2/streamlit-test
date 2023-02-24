@@ -5,9 +5,9 @@ import snowflake.connector
 # import plotly.express as px
 from AR import create_ar_reports
 
-st.write("# Hello, Reports! :wave:")
-st.write('[AR Reports](#AR)')
-st.write('## random text to see if link actually works')
+st.markdown("# Hello, Reports! :wave:")
+st.markdown('[AR Reports](#AR)')
+st.markdown('## random text to see if link actually works')
 st.write("""I'm baby disrupt activated charcoal vaporware fashion axe. Pabst pinterest forage dreamcatcher, +1 same hashtag church-key. Post-ironic banh mi stumptown lumbersexual jianbing, kombucha tonx disrupt tote bag microdosing. Jianbing seitan wolf celiac, raw denim chia williamsburg. Kinfolk taxidermy sartorial prism yes plz, lomo chambray mlkshk food truck retro cold-pressed flannel microdosing marfa. Ascot vexillologist cronut authentic narwhal semiotics prism, mlkshk cred skateboard vinyl. Retro iPhone pop-up bruh snackwave YOLO palo santo plaid.
 
 Put a bird on it biodiesel polaroid listicle paleo tofu ethical synth flexitarian hella neutra praxis. Pork belly listicle pop-up tbh viral direct trade, blue bottle venmo tofu pug before they sold out. Live-edge schlitz tousled, PBR&B fashion axe freegan flannel bespoke kale chips lo-fi shabby chic. Fit lo-fi selvage, street art ennui raclette trust fund retro drinking vinegar paleo activated charcoal. Etsy fam succulents whatever selfies. Hoodie succulents sartorial, fixie asymmetrical mlkshk fashion axe sriracha lyft.
@@ -28,7 +28,7 @@ def init_connection():
 
 conn = init_connection()
 
-st.write('### AR Reports {#AR}')
+st.markdown('### AR Reports {#AR}')
 create_ar_reports(st, conn)
 
 # @st.cache_data(ttl=3600)
