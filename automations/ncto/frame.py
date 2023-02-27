@@ -10,13 +10,12 @@ def clientTakeOn(st):
     from importlib import import_module
     screen = import_module(pageList[st.session_state.pageCounter]['module'])
 
-    while True:
-        if st.session_state.pageCounter == 6:
-            screen.screen(st, )
+    if st.session_state.pageCounter == 6:
+        display = screen.screen(st, )
+    else:
+        display = screen.screen(st)
 
-        screen.screen(st)
-
-        st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,))
+    st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,))
 
     # while True:    
     #     num = st.session_state.num
