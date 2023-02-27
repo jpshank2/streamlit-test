@@ -16,7 +16,7 @@ def clientTakeOn(st):
 
         screen.screen(st)
 
-        st.button('Save & Next', on_click=next_page, args=(st,))
+        st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,))
 
     # while True:    
     #     num = st.session_state.num
