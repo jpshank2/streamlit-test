@@ -15,11 +15,11 @@ def create_wip_reports(st, conn):
             WHERE WIP.ContIndex < 900000
                 AND WIP.WIPOUTSTANDING <> 0""", conn).copy()
         
-        outstanding_WIP = rows['WIPOUTSTANDING'].sum()
+        outstanding_WIP = round(rows['WIPOUTSTANDING'].sum(), 2)
         
         st.write(f'Outstanding WIP is {outstanding_WIP}')
         
-        st.write(rows)
+        st.write(pd.pivot_table(rows, index=['CLIENTPARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=np.sum))
 
         # office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
         # office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
