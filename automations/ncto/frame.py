@@ -5,7 +5,7 @@ def clientTakeOn(st):
 
     while True:
         st.write(pageList[pageCounter])
-        import pages.home as home
+        import automations.ncto.pages.home as home
         home.screen(st)
         from importlib import import_module
         screen = import_module(pageList[pageCounter]['module'])
