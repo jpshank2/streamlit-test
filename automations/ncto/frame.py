@@ -3,9 +3,8 @@ def clientTakeOn(st):
 
     pageCounter = 0
 
-    while True:
-        st.write(pageList[pageCounter])
-        from importlib import import_module
-        screen = import_module(pageList[pageCounter]['module'])
+    st.write(pageList[pageCounter])
+    from importlib import import_module
+    screen = import_module(pageList[pageCounter]['module'])
 
-        screen.screen(st)
+    screen.screen(st)
