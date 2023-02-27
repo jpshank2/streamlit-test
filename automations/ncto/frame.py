@@ -19,6 +19,6 @@ def clientTakeOn(st):
         display = screen.screen(st)
 
     if st.session_state.pageCounter > 0:
-        st.button('Previous Page', on_click=prev_page, agrs=(st,))
+        st.button('Previous Page', on_click=prev_page, args=(st,))
 
     st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,))
