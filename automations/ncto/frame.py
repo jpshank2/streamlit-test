@@ -1,5 +1,5 @@
 def clientTakeOn(st):
-    pageList = [{'name': 'Home', 'module': 'pages.home'}, {'name': 'General Information', 'module': 'pages.general'}, {'name': 'Client Details', 'module': 'pages.client'}, {'name': 'Contact Details', 'module': 'pages.contact'}, {'name': 'Client Billings', 'module': 'pages.billings'}, {'name': 'Client Attributes', 'module': 'pages.attributes'}, {'name': 'Services', 'module': 'pages.services'}, {'name': 'Final Review', 'module': 'pages.review'}, {'name': 'Submitted', 'module': 'pages.end'}]
+    pageList = [{'name': 'Home', 'module': 'automations.ncto.pages.home'}, {'name': 'General Information', 'module': 'automations.ncto.pages.general'}, {'name': 'Client Details', 'module': 'automations.ncto.pages.client'}, {'name': 'Contact Details', 'module': 'automations.ncto.pages.contact'}, {'name': 'Client Billings', 'module': 'automations.ncto.pages.billings'}, {'name': 'Client Attributes', 'module': 'automations.ncto.pages.attributes'}, {'name': 'Services', 'module': 'automations.ncto.pages.services'}, {'name': 'Final Review', 'module': 'automations.ncto.pages.review'}, {'name': 'Submitted', 'module': 'automations.ncto.pages.end'}]
 
     pageCounter = 0
 
