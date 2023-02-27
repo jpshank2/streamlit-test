@@ -6,12 +6,18 @@ import utilities.queries as q
 
 def create_wip_reports(st, conn):
     try:
-        rowNums = q.get_row_nums('TRANS_WIP', conn)
-        st.write(rowNums)
+        # rowNums = q.get_row_nums('TRANS_WIP', conn)
+        # st.write(rowNums)
         rows = q.run_query("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
-                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE""", conn, rowNums).copy()
+                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
+            WHERE WIP.ContIndex < 900000
+                AND WIP.WIPOUTSTANDING <> 0""", conn).copy()
+        
+        outstanding_WIP = rows['WIPOUTSTANDING'].sum()
+        
+        st.write(f'Outstanding WIP is {outstanding_WIP}')
         
         st.write(rows)
 

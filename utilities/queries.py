@@ -3,7 +3,7 @@ from pandas import DataFrame
 from math import ceil
 
 @cache_resource(ttl=3600)
-def run_query(query, _conn, rows):
+def run_query(query, _conn):
     try:
         # iterations = ceil(rows / 10000)
         # finalList = list()
