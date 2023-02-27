@@ -5,6 +5,7 @@ def clientTakeOn(st):
 
     while True:
         st.write(pageList[pageCounter])
-        __import__(pageList[pageCounter].module)
+        from importlib import import_module
+        screen = import_module(pageList[pageCounter]['module'])
 
-        screen(st)
+        screen.screen(st)
