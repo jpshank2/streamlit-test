@@ -6,6 +6,7 @@ def prev_page(st):
 
 def clientTakeOn(st, conn):
     pageList = [{'name': 'Home', 'module': 'automations.ncto.pages.home'}, {'name': 'General Information', 'module': 'automations.ncto.pages.general'}, {'name': 'Client Details', 'module': 'automations.ncto.pages.client'}, {'name': 'Contact Details', 'module': 'automations.ncto.pages.contact'}, {'name': 'Client Billings', 'module': 'automations.ncto.pages.billings'}, {'name': 'Client Attributes', 'module': 'automations.ncto.pages.attributes'}, {'name': 'Services', 'module': 'automations.ncto.pages.services'}, {'name': 'Final Review', 'module': 'automations.ncto.pages.review'}, {'name': 'Submitted', 'module': 'automations.ncto.pages.end'}]
+    
     if 'pageCounter' not in st.session_state:
         st.session_state['pageCounter'] = 0
 
@@ -25,7 +26,3 @@ def clientTakeOn(st, conn):
 
     progress_bar = st.progress(0)
     progress_bar.progress(int(100 * (st.session_state.pageCounter / len(pageList))))
-    # for i in range(len(pageList)):
-    #     progress_bar.progress(int(100 * i / st.session_state.pageCounter))
-    # for completion in range(len(pageList)):
-    #     progress_bar.progress(completion)
