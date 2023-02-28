@@ -24,6 +24,7 @@ def clientTakeOn(st, conn):
     st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,))
 
     progress_bar = st.progress(0)
-    progress_bar.progress(st.session_state.pageCounter)
+    for i in range(len(pageList))
+        progress_bar.progress(int(100 * i / st.session_state.pageCounter))
     # for completion in range(len(pageList)):
     #     progress_bar.progress(completion)
