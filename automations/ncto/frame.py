@@ -9,7 +9,7 @@ def clientTakeOn(st):
     if 'pageCounter' not in st.session_state:
         st.session_state['pageCounter'] = 0
 
-    st.write(pageList[st.session_state.pageCounter])
+    st.write('### ' + pageList[st.session_state.pageCounter]['name'])
     from importlib import import_module
     screen = import_module(pageList[st.session_state.pageCounter]['module'])
 
