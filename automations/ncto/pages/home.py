@@ -11,3 +11,5 @@ def screen(st, conn):
     Client Manager  
     Entity  
     Invoice Method""")
+
+#Next page will be general info. Each page will be built just like home.py and general.py under this pages < automations\ncto
