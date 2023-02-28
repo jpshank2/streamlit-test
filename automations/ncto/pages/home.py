@@ -1,7 +1,7 @@
 def screen(st):
     st.write("### Required information before you begin the Client Take On Form")
 
-    st.write("""Name of Client
+    st.markdown("""Name of Client
     Primary Contact
     Name
     Address
