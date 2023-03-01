@@ -1,3 +1,7 @@
+#
+# streamlit docs can be found here: https://docs.streamlit.io/
+#
+
 import streamlit as st
 
 st.write("# Hello, home! :wave:")
