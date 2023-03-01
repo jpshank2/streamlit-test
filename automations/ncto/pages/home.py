@@ -1,5 +1,5 @@
-def screen(st, conn):
-    st.write("### Required information before you begin the Client Take On Form")
+def screen(st):
+    st.markdown("### Required information before you begin the Client Take On Form")
 
     st.markdown("""Name of Client  
     Primary Contact  

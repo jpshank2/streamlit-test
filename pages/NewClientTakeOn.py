@@ -12,7 +12,6 @@ def init_connection():
 
 conn = init_connection()
 
-st.write("<h1>This is HTML</h1>", unsafe_allow_html=True)
-st.markdown("## Hello, form! :wave:")
+st.markdown("# Hello, form! :wave:")
 # ncto.clientTakeOn(st, conn)
 clientTakeOn(st, conn)
