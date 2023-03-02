@@ -15,6 +15,8 @@ def create_wip_reports(st, conn):
             WHERE WIP.ContIndex < 900000
                 AND WIP.WIPOUTSTANDING <> 0""", conn).copy()
         
+        st.write(rows)
+        
         outstanding_WIP = round(rows['WIPOUTSTANDING'].sum(), 2)
         
         st.write(f'Outstanding WIP is {outstanding_WIP}')
