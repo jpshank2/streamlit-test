@@ -11,6 +11,6 @@ def run_query(query, _conn):
             # results = list()
             # for row in rows:
             #     results.append(dict(zip(columns, row)))
-        return DataFrame.from_records(iter(rows), columns=columns)
+        return DataFrame.from_records(rows, columns=columns)
     except Exception as e:
         return {'query': query, 'e': e, 'data': rows}
