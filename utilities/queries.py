@@ -5,12 +5,12 @@ from pandas import DataFrame
 def run_query(query, _conn):
     try:
         with _conn.cursor() as cur:
-            rows = cur.execute(query)
-            # rows = cur.fetchall()
+            cur.execute(query)
+            rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
             # results = list()
             # for row in rows:
             #     results.append(dict(zip(columns, row)))
-        return DataFrame.from_records(rows, columns=columns).copy()
+        return DataFrame.from_records(rows, columns=columns)
     except Exception as e:
         return {'query': query, 'e': e, 'data': rows}
