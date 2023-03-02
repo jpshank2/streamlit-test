@@ -6,7 +6,6 @@ def run_query(query, _conn):
     try:
         with _conn.cursor() as cur:
             rows = cur.execute(query)
-            print(rows)
             # rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
             # results = list()
@@ -14,4 +13,4 @@ def run_query(query, _conn):
             #     results.append(dict(zip(columns, row)))
         return DataFrame.from_records(iter(rows), columns=columns)
     except Exception as e:
-        return {'query': query, 'e': e}
+        return {'query': query, 'e': e, 'data': rows}
