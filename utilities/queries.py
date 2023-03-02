@@ -6,6 +6,7 @@ def run_query(query, _conn):
     try:
         with _conn.cursor() as cur:
             rows = cur.execute(query)
+            print(rows)
             # rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
             # results = list()
