@@ -5,6 +5,6 @@ def screen(st, conn):
     offices = run_query('SELECT * FROM DIM_OFFICES;-- WHERE OFFICEINDEX BETWEEN 1 AND 4;', conn)
     st.write(offices[["OFFICENAME", "OFFICEINDEX"]])
     st.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'))
-    office_select = st.selectbox('Client Office', [i for i in offices.OFFICENAME], on_change=validate_dropdown, args=(office_select, ['No Selection', 'Unknown', 'OUTSOURCE'], st.session_state['valid']))
+    office_select = st.selectbox('Client Office', [i for i in offices.OFFICENAME])
 
     st.markdown(office_select)
