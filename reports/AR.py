@@ -1,19 +1,18 @@
-import streamlit as st
-import numpy as np
-import pandas as pd
-import plotly.express as px
+from numpy import where
+from plotly.express import bar, pie
+from utilities.queries import run_query
 
-@st.cache_data(ttl=3600)
-def run_query(query, _conn):
-    with _conn.cursor() as cur:
-        cur.execute(query)
-        rows = cur.fetchall()
-        columns = [column[0] for column in cur.description]
-        results = list()
-        for row in rows:
-            results.append(dict(zip(columns, row)))
+# @st.cache_data(ttl=3600)
+# def run_query(query, _conn):
+#     with _conn.cursor() as cur:
+#         cur.execute(query)
+#         rows = cur.fetchall()
+#         columns = [column[0] for column in cur.description]
+#         results = list()
+#         for row in rows:
+#             results.append(dict(zip(columns, row)))
         
-        return pd.DataFrame(results)
+#         return pd.DataFrame(results)
 
 def create_ar_reports(st, conn):
     try:
@@ -51,18 +50,18 @@ def create_ar_reports(st, conn):
                 yVal = 'CLIENT'
                 title = f'{levels[1]}\'s {levels[0]} AR by Client w/ drilldown'
                 
-        st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title, text='OUTSTANDING_AR'))
+        st.write(bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title, text='OUTSTANDING_AR'))
 
         partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
         partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
 
-        st.write(px.bar(partner_AR, y='CLIENTPARTNER', x='OUTSTANDING_AR', orientation='h', title='AR by Client Partner'))
+        st.write(bar(partner_AR, y='CLIENTPARTNER', x='OUTSTANDING_AR', orientation='h', title='AR by Client Partner'))
 
         aging_AR = rows[['AGING_PERIOD_SORT', 'OG_PERIOD', 'DEBTTRANUNPAID']].copy()
-        aging_AR['AGING_PERIOD'] = np.where(aging_AR['AGING_PERIOD_SORT'] < 4, aging_AR['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
+        aging_AR['AGING_PERIOD'] = where(aging_AR['AGING_PERIOD_SORT'] < 4, aging_AR['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
         aging_AR = aging_AR[['AGING_PERIOD', 'DEBTTRANUNPAID']]
         aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
-        st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods'))
+        st.write(pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods'))
         
     except Exception as e:
         st.write(e)

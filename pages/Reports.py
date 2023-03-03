@@ -1,8 +1,5 @@
 import streamlit as st
-# import numpy as np
-# import pandas as pd
-import snowflake.connector
-# import plotly.express as px
+from snowflake.connector import connect
 from reports.AR import create_ar_reports
 from reports.WIP import create_wip_reports
 
@@ -29,7 +26,7 @@ Dummy text? More like dummy thicc text, amirite?""")
 
 @st.cache_resource
 def init_connection():
-    return snowflake.connector.connect(
+    return connect(
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 

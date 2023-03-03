@@ -1,27 +1,23 @@
-import streamlit as st
-import numpy as np
-import pandas as pd
-import plotly.express as px
-import utilities.queries as q
+from numpy import sum
+from pandas import pivot_table
+from utilities.queries import run_query
 
 def create_wip_reports(st, conn):
     try:
         # rowNums = q.get_row_nums('TRANS_WIP', conn)
         # st.write(rowNums)
-        rows = q.run_query("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = run_query("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
             WHERE WIP.ContIndex < 900000
                 AND WIP.WIPOUTSTANDING <> 0""", conn).copy()
         
-        st.write(rows)
-        
         outstanding_WIP = round(rows['WIPOUTSTANDING'].sum(), 2)
         
         st.write(f'Outstanding WIP is {outstanding_WIP}')
         
-        st.write(pd.pivot_table(rows, index=['CLIENTPARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=np.sum))
+        st.write(pivot_table(rows, index=['CLIENTPARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=sum))
 
         # office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
         # office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
