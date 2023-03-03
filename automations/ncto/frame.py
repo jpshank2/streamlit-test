@@ -9,6 +9,8 @@ def clientTakeOn(st, conn):
     
     if 'pageCounter' not in st.session_state:
         st.session_state['pageCounter'] = 0
+    if 'valid' not in st.session_state:
+        st.session_state['valid'] = True
 
     st.markdown('## ' + pageList[st.session_state.pageCounter]['name'])
 
@@ -27,7 +29,7 @@ def clientTakeOn(st, conn):
     if st.session_state.pageCounter > 0:
         st.button('Previous Page', on_click=prev_page, args=(st,))
 
-    st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,))
+    st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,), disabled=st.session_state['valid'])
 
     progress_bar = st.progress(0)
     progress_bar.progress(int(100 * (st.session_state.pageCounter / len(pageList))))
