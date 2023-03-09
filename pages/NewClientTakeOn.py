@@ -4,6 +4,7 @@ import pandas as pd
 import math, datetime
 import snowflake.connector
 import automations.ncto.frame as ncto
+from PIL import Image
 
 @st.cache_resource
 def init_connection():
@@ -12,6 +13,11 @@ def init_connection():
     )
 
 conn = init_connection()
+
+MainHeaderImage = Image.open('C:\Users\imesser\BMSS\Business Intelligence - Documents\Clients\Abacus\Abacus Technologies logo 2022\Full color\Abacus logo 2022_Full-color.png')
+
+#Added a logo to the top of the screen
+st.image(MainHeaderImage, use_column_width = True)
 
 @st.cache_data(ttl=3600)
 def run_query(query):
