@@ -1,0 +1,22 @@
+git add .
+git commit -m "text here"
+git push
+
+git pull
+
+git status
+
+#allows you to chain commands together on command line
+git add . | git commit -m "write dataframe for example" | git push  s\code\streamlit>
+
+#swap between branches 
+git checkout MAIN
+
+#checkout a new branch
+git checkout -b isaiahsandbox
+
+#When ready to commit to the main branch
+git merge isaiahsandbox
+
+#If you can't remember a git command
+git --help
