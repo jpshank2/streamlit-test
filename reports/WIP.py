@@ -15,7 +15,7 @@ def create_wip_reports(st, conn):
         
         outstanding_WIP = round(rows['WIPOUTSTANDING'].sum(), 2)
         
-        st.write(f'Outstanding WIP is {outstanding_WIP}')
+        st.markdown(f'Outstanding WIP is {outstanding_WIP}')
         
         st.write(pivot_table(rows, index=['CLIENTPARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=sum))
 

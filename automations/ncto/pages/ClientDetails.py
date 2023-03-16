@@ -12,7 +12,7 @@ st.markdown("Please input all required fields to proceed to the next screen")
 
 
 with st.form("Client_Details"):
-   st.write("Inside the form")
+   st.markdown("Inside the form")
    slider_val = st.slider("Form slider")
    checkbox_val = st.checkbox("Form checkbox")
 
@@ -29,7 +29,7 @@ st.slider("Outside the form")
 # Now add a submit button to the form:
 form.form_submit_button("Submit")
 
-st.write("Outside the form")
+st.markdown("Outside the form")
 
 def screen(st, conn):
     partner = q.run_query('SELECT * FROM tblEngagement;', conn)
