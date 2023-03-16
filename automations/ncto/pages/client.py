@@ -23,7 +23,7 @@ def screen(st):
     st.text_input('Client City', 'Client City', key='clientcity')
     st.session_state.valid[5] = validate_string(st.session_state.clientcity, ['Client City'])
 
-    if st.session_state.country == 'United States':
+    if st.session_state.clientcountry == 'United States':
         st.selectbox('Client State', ["", "AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"], key='clientstate')
         st.session_state.valid[6] = validate_dropdown(st.session_state.clientstate, [''])
     else:
