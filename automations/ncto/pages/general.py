@@ -12,10 +12,10 @@ def screen(st, conn):
     client_input = st.text_input('Client Name', 'Client Name', key='client')
 
     if type_select == "New Client Relationship":
-        originators = run_query("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'ACTIVE' AND DEPARTMENT <> 'No Selection';")
+        originators = run_query("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'ACTIVE' AND DEPARTMENT <> 'No Selection';", conn)
         originator_select = st.selectbox('Originator', [''] + [i for i in originators.EMPLOYEE], key='originator')
     else:
-        clients = run_query("SELECT * FROM DIM_CLIENT_MASTER WHERE STATUS <> 'LOST';")
+        clients = run_query("SELECT * FROM DIM_CLIENT_MASTER WHERE STATUS <> 'LOST';", conn)
         relationship_select = st.selectbox('Client Relationship', [''] + [i for i in clients.CLIENTDISPLAY], key='relationship')
 
     st.markdown(st.session_state)
