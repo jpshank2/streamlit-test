@@ -3,7 +3,7 @@ from automations.ncto.validators import validate_dropdown, validate_string
 def screen(st):
     st.session_state.valid = [False for i in range(9)]
 
-    st.write(st.session_state.staff)
+    st.write(st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE' == True]])
 
     st.selectbox('Client Partner', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='clientpartner')
     st.session_state.valid[0] = validate_dropdown(st.session_state.clientpartner, [''])

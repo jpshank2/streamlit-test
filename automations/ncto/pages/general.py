@@ -15,7 +15,7 @@ def screen(st):
     if st.session_state.type == "New Client Relationship":
         st.selectbox('Originator', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='originator')
         st.session_state.valid[3] = validate_dropdown(st.session_state.originator, [''])
-    else:
+    elif st.session_state.type == 'Subcode Needed for Existing Client':
         st.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients.CLIENTDISPLAY], key='relationship')
         st.session_state.valid[3] = validate_dropdown(st.session_state.relationship, [''])
 
