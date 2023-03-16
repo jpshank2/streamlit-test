@@ -22,5 +22,3 @@ def screen(st):
         st.selectbox('Client Relationship', [''] + [i for i in state.clients.CLIENTDISPLAY], key='relationship')
         state.valid[3] = validate_dropdown(state.relationship, [''])
 
-
-    st.markdown(state)
