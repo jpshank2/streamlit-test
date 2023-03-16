@@ -17,12 +17,14 @@ def clientTakeOn(st, conn):
 
     st.markdown('## ' + pageList[st.session_state.pageCounter]['name'])
 
-    st.write('## ' + pageList[st.session_state.pageCounter]['name'])
     from importlib import import_module
     screen = import_module(pageList[st.session_state.pageCounter]['module'])
 
     if st.session_state.pageCounter == 6:
-        display = screen.screen(st, conn)
+        screen.screen(st, conn)
+    elif st.session_state.pageCounter == 0:
+        st.session_state.valid = [True]
+        screen.screen(st)
     else:
         screen.screen(st, conn)
 
