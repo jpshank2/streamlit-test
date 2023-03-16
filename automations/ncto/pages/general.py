@@ -1,24 +1,21 @@
-from automations.ncto.validators import validate_dropdown
+from automations.ncto.validators import validate_dropdown, validate_string
 
 def screen(st):
-    state = st.session_state
-    state.valid = [False, False, False, False]
-
-    st.write(state.offices[["OFFICENAME", "OFFICEINDEX"]])
+    st.session_state.valid = [False, False, False, False]
 
     st.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type')
-    state.valid[0] = validate_dropdown(state.type, [''])
+    st.session_state.valid[0] = validate_dropdown(st.session_state.type, [''])
 
-    st.selectbox('Client Office', [''] + [i for i in state.offices.OFFICENAME], key='office')
-    state.valid[1] = validate_dropdown(state.office, [''])
+    st.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
+    st.session_state.valid[1] = validate_dropdown(st.session_state.office, [''])
 
     st.text_input('Client Name', 'Client Name', key='client')
-    state.valid[2] = validate_dropdown(state.client, ['', 'Client Name'])
+    st.session_state.valid[2] = validate_string(st.session_state.client, ['Client Name'])
 
-    if state.type == "New Client Relationship":
-        st.selectbox('Originator', [''] + [i for i in state.staff.EMPLOYEE], key='originator')
-        state.valid[3] = validate_dropdown(state.originator, [''])
+    if st.session_state.type == "New Client Relationship":
+        st.selectbox('Originator', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='originator')
+        st.session_state.valid[3] = validate_dropdown(st.session_state.originator, [''])
     else:
-        st.selectbox('Client Relationship', [''] + [i for i in state.clients.CLIENTDISPLAY], key='relationship')
-        state.valid[3] = validate_dropdown(state.relationship, [''])
+        st.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients.CLIENTDISPLAY], key='relationship')
+        st.session_state.valid[3] = validate_dropdown(st.session_state.relationship, [''])
 
