@@ -28,8 +28,6 @@ def clientTakeOn(st):
 
     st.markdown('## ' + pageList[st.session_state.pageCounter]['name'])
 
-    st.write(list(st.session_state.keys()))
-
     from importlib import import_module
     screen = import_module(pageList[st.session_state.pageCounter]['module'])
 
@@ -41,10 +39,12 @@ def clientTakeOn(st):
     else:
         screen.screen(st)
 
-    if st.session_state.pageCounter > 0:
-        st.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
+    leftButton, rightButton = st.columns(2)
 
-    st.button('Save & Next', key='next', on_click=next_page, args=(st,), disabled=(False in st.session_state['valid']))
+    if st.session_state.pageCounter > 0:
+        leftButton.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
+
+    rightButton.button('Save & Next', key='next', on_click=next_page, args=(st,), disabled=(False in st.session_state['valid']))
 
     progress_bar = st.progress(0)
     progress_bar.progress(int(100 * (st.session_state.pageCounter / len(pageList))))
