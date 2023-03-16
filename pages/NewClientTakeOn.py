@@ -26,6 +26,10 @@ if 'clients' not in st.session_state:
     st.session_state['clients'] = run_query("SELECT * FROM DIM_CLIENT_MASTER WHERE STATUS <> 'LOST';", conn)
 if 'staff' not in st.session_state:
     st.session_state['staff'] = run_query("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';", conn)
+if 'entities' not in st.session_state:
+    st.session_state['entities'] = run_query("SELECT * FROM DIM_ENTITIES;", conn)
+if 'industries' not in st.session_state:
+    st.session_state['industries'] = run_query("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true;", conn)
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/DcFwdrQ.png').content))
 
