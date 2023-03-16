@@ -28,6 +28,8 @@ def clientTakeOn(st):
 
     st.markdown('## ' + pageList[st.session_state.pageCounter]['name'])
 
+    st.write(list(st.session_state.keys()))
+
     from importlib import import_module
     screen = import_module(pageList[st.session_state.pageCounter]['module'])
 

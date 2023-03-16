@@ -3,8 +3,6 @@ from automations.ncto.validators import validate_dropdown, validate_string
 def screen(st):
     st.session_state.valid = [False for i in range(8)]
 
-    st.write(st.session_state.keys())
-
     st.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type')
     st.session_state.valid[0] = validate_dropdown(st.session_state.type, [''])
 
