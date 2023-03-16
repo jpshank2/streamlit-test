@@ -1,9 +1,25 @@
 #move from page to page in the def ClientTakeOn
 def next_page(st):
     st.session_state.pageCounter += 1
+    
+    allSessions = list(st.session_state.keys())
+    sessionsToRemove = list(filter(lambda x: all([x != y for y in st.session_state.static_session]), allSessions))
+
+    st.write(sessionsToRemove)
+
+    for session in sessionsToRemove:
+        del st.session_state[session]
 
 def prev_page(st):
     st.session_state.pageCounter -= 1
+
+    allSessions = list(st.session_state.keys())
+    sessionsToRemove = list(filter(lambda x: all([x != y for y in st.session_state.static_session]), allSessions))
+
+    st.write(sessionsToRemove)
+
+    for session in sessionsToRemove:
+        del st.session_state[session]
 
 #NCTO function
 def clientTakeOn(st):
