@@ -26,8 +26,8 @@ if 'clients' not in st.session_state:
     st.session_state['clients'] = run_query("SELECT * FROM DIM_CLIENT_MASTER WHERE STATUS <> 'LOST';", conn)
 if 'staff' not in st.session_state:
     st.session_state['staff'] = run_query("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'ACTIVE' AND DEPARTMENT <> 'No Selection';", conn)
-    
-MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/DcFwdrQ.png')))
+
+MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/DcFwdrQ.png').content))
 
 #Added a logo to the top of the screen
 st.image(MainHeaderImage, use_column_width = True)
