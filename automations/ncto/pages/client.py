@@ -17,9 +17,9 @@ def screen(st):
     st.selectbox('Client Industry', [''] + [i for i in st.session_state.industries.INDUSTRY], key='industry')
     st.session_state.valid[3] = validate_dropdown(st.session_state.industry, ['', 'Unknown'])
 
-    st.text_input('Client Country', 'Client Country', key='clientcountry')
+    st.text_input('Client Country', 'United States', key='clientcountry')
     st.session_state.valid[8] = validate_string(st.session_state.clientcountry, [''])
-    
+
     st.text_input('Client Address', 'Client Address', key='clientaddress')
     st.session_state.valid[4] = validate_string(st.session_state.clientaddress, ['Client Address'])
 
