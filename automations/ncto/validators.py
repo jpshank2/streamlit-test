@@ -1,7 +1,3 @@
-def validate_dropdown(selection, notAllowed, valid):
-    if selection in notAllowed:
-        valid = False
-    else:
-        valid = True
+def validate_dropdown(selection, notAllowed):
 
-    return valid
+    return False if selection in notAllowed else True

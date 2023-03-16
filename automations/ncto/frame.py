@@ -14,6 +14,8 @@ def clientTakeOn(st, conn):
         st.session_state['pageCounter'] = 0
     if 'valid' not in st.session_state:
         st.session_state['valid'] = [True]
+    if 'inputs' not in st.session_state:
+        st.session_state['inputs'] = [True]
 
     st.markdown('## ' + pageList[st.session_state.pageCounter]['name'])
 
