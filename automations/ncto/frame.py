@@ -7,6 +7,9 @@ def prev_page(st):
 
 #NCTO function
 def clientTakeOn(st):
+    if 'static_session' not in st.session_state:
+        st.session_state['static-session'] = ['previous', 'next', 'staff', 'clients', 'offices', 'valid', 'pageCounter']
+    
     pageList = [{'name': 'Home', 'module': 'automations.ncto.pages.home'}, {'name': 'General Information', 'module': 'automations.ncto.pages.general'}, {'name': 'Client Details', 'module': 'automations.ncto.pages.client'}, {'name': 'Contact Details', 'module': 'automations.ncto.pages.contact'}, {'name': 'Client Billings', 'module': 'automations.ncto.pages.billings'}, {'name': 'Client Attributes', 'module': 'automations.ncto.pages.attributes'}, {'name': 'Services', 'module': 'automations.ncto.pages.services'}, {'name': 'Final Review', 'module': 'automations.ncto.pages.review'}, {'name': 'Submitted', 'module': 'automations.ncto.pages.end'}]
     
     # dictionary that can be added to, that can interact with the list of pages that we have up above
@@ -25,9 +28,9 @@ def clientTakeOn(st):
         screen.screen(st)
 
     if st.session_state.pageCounter > 0:
-        st.button('Previous Page', on_click=prev_page, args=(st,))
+        st.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
 
-    st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,), disabled=(False in st.session_state['valid']))
+    st.button('Save & Next', key='next', on_click=next_page, args=(st,), disabled=(False in st.session_state['valid']))
 
     progress_bar = st.progress(0)
     progress_bar.progress(int(100 * (st.session_state.pageCounter / len(pageList))))

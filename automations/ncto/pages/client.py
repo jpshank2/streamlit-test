@@ -1,7 +1,15 @@
 from automations.ncto.validators import validate_dropdown, validate_string
 
 def screen(st):
-    st.session_state.valid = [False for i in range(4)]
+    st.session_state.valid = [False for i in range(8)]
+
+    allSessions = list(st.session_state.keys())
+    sessionsToRemove = list(filter(lambda x: all([x != y for y in st.session_state.static_session]), allSessions))
+
+    st.write(sessionsToRemove)
+
+    for session in sessionsToRemove:
+        del st.session_state[session]
 
     st.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type')
     st.session_state.valid[0] = validate_dropdown(st.session_state.type, [''])
