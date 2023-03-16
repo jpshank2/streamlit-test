@@ -3,10 +3,20 @@ from automations.ncto.validators import validate_dropdown, validate_string
 def screen(st):
     st.session_state.valid = [False for i in range(9)]
 
-    st.write(st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True])
+    # st.write(st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True])
 
-    st.selectbox('Client Partner', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='clientpartner')
+    st.selectbox('Client Partner', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True].EMPLOYEE], key='clientpartner')
     st.session_state.valid[0] = validate_dropdown(st.session_state.clientpartner, [''])
+
+    st.selectbox('Client Manager', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFMANAGER'] == True].EMPLOYEE], key='clientmanager')
+    st.session_state.valid[1] = validate_dropdown(st.session_state.clientmanager, [''])
+    
+    st.selectbox('Client Entity', [''] + [i for i in st.session_state.entities.ENTITYNAME], key='entity')
+    st.session_state.valid[2] = validate_dropdown(st.session_state.entity, ['', 'Unknown'])
+    
+    st.selectbox('Client Industry', [''] + [i for i in st.session_state.industries.INDUSTRY], key='industry')
+    st.session_state.valid[3] = validate_dropdown(st.session_state.industry, ['', 'Unknown'])
+
 
     # st.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
     # st.session_state.valid[1] = validate_dropdown(st.session_state.office, [''])
