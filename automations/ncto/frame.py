@@ -10,7 +10,7 @@ def clientTakeOn(st, conn):
     if 'pageCounter' not in st.session_state:
         st.session_state['pageCounter'] = 0
     if 'valid' not in st.session_state:
-        st.session_state['valid'] = True
+        st.session_state['valid'] = [True]
 
     st.markdown('## ' + pageList[st.session_state.pageCounter]['name'])
 
@@ -20,16 +20,17 @@ def clientTakeOn(st, conn):
     services = list()
 
     if st.session_state.pageCounter == 0:
-        display = screen.screen(st)
+        screen.screen(st)
+        st.session_state['valid'] = [True]
     elif pageList[st.session_state.pageCounter]['name'] == 'Services':
-        display = screen.screen(st, conn, services)
+        screen.screen(st, conn, services)
     else:
-        display = screen.screen(st, conn)
+        screen.screen(st, conn)
 
     if st.session_state.pageCounter > 0:
         st.button('Previous Page', on_click=prev_page, args=(st,))
 
-    st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,), disabled=st.session_state['valid'])
+    st.button('Save & Next', key=(f'button-{st.session_state.pageCounter}'), on_click=next_page, args=(st,), disabled=(False not in st.session_state['valid']))
 
     progress_bar = st.progress(0)
     progress_bar.progress(int(100 * (st.session_state.pageCounter / len(pageList))))
