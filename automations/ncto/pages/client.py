@@ -33,7 +33,13 @@ def screen(st):
         with warnings:
             st.warning('Please select an entity type for this client!')
     
-    topRight.selectbox('Client Industry', [''] + [i for i in st.session_state.industries.INDUSTRY], key='industry')
+    if st.session_state.entity == 'INDIVIDUAL':
+        indSelect = ['Individual']
+        indDisable = True
+    else:
+        indSelect = [''] + [i for i in st.session_state.industries.INDUSTRY]
+        indDisable = False
+    topRight.selectbox('Client Industry', indSelect, key='industry', disabled=indDisable)
     st.session_state.valid[3] = validate_dropdown(st.session_state.industry, ['', 'Unknown'])
 
     if not st.session_state.valid[3]:
