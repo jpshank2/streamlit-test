@@ -45,12 +45,12 @@ def screen(st):
     midOne.checkbox('Client and Contact Address Same?', key='contact_same')
 
     if st.session_state.contact_same:
-        address = st.session_state.newclient.client[-1].client_address
-        city = st.session_state.newclient.client[-1].client_city
-        country = st.session_state.newclient.client[-1].client_country
-        state = st.session_state.newclient.client[-1].client_state
-        province = st.session_state.newclient.client[-1].client_province
-        zip = st.session_state.newclient.client[-1].client_zip
+        address = st.session_state.newclient['client'][-1].client_address
+        city = st.session_state.newclient['client'][-1].client_city
+        country = st.session_state.newclient['client'][-1].client_country
+        state = st.session_state.newclient['client'][-1].client_state
+        province = st.session_state.newclient['client'][-1].client_province
+        zip = st.session_state.newclient['client'][-1].client_zip
         
         st.session_state.valid[4:9] = [True for j in range(5)]
     else:
