@@ -70,4 +70,3 @@ def screen(st):
             existingWarning.empty()
 
     st.write(st.session_state.clicks)
-
