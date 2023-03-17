@@ -30,7 +30,7 @@ def screen(st):
         with warnings:
             st.warning('Please enter a valid name for this client!')
 
-    if st.session_state.type == "New Client Relationship":
+    if st.session_state.general_type == "New Client Relationship":
         rightCol.selectbox('Originator', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='general_originator')
         st.session_state.valid[3] = validate_dropdown(st.session_state.general_originator, [''])
 
