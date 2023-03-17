@@ -1,7 +1,13 @@
 from utilities.validators import validate_dropdown, validate_string
-from utilities.click_handlers import inc_click
+# from utilities.click_handlers import inc_click
 
 def screen(st):
+
+    def inc_click(st, position):
+        updatedClicks = st.session_state.clicks
+        updatedClicks[position] = updatedClicks[position] + 1
+        st.session_state.clicks = updatedClicks
+
     st.session_state.valid = [False for i in range(4)]
     st.session_state.clicks = [0 for i in range(4)]
 
@@ -17,7 +23,7 @@ def screen(st):
             st.warning('Please select either new or existing client!')
     elif st.session_state.clicks[0] == 0:
         with existingWarning.container():
-            st.markdown('<br>', unsafe_allow_html=True)
+            st.markdown('<br style="margin:8px;">', unsafe_allow_html=True)
     else:
         existingWarning.empty()
         with existingWarning.container():
