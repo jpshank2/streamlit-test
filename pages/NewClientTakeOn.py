@@ -35,7 +35,7 @@ if 'industries' not in st.session_state:
 if 'contacts' not in st.session_state:
     st.session_state['contacts'] = run_query("SELECT * FROM DIM_CONTACTS WHERE CONTTYPE = 1;", conn)
 if 'newclient' not in st.session_state:
-    st.session_state['newclient'] = {}
+    st.session_state['newclient'] = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': []}
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/DcFwdrQ.png').content))
 
