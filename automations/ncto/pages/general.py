@@ -38,7 +38,7 @@ def screen(st):
             with warnings:
                 st.warning('Please select an originator for this client!')
 
-    elif st.session_state.type == 'Subcode Needed for Existing Client':
+    elif st.session_state.general_type == 'Subcode Needed for Existing Client':
         rightCol.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients.CLIENTDISPLAY], key='general_relationship')
         st.session_state.valid[3] = validate_dropdown(st.session_state.general_relationship, [''])
 
