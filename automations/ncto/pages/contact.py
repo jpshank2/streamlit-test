@@ -40,11 +40,11 @@ def screen(st):
 
     if not st.session_state.valid[3]:
         with warnings:
-            st.warning('Please enter a valid phone number for this contact!')
+            st.warning('Please enter a valid phone number for this contact! (Numbers only with area code)')
 
     midOne.checkbox('Client and Contact Address Same?', key='contact_same')
 
-    bottomFour.text_input('Contact Country', st.session_state.newclient['client'][-1]['client_country'] if st.session_state.contact_same else 'United States', key='contact_country')
+    bottomFour.text_input('Contact Country', st.session_state.newclient['client'][-1]['client_country'] if st.session_state.contact_same else 'United States', key='contact_country', disabled=st.session_state.contact_same)
 
     if st.session_state.contact_same:
         address = st.session_state.newclient['client'][-1]['client_address']
@@ -71,7 +71,7 @@ def screen(st):
     
     
     
-    bottomThree.text_input('Contact Zip Code', zip, key='contact_zip')
+    bottomThree.text_input('Contact Zip Code', zip, key='contact_zip', disabled=st.session_state.contact_same)
 
     if not st.session_state.contact_same:
         st.session_state.valid[4] = validate_string(st.session_state.contact_address, ['Contact Street'])
