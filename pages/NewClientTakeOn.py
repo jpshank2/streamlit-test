@@ -31,7 +31,7 @@ if 'staff' not in st.session_state:
 if 'entities' not in st.session_state:
     st.session_state['entities'] = run_query("SELECT * FROM DIM_ENTITIES;", conn)
 if 'industries' not in st.session_state:
-    st.session_state['industries'] = run_query("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true;", conn)
+    st.session_state['industries'] = run_query("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true AND INDUSTRY <> 'Individual';", conn)
 if 'contacts' not in st.session_state:
     st.session_state['contacts'] = run_query("SELECT * FROM DIM_CONTACTS WHERE CONTTYPE = 1;", conn)
 
