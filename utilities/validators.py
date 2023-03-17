@@ -22,3 +22,11 @@ def validate_nums(input, minVal, maxVal):
             return False
     else:
         return True if int(input) >= minVal and int(input) <= maxVal else False
+
+def validate_email(input):
+    from re import fullmatch
+
+    if fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b', input) == None:
+        return False
+    else:
+        return True
