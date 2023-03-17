@@ -5,6 +5,9 @@ def screen(st):
 
     topLeft, topRight = st.columns(2)
 
+    st.text_input('Client Address', 'Client Address', key='clientaddress')
+    st.session_state.valid[4] = validate_string(st.session_state.clientaddress, ['Client Address'])
+
     bottomFirst, bottomSecond, bottomThird, bottomFourth = st.columns(4)
 
     warnings = st.expander('View warnings')
@@ -37,15 +40,12 @@ def screen(st):
         with warnings:
             st.warning('Please select an industry for this client!')
 
-    st.text_input('Client Address', 'Client Address', key='clientaddress')
-    st.session_state.valid[4] = validate_string(st.session_state.clientaddress, ['Client Address'])
-
     if not st.session_state.valid[4]:
         with warnings:
             st.warning('Please enter a valid address for this client!')
 
     bottomFourth.text_input('Client Country', 'United States', key='clientcountry')
-    st.session_state.valid[8] = validate_string(st.session_state.clientcountry, ['', 'US', 'USA', 'United States of America'])
+    st.session_state.valid[8] = validate_string(st.session_state.clientcountry, ['US', 'USA', 'United States of America'])
 
     if not st.session_state.valid[8]:
         with warnings:
@@ -66,8 +66,8 @@ def screen(st):
             with warnings:
                 st.warning('Please select a state for this client!')
     else:
-        st.text_input('Client Province', 'Client Province', key='clientprovince')
-        bottomSecond.session_state.valid[6] = validate_string(st.session_state.clientprovince, ['Client Province'])
+        bottomSecond.text_input('Client Province', 'Client Province', key='clientprovince')
+        st.session_state.valid[6] = validate_string(st.session_state.clientprovince, ['Client Province'])
 
         if not st.session_state.valid[6]:
             with warnings:
