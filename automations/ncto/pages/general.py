@@ -10,14 +10,14 @@ def screen(st):
     leftCol.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type', on_change=inc_click, args=(st, 0))
     st.session_state.valid[0] = validate_dropdown(st.session_state.type, [''])
 
-    existingWarning = leftCol.empty()
+    existingWarning = st.empty()
 
     if not st.session_state.valid[0] and st.session_state.clicks[0] > 0:
         with existingWarning.container():
             st.warning('Please select either new or existing client!')
     elif st.session_state.clicks[0] == 0:
         with existingWarning.container():
-            st.markdown('  ')
+            st.markdown('<br>', unsafe_allow_html=True)
     else:
         existingWarning.empty()
         with existingWarning.container():
