@@ -38,16 +38,3 @@ def screen(st):
     bottomThird.text_input('Client Zip Code', 'Client Zip', key='clientzip')
     st.session_state.valid[7] = validate_nums(st.session_state.clientzip, 10000, 99999)
 
-    # st.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
-    # st.session_state.valid[1] = validate_dropdown(st.session_state.office, [''])
-
-    # st.text_input('Client Name', 'Client Name', key='client')
-    # st.session_state.valid[2] = validate_string(st.session_state.client, ['Client Name'])
-
-    # if st.session_state.type == "New Client Relationship":
-    #     st.selectbox('Originator', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='originator')
-    #     st.session_state.valid[3] = validate_dropdown(st.session_state.originator, [''])
-    # else:
-    #     st.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients.CLIENTDISPLAY], key='relationship')
-    #     st.session_state.valid[3] = validate_dropdown(st.session_state.relationship, [''])
-

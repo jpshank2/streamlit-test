@@ -6,6 +6,8 @@ def screen(st):
     leftCol, rightCol = st.columns(2)
 
     leftCol.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type')
+    if not st.session_state.valid[0]:
+        st.warning('Please select either new or existing client!')
     st.session_state.valid[0] = validate_dropdown(st.session_state.type, [''])
 
     rightCol.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
