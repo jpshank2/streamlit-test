@@ -11,7 +11,6 @@ def validate_string(input, notAllowed):
         return False if input in notAllowed else True
 
 def validate_nums(input, minVal, maxVal):
-    print(input)
     from re import search
 
     if search('[^0-9]+', input) != None:
