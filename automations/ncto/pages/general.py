@@ -15,14 +15,9 @@ def screen(st):
     if not st.session_state.valid[0]:
         with warnings:
             st.warning('Please select either new or existing client!')
-    # else:
-    #     existingWarning.empty()
-
 
     rightCol.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
     st.session_state.valid[1] = validate_dropdown(st.session_state.office, [''])
-
-    # officeWarning = st.empty()
 
     if not st.session_state.valid[1]:
         with warnings:
@@ -30,8 +25,6 @@ def screen(st):
 
     leftCol.text_input('Client Name', 'Client Name', key='client')
     st.session_state.valid[2] = validate_string(st.session_state.client, ['Client Name'])
-
-    # nameWarning = st.empty()
 
     if not st.session_state.valid[2]:
         with warnings:
@@ -41,8 +34,6 @@ def screen(st):
         rightCol.selectbox('Originator', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='originator')
         st.session_state.valid[3] = validate_dropdown(st.session_state.originator, [''])
 
-        # originatorWarning = st.empty()
-
         if not st.session_state.valid[3]:
             with warnings:
                 st.warning('Please select an originator for this client!')
@@ -50,8 +41,6 @@ def screen(st):
     elif st.session_state.type == 'Subcode Needed for Existing Client':
         rightCol.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients.CLIENTDISPLAY], key='relationship')
         st.session_state.valid[3] = validate_dropdown(st.session_state.relationship, [''])
-
-        # relationshipWarning = st.empty()
 
         if not st.session_state.valid[3]:
             with warnings:
