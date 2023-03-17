@@ -20,6 +20,8 @@ if 'pageCounter' not in st.session_state:
         st.session_state['pageCounter'] = 0
 if 'valid' not in st.session_state:
     st.session_state['valid'] = [True]
+if 'clicks' not in st.session_state:
+    st.session_state['clicks'] = [0]
 if 'offices' not in st.session_state:
     st.session_state['offices'] = run_query('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;', conn)
 if 'clients' not in st.session_state:

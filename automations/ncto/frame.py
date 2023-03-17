@@ -20,7 +20,7 @@ def prev_page(st):
 #NCTO function
 def clientTakeOn(st):
     if 'static_session' not in st.session_state:
-        st.session_state['static_session'] = ['previous', 'next', 'staff', 'clients', 'offices', 'entities', 'industries', 'contacts', 'valid', 'pageCounter', 'static_session']
+        st.session_state['static_session'] = ['previous', 'next', 'staff', 'clients', 'offices', 'entities', 'industries', 'contacts', 'valid', 'pageCounter', 'clicks', 'static_session']
     
     pageList = [{'name': 'Home', 'module': 'automations.ncto.pages.home'}, {'name': 'General Information', 'module': 'automations.ncto.pages.general'}, {'name': 'Client Details', 'module': 'automations.ncto.pages.client'}, {'name': 'Contact Details', 'module': 'automations.ncto.pages.contact'}, {'name': 'Client Billings', 'module': 'automations.ncto.pages.billings'}, {'name': 'Client Attributes', 'module': 'automations.ncto.pages.attributes'}, {'name': 'Services', 'module': 'automations.ncto.pages.services'}, {'name': 'Final Review', 'module': 'automations.ncto.pages.review'}, {'name': 'Submitted', 'module': 'automations.ncto.pages.end'}]
     

@@ -1,4 +1,4 @@
-from automations.ncto.validators import validate_dropdown, validate_string, validate_nums
+from utilities.validators import validate_dropdown, validate_string, validate_nums
 
 def screen(st):
     st.session_state.valid = [False for i in range(9)]
