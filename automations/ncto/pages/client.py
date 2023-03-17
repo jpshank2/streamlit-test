@@ -5,6 +5,8 @@ def screen(st):
 
     topLeft, topRight = st.columns(2)
 
+    bottomFirst, bottomSecond, bottomThird, bottomFourth = st.columns(4)
+
     warnings = st.expander('View warnings')
 
     topLeft.selectbox('Client Partner', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True].EMPLOYEE], key='clientpartner')
@@ -41,8 +43,6 @@ def screen(st):
     if not st.session_state.valid[4]:
         with warnings:
             st.warning('Please enter a valid address for this client!')
-
-    bottomFirst, bottomSecond, bottomThird, bottomFourth = st.columns(4)
 
     bottomFourth.text_input('Client Country', 'United States', key='clientcountry')
     st.session_state.valid[8] = validate_string(st.session_state.clientcountry, ['', 'US', 'USA', 'United States of America'])
