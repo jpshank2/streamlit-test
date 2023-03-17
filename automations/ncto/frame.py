@@ -53,7 +53,8 @@ def clientTakeOn(st):
             leftButton.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
 
         rightButton.button('Save & Next', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
-    except:
+    except Exception as e:
+        st.write(e)
         st.write(st.session_state.newclient)
 
     progress_bar = st.progress(0)
