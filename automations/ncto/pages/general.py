@@ -69,3 +69,5 @@ def screen(st):
         else:
             existingWarning.empty()
 
+    st.write(st.session_state.clicks)
+
