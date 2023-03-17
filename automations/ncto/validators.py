@@ -10,7 +10,7 @@ def validate_string(input, notAllowed):
     else:
         return False if input in notAllowed else True
 
-def validate_nums(input, minVal, maxVal):
+def validate_nums(minVal, maxVal, input=0):
     from re import search
 
     if search('\D', input) == None and int(input) >= minVal and int(input) <= maxVal:

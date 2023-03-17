@@ -4,7 +4,6 @@ def screen(st):
     st.session_state.valid = [False for i in range(9)]
 
     topLeft, topRight = st.columns(2)
-    bottomFirst, bottomSecond, bottomThird, bottomFourth = st.columns(4)
 
     topLeft.selectbox('Client Partner', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True].EMPLOYEE], key='clientpartner')
     st.session_state.valid[0] = validate_dropdown(st.session_state.clientpartner, [''])
@@ -21,6 +20,8 @@ def screen(st):
     st.text_input('Client Address', 'Client Address', key='clientaddress')
     st.session_state.valid[4] = validate_string(st.session_state.clientaddress, ['Client Address'])
 
+    bottomFirst, bottomSecond, bottomThird, bottomFourth = st.columns(4)
+
     bottomFourth.text_input('Client Country', 'United States', key='clientcountry')
     st.session_state.valid[8] = validate_string(st.session_state.clientcountry, [''])
 
@@ -35,7 +36,7 @@ def screen(st):
         bottomSecond.session_state.valid[6] = validate_string(st.session_state.clientprovince, ['Client Province'])
 
     bottomThird.text_input('Client Zip Code', 'Client Zip', key='clientzip')
-    st.session_state.valid[7] = validate_nums(st.session_state.clientzip, 10000, 99999)
+    st.session_state.valid[7] = validate_nums(10000, 99999, st.session_state.clientzip)
 
     # st.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
     # st.session_state.valid[1] = validate_dropdown(st.session_state.office, [''])
