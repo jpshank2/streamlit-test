@@ -17,7 +17,7 @@ def screen(st):
             st.warning('Please select either new or existing client!')
     elif st.session_state.clicks[0] == 0:
         with existingWarning.container():
-            st.markdown('')
+            st.markdown('  ')
     else:
         existingWarning.empty()
         with existingWarning.container():
