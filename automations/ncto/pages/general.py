@@ -15,8 +15,12 @@ def screen(st):
     if not st.session_state.valid[0] and st.session_state.clicks[0] > 0:
         with existingWarning.container():
             st.warning('Please select either new or existing client!')
+    elif st.session_state.clicks[0] == 0:
+        existingWarning.container()
     else:
         existingWarning.empty()
+        with existingWarning.container():
+            st.markdown('')
 
 
     rightCol.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
