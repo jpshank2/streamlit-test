@@ -36,7 +36,7 @@ def screen(st):
         bottomSecond.session_state.valid[6] = validate_string(st.session_state.clientprovince, ['Client Province'])
 
     bottomThird.text_input('Client Zip Code', 'Client Zip', key='clientzip')
-    st.session_state.valid[7] = validate_nums(10000, 99999, st.session_state.clientzip)
+    st.session_state.valid[7] = validate_nums(st.session_state.clientzip, 10000, 99999)
 
     # st.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='office')
     # st.session_state.valid[1] = validate_dropdown(st.session_state.office, [''])
