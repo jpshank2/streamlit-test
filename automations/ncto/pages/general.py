@@ -13,7 +13,7 @@ def screen(st):
 
     leftCol, rightCol = st.columns(2)
 
-    leftCol.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type', on_change=inc_click, args=(0,))
+    leftCol.selectbox('New or Existing Client?', ('', 'New Client Relationship', 'Subcode Needed for Existing Client'), key='type', on_change=(lambda: st.session_state.clicks[0] + 1))
     st.session_state.valid[0] = validate_dropdown(st.session_state.type, [''])
 
     existingWarning = st.empty()
