@@ -42,14 +42,13 @@ def screen(st):
         with warnings:
             st.warning('Please enter a valid phone number for this contact!')
 
-    bottomFour.text_input('Contact Country', country, key='contact_country')
-
     midOne.checkbox('Client and Contact Address Same?', key='contact_same')
+
+    bottomFour.text_input('Contact Country', st.session_state.newclient['client'][-1]['client_country'] if st.session_state.contact_same else 'United States', key='contact_country')
 
     if st.session_state.contact_same:
         address = st.session_state.newclient['client'][-1]['client_address']
         city = st.session_state.newclient['client'][-1]['client_city']
-        country = st.session_state.newclient['client'][-1]['client_country']
         zip = st.session_state.newclient['client'][-1]['client_zip']
         if st.session_state.newclient['client'][-1]['client_country'] == 'United States':
             bottomTwo.selectbox('Contact State', st.session_state.newclient['client'][-1]['client_state'], key='contact_state', disabled=st.session_state.contact_same)
@@ -60,7 +59,6 @@ def screen(st):
     else:
         address = 'Contact Street'
         city = 'Contact City'
-        country = 'United States'
         zip = 'Numbers Only'
         if st.session_state.contact_country == 'United States':
             bottomTwo.selectbox('Contact State', ["", "AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"], key='contact_state', disabled=st.session_state.contact_same)
