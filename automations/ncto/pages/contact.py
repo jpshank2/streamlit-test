@@ -9,6 +9,10 @@ def screen(st):
 
     bottomOne, bottomTwo, bottomThree, bottomFour = st.columns(4)
 
+    contactButtonOne, contactButtonTwo = st.columns(2)
+
+    existingContact = st.columns(1)
+
     warnings = st.expander('View warnings')
 
     topOne.text_input('First Name', 'First Name', key='contact_first')
@@ -92,3 +96,23 @@ def screen(st):
             if not st.session_state.valid[8]:
                 st.warning("Please enter a vaild country for this contact! (For US clients please only use 'United States')")
 
+    contactButtonOne.checkbox('Search for an Existing Contact', key='existing_toggle', value=False)
+
+    existingContact.selectbox('Select an existing contact', [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', label_visibility=("visible" if st.session_state.existing_toggle else "collapsed"))
+
+    if st.session_state.existing_toggle:
+        contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
+        contactName = contact['CONTNAME'].iloc[0].split(maxsplit=1)
+        st.session_state.contact_first = contactName[0]
+        st.session_state.contact_last = contactName[1]
+        st.session_state.contact_email = contact['CONTEMAIL'].iloc[0]
+        st.session_state.contact_address = contact['CONTADDRESS'].iloc[0]
+        st.session_state.contact_city = contact['CONTCITY'].iloc[0]
+        st.session_state.contact_country = contact['CONTCOUNTRY'].iloc[0]
+        if st.session_state.contact_country == 'United States':
+            st.session_state.contact_state = contact['CONTSTATE'].iloc[0]
+        else:
+            st.session_state.contact_province = contact['CONTSTATE'].iloc[0]
+        
+        if 'contact_index' not in st.session_state:
+            st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]

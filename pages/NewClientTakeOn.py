@@ -17,7 +17,7 @@ def init_connection():
 conn = init_connection()
 
 if 'pageCounter' not in st.session_state:
-        st.session_state['pageCounter'] = 0
+    st.session_state['pageCounter'] = 0
 if 'valid' not in st.session_state:
     st.session_state['valid'] = [True]
 if 'clicks' not in st.session_state:
