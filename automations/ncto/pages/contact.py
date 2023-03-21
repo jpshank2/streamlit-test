@@ -98,7 +98,7 @@ def screen(st):
 
     contactButtonOne.checkbox('Search for an Existing Contact', key='existing_toggle', value=False)
 
-    contactButtonTwo.selectbox('Select an existing contact', [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', label_visibility=("visible" if st.session_state.existing_toggle else "collapsed"))
+    contactButtonTwo.selectbox('Select an existing contact', [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', disabled=(not st.session_state.existing_toggle))
 
     if st.session_state.existing_toggle:
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
