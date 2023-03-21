@@ -11,7 +11,7 @@ def screen(st):
 
     contactButtonOne, contactButtonTwo = st.columns(2)
 
-    existingContact = st.columns(1)
+    # existingContact = st.columns(1)
 
     warnings = st.expander('View warnings')
 
@@ -98,7 +98,7 @@ def screen(st):
 
     contactButtonOne.checkbox('Search for an Existing Contact', key='existing_toggle', value=False)
 
-    existingContact.selectbox('Select an existing contact', [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', label_visibility=("visible" if st.session_state.existing_toggle else "collapsed"))
+    contactButtonTwo.selectbox('Select an existing contact', [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', label_visibility=("visible" if st.session_state.existing_toggle else "collapsed"))
 
     if st.session_state.existing_toggle:
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
