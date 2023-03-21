@@ -102,17 +102,20 @@ def screen(st):
 
     if st.session_state.existing_toggle:
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
-        contactName = contact['CONTNAME'].iloc[0].split(maxsplit=1)
-        st.session_state.contact_first = contactName[0]
-        st.session_state.contact_last = contactName[1]
-        st.session_state.contact_email = contact['CONTEMAIL'].iloc[0]
-        st.session_state.contact_address = contact['CONTADDRESS'].iloc[0]
-        st.session_state.contact_city = contact['CONTCITY'].iloc[0]
-        st.session_state.contact_country = contact['CONTCOUNTRY'].iloc[0]
-        if st.session_state.contact_country == 'United States':
-            st.session_state.contact_state = contact['CONTSTATE'].iloc[0]
-        else:
-            st.session_state.contact_province = contact['CONTSTATE'].iloc[0]
+        st.session_state.valid = [True for i in range(9)]
         
         if 'contact_index' not in st.session_state:
             st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
+    else:
+        st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
+        st.session_state.valid[1] = validate_string(st.session_state.contact_last, ['Last Name'])
+        st.session_state.valid[2] = validate_email(st.session_state.contact_email)
+        if st.session_state.contact_phone != 'Numbers Only' and st.session_state.contact_phone != '':
+            st.session_state.valid[3] = validate_nums(st.session_state.contact_phone, 1000000000, 9999999999)
+        else:
+            st.session_state.valid[3] = True
+        st.session_state.valid[4] = validate_string(st.session_state.contact_address, ['Contact Street'])
+        st.session_state.valid[5] = validate_string(st.session_state.contact_city, ['Contact City'])
+        st.session_state.valid[6] = validate_dropdown(st.session_state.contact_state, ['']) if st.session_state.contact_country == 'United States' else validate_string(st.session_state.contact_province, ['Contact Province'])
+        st.session_state.valid[7] = validate_nums(st.session_state.contact_zip, 10000, 99999)
+        st.session_state.valid[8] = validate_string(st.session_state.contact_country, ['US', 'USA', 'United States of America'])
