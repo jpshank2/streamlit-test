@@ -29,6 +29,9 @@ def screen(st):
     if not st.session_state.valid[2]:
         with warnings:
             st.warning('Please enter a valid name for this client!')
+    elif st.session_state.clients[st.session_state.clients['CLIENTNAME'].str.upper() == st.session_state.general_client.upper()].shape[0] > 0:
+        with warnings:
+            st.warning('A client with this name already exists! - ' + st.session_state.clients[st.session_state.clients['CLIENTNAME'].str.upper() == st.session_state.general_client.upper()].CLIENTDISPLAY)
 
     if st.session_state.general_type == "New Client Relationship":
         rightCol.selectbox('Originator', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='general_originator')
@@ -39,7 +42,7 @@ def screen(st):
                 st.warning('Please select an originator for this client!')
 
     elif st.session_state.general_type == 'Subcode Needed for Existing Client':
-        rightCol.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients.CLIENTDISPLAY], key='general_relationship')
+        rightCol.selectbox('Client Relationship', [''] + [i for i in st.session_state.clients[st.session_state.clients['Status'] != 'LOST'].CLIENTDISPLAY], key='general_relationship')
         st.session_state.valid[3] = validate_dropdown(st.session_state.general_relationship, [''])
 
         if not st.session_state.valid[3]:
