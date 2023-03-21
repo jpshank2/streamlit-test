@@ -30,6 +30,7 @@ def screen(st):
         with warnings:
             st.warning('Please enter a valid name for this client!')
     elif st.session_state.clients[st.session_state.clients['CLIENT'].str.upper() == st.session_state.general_client.upper()].shape[0] > 0:
+        st.session_state.valid[2] = False
         with warnings:
             st.warning('A client with this name already exists! - ' + st.session_state.clients[st.session_state.clients['CLIENT'].str.upper() == st.session_state.general_client.upper()].CLIENTDISPLAY.iloc[0])
 
