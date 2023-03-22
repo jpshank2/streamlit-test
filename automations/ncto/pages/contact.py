@@ -73,8 +73,6 @@ def screen(st):
 
     bottomOne.text_input('Contact City', city, key='contact_city', disabled=st.session_state.contact_same)
     
-    
-    
     bottomThree.text_input('Contact Zip Code', zip, key='contact_zip', disabled=st.session_state.contact_same)
 
     if not st.session_state.contact_same:
@@ -119,3 +117,5 @@ def screen(st):
         st.session_state.valid[6] = validate_dropdown(st.session_state.contact_state, ['']) if st.session_state.contact_country == 'United States' else validate_string(st.session_state.contact_province, ['Contact Province'])
         st.session_state.valid[7] = validate_nums(st.session_state.contact_zip, 10000, 99999)
         st.session_state.valid[8] = validate_string(st.session_state.contact_country, ['US', 'USA', 'United States of America'])
+        if 'contact_index' not in st.session_state:
+            st.session_state['contact_index'] = 0
