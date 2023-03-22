@@ -25,7 +25,7 @@ if 'clicks' not in st.session_state:
 if 'offices' not in st.session_state:
     st.session_state['offices'] = run_query('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;', conn)
 if 'clients' not in st.session_state:
-    st.session_state['clients'] = run_query("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX FROM DIM_CLIENT_MASTER;", conn)
+    st.session_state['clients'] = run_query("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX, STATUS FROM DIM_CLIENT_MASTER;", conn)
 if 'staff' not in st.session_state:
     st.session_state['staff'] = run_query("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';", conn)
 if 'entities' not in st.session_state:
