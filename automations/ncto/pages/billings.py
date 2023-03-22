@@ -36,7 +36,7 @@ def screen(st):
     else:
         st.session_state.valid[3] = True
 
-    lowerMidOne.checkbox('Client and Billing Address Same?', value='billings_same')
+    lowerMidOne.checkbox('Client and Billing Address Same?', key='billings_same')
 
     bottomFour.text_input('Billing Country', st.session_state.newclient['client'][-1]['client_country'] if st.session_state.billings_same else 'United States', key='billings_country', disabled=st.session_state.billings_same)
 
