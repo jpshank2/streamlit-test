@@ -102,14 +102,13 @@ def screen(st):
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
         if validate_dropdown(st.session_state.existing_contact, ['']):
             st.session_state.valid = [True for i in range(9)]
+            if 'contact_index' not in st.session_state:
+                st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
+            else:
+                st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
         else:
-            warnings = st.empty()
+            warnings.empty()
             warnings.warning('Please select a valid existing contact for this client!')
-        
-        if 'contact_index' not in st.session_state:
-            st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
-        else:
-            st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
     else:
         st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
         st.session_state.valid[1] = validate_string(st.session_state.contact_last, ['Last Name'])
