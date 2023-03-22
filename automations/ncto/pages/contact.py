@@ -104,8 +104,10 @@ def screen(st):
         
         if 'contact_index' not in st.session_state:
             st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
+            warnings.write('existing true init')
         else:
             st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
+            warnings.write('existing true update')
     else:
         st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
         st.session_state.valid[1] = validate_string(st.session_state.contact_last, ['Last Name'])
@@ -121,5 +123,7 @@ def screen(st):
         st.session_state.valid[8] = validate_string(st.session_state.contact_country, ['US', 'USA', 'United States of America'])
         if 'contact_index' not in st.session_state:
             st.session_state['contact_index'] = 0
+            warnings.write('new contact init')
         else:
             st.session_state['contact_index'] = 0
+            warnings.write('new contact update')
