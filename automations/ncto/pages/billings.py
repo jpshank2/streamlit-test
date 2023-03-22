@@ -23,7 +23,7 @@ def screen(st):
     from datetime import datetime
     today = datetime.now()
 
-    topThree.date_input('Fiscal Year End', value=datetime(today.strftime('%Y'), 12, 31), key='billings_fye')
+    topThree.date_input('Fiscal Year End', value=datetime(int(today.strftime('%Y')), 12, 31), key='billings_fye')
 
     upperMidOne.selectbox('Client Invoice Method', ('', 'Print and Mail', 'Email'), key='billings_invoice')
     st.session_state.valid[2] = validate_dropdown(st.session_state.billings_invoice, [''])

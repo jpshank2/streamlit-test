@@ -55,7 +55,7 @@ def screen(st):
         city = st.session_state.newclient['client'][-1]['client_city']
         zip = st.session_state.newclient['client'][-1]['client_zip']
         if st.session_state.newclient['client'][-1]['client_country'] == 'United States':
-            bottomTwo.selectbox('Contact State', st.session_state.newclient['client'][-1]['client_state'], key='contact_state', disabled=st.session_state.contact_same)
+            bottomTwo.selectbox('Contact State', [st.session_state.newclient['client'][-1]['client_state']], key='contact_state', disabled=st.session_state.contact_same)
         else:
             bottomTwo.text_input('Contact Province', st.session_state.newclient['client'][-1]['client_province'], key='contact_province', disabled=st.session_state.contact_same)
         
