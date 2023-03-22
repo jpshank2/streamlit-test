@@ -96,18 +96,20 @@ def screen(st):
 
     contactButtonOne.checkbox('Search for an Existing Contact', key='existing_toggle', value=False)
 
-    contactButtonTwo.selectbox('Select an existing contact', [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', disabled=(not st.session_state.existing_toggle))
+    contactButtonTwo.selectbox('Select an existing contact', [''] + [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', disabled=(not st.session_state.existing_toggle))
 
     if st.session_state.existing_toggle:
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
-        st.session_state.valid = [True for i in range(9)]
+        if validate_dropdown(st.session_state.existing_contact, ['']):
+            st.session_state.valid = [True for i in range(9)]
+        else:
+            warnings = st.empty()
+            warnings.warning('Please select a valid existing contact for this client!')
         
         if 'contact_index' not in st.session_state:
             st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
-            warnings.write('existing true init')
         else:
             st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
-            warnings.write('existing true update')
     else:
         st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
         st.session_state.valid[1] = validate_string(st.session_state.contact_last, ['Last Name'])
@@ -123,7 +125,5 @@ def screen(st):
         st.session_state.valid[8] = validate_string(st.session_state.contact_country, ['US', 'USA', 'United States of America'])
         if 'contact_index' not in st.session_state:
             st.session_state['contact_index'] = 0
-            warnings.write('new contact init')
         else:
             st.session_state['contact_index'] = 0
-            warnings.write('new contact update')
