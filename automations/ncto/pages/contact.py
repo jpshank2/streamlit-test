@@ -107,7 +107,7 @@ def screen(st):
             else:
                 st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
         else:
-            warnings.empty()
+            st.session_state.valid = [True for i in range(9)] + [False]
             warnings.warning('Please select a valid existing contact for this client!')
     else:
         st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
