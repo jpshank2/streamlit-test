@@ -27,18 +27,7 @@ def screen(st):
     contactButtonTwo.selectbox('Select an existing contact', [''] + [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', disabled=(not st.session_state.existing_toggle))
 
     midOne.checkbox('Client and Contact Address Same?', key='contact_same', disabled=st.session_state.existing_toggle)
-    if st.session_state.contact_same:
-        address = st.session_state.newclient['client'][-1]['client_address']
-        city = st.session_state.newclient['client'][-1]['client_city']
-        zip = st.session_state.newclient['client'][-1]['client_zip']
-        country = st.session_state.newclient['client'][-1]['client_country']
-        if country == 'United States':
-            state = [st.session_state.newclient['client'][-1]['client_state']]
-        else:
-            province = st.session_state.newclient['client'][-1]['client_province']
-        
-        st.session_state.valid[4:9] = [True for j in range(5)]
-    elif st.session_state.existing_toggle:
+    if st.session_state.existing_toggle:
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
         if validate_dropdown(st.session_state.existing_contact, ['']):
             st.session_state.valid = [True for i in range(10)]
@@ -59,6 +48,17 @@ def screen(st):
         else:    
             st.session_state.valid = [True for i in range(9)] + [False]
             warnings.warning('Please select a valid existing contact for this client!')
+    elif st.session_state.contact_same:
+        address = st.session_state.newclient['client'][-1]['client_address']
+        city = st.session_state.newclient['client'][-1]['client_city']
+        zip = st.session_state.newclient['client'][-1]['client_zip']
+        country = st.session_state.newclient['client'][-1]['client_country']
+        if country == 'United States':
+            state = [st.session_state.newclient['client'][-1]['client_state']]
+        else:
+            province = st.session_state.newclient['client'][-1]['client_province']
+        
+        st.session_state.valid[4:9] = [True for j in range(5)]
 
     # existingContact = st.columns(1)
 
