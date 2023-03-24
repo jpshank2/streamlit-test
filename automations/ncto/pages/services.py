@@ -1,7 +1,7 @@
 from utilities.validators import validate_multi
 
 def screen(st, service):
-    st.session_state.valid = [False for i in range(2)]
+    st.session_state.valid = [True]#[False for i in range(2)]
 
     st.markdown('### ' + service + ' Service Information')
 
