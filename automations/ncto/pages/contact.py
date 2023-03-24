@@ -83,7 +83,7 @@ def screen(st):
         with warnings:
             st.warning('Please enter a valid email for this contact!')
 
-    topFour.text_input('Contact Phone Number', zip, key='contact_phone', disabled=st.session_state.existing_toggle)
+    topFour.text_input('Contact Phone Number', 'Numbers Only', key='contact_phone', disabled=st.session_state.existing_toggle)
     if st.session_state.contact_phone != 'Numbers Only' and st.session_state.contact_phone != '':
         st.session_state.valid[3] = validate_nums(st.session_state.contact_phone, 1000000000, 9999999999)
     else:
