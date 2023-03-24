@@ -6,8 +6,10 @@ def next_page(st, screen):
         try:
             if st.session_state.serviceCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']) - 1:
                 st.session_state.serviceCounter += 1
+                st.write('go to next service')
             else:
                 st.session_state.pageCounter += 1
+                st.write('go to next page')
         except Exception as e:
             st.write(e)
     else:
