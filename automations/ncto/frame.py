@@ -4,8 +4,8 @@ def next_page(st, screen):
         st.session_state.pageCounter += 1
     elif screen == 'services':
         try:
-            if st.session_state.screenCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']):
-                st.session_state.screenCounter += 1
+            if st.session_state.serviceCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']):
+                st.session_state.serviceCounter += 1
             else:
                 st.session_state.pageCounter += 1
         except Exception as e:
