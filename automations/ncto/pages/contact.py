@@ -22,7 +22,7 @@ def screen(st):
     contactButtonOne, contactButtonTwo = st.columns(2)
 
     warnings = st.expander('View warnings')
-    
+
     contactButtonOne.checkbox('Search for an Existing Contact', key='existing_toggle', value=False)
     contactButtonTwo.selectbox('Select an existing contact', [''] + [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', disabled=(not st.session_state.existing_toggle))
 
@@ -42,16 +42,16 @@ def screen(st):
         contact = st.session_state.contacts[st.session_state.contacts.CONTDISPLAY == st.session_state.existing_contact]
         if validate_dropdown(st.session_state.existing_contact, ['']):
             st.session_state.valid = [True for i in range(10)]
-            name = contact['CONTNAME'].split(' ', maxsplit=1)
-            address = contact['CONTADDRESS']
-            city = contact['CONTCITY']
-            zip = contact['CONTZIP']
+            name = contact['CONTNAME'].iloc[0].split(' ', maxsplit=1)
+            address = contact['CONTADDRESS'].iloc[0]
+            city = contact['CONTCITY'].iloc[0]
+            zip = contact['CONTZIP'].iloc[0]
             first = name[0]
             last = name[1]
-            email = contact['CONTEMAIL']
-            state = [contact['CONTSTATE']]
-            province = contact['CONTSTATE']
-            country = contact['CONTCOUNTRY']
+            email = contact['CONTEMAIL'].iloc[0]
+            state = [contact['CONTSTATE'].iloc[0]]
+            province = contact['CONTSTATE'].iloc[0]
+            country = contact['CONTCOUNTRY'].iloc[0]
             if 'contact_index' not in st.session_state:
                 st.session_state['contact_index'] = contact['CONTINDEX'].iloc[0]
             else:
