@@ -5,6 +5,9 @@ def screen(st, service):
 
     st.markdown('### ' + service + ' Service Information')
 
+    st.write(st.session_state['newclient']['attributes'][-1]['attributes_service'])
+    st.write(st.session_state.screenCounter)
+
     # if st.session_state.newclient['client'][-1]['client_entity'] == 'INDIVIDUAL':
     #     available_servs = st.session_state.services[st.session_state.services['SERVPERSON'] == True]
     # else:

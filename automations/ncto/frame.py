@@ -3,10 +3,13 @@ def next_page(st, screen):
     if screen == 'home':
         st.session_state.pageCounter += 1
     elif screen == 'services':
-        if st.session_state.screenCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']):
-            st.session_state.screenCounter += 1
-        else:
-            st.session_state.pageCounter += 1
+        try:
+            if st.session_state.screenCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']):
+                st.session_state.screenCounter += 1
+            else:
+                st.session_state.pageCounter += 1
+        except Exception as e:
+            st.write(e)
     else:
         prefix = screen + '_'
         allSessions = list(st.session_state.keys())
