@@ -15,6 +15,8 @@ def next_page(st, screen):
 
         st.session_state['newclient'][screen].append(JSONtoAdd)
 
+        st.session_state.pageCounter += 1
+
 
 def prev_page(st):
     st.session_state.pageCounter -= 1
