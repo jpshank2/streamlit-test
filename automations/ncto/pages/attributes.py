@@ -5,7 +5,7 @@ def screen(st):
     st.session_state.valid = [False]
 
     st.multiselect('Client Services', st.session_state.services.SERVTITLE, key='attributes_service')
-    st.sessiion_state.valid[0] = validate_multi(st.session_state.attributes_service)
+    st.session_state.valid[0] = validate_multi(st.session_state.attributes_service)
 
     warnings = st.expander('View warnings')
 
