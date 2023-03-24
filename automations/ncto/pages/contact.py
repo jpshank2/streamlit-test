@@ -20,6 +20,9 @@ def screen(st):
     bottomOne, bottomTwo, bottomThree, bottomFour = st.columns(4)
 
     contactButtonOne, contactButtonTwo = st.columns(2)
+
+    warnings = st.expander('View warnings')
+    
     contactButtonOne.checkbox('Search for an Existing Contact', key='existing_toggle', value=False)
     contactButtonTwo.selectbox('Select an existing contact', [''] + [i for i in st.session_state.contacts.CONTDISPLAY], key='existing_contact', disabled=(not st.session_state.existing_toggle))
 
@@ -58,8 +61,6 @@ def screen(st):
             warnings.warning('Please select a valid existing contact for this client!')
 
     # existingContact = st.columns(1)
-
-    warnings = st.expander('View warnings')
 
     topOne.text_input('First Name', first, key='contact_first', disabled=st.session_state.existing_toggle)
     st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
