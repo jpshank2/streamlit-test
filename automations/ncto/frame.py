@@ -3,7 +3,10 @@ def next_page(st, screen):
     if screen == 'home':
         st.session_state.pageCounter += 1
     elif screen == 'services':
-        st.session_state.pageCounter += 1
+        if st.session_state.screenCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']):
+            st.session_state.screenCounter += 1
+        else:
+            st.session_state.pageCounter += 1
     else:
         prefix = screen + '_'
         allSessions = list(st.session_state.keys())
@@ -21,16 +24,8 @@ def next_page(st, screen):
 def prev_page(st):
     st.session_state.pageCounter -= 1
 
-    # allSessions = list(st.session_state.keys())
-    # sessionsToRemove = list(filter(lambda x: all([x != y for y in st.session_state.static_session]), allSessions))
-
-    # for session in sessionsToRemove:
-    #     del st.session_state[session]
-
 #NCTO function
 def clientTakeOn(st):
-    # if 'static_session' not in st.session_state:
-    #     st.session_state['static_session'] = ['previous', 'next', 'staff', 'clients', 'offices', 'entities', 'industries', 'contacts', 'valid', 'pageCounter', 'clicks', 'static_session']
     
     pageList = [{'name': 'Home', 'module': 'automations.ncto.pages.home'}, {'name': 'General Information', 'module': 'automations.ncto.pages.general'}, {'name': 'Client Details', 'module': 'automations.ncto.pages.client'}, {'name': 'Contact Details', 'module': 'automations.ncto.pages.contact'}, {'name': 'Client Billings', 'module': 'automations.ncto.pages.billings'}, {'name': 'Client Attributes', 'module': 'automations.ncto.pages.attributes'}, {'name': 'Services', 'module': 'automations.ncto.pages.services'}, {'name': 'Final Review', 'module': 'automations.ncto.pages.review'}, {'name': 'Submitted', 'module': 'automations.ncto.pages.end'}]
     
@@ -43,9 +38,11 @@ def clientTakeOn(st):
         from importlib import import_module
         screen = import_module(pageList[st.session_state.pageCounter]['module'])
 
-        if st.session_state.pageCounter == 6:
-            screen.screen(st)
-        elif st.session_state.pageCounter == 0:
+        if pageList[st.session_state.pageCounter]['name'] == 'Services':
+            if 'serviceCounter' not in st.session_state:
+                st.session_state['serviceCounter'] = 0
+            screen.screen(st, st.session_state['newclient']['attributes'][-1]['attributes_service'][st.session_state.serviceCounter])
+        elif pageList[st.session_state.pageCounter]['name'] == 'Home':
             st.session_state.valid = [True]
             screen.screen(st)
         else:

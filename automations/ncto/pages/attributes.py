@@ -4,8 +4,6 @@ from utilities.validators import validate_multi
 def screen(st):
     st.session_state.valid = [False]
 
-    st.write(st.session_state.services)
-
     if st.session_state.newclient['client'][-1]['client_entity'] == 'INDIVIDUAL':
         available_servs = st.session_state.services[st.session_state.services['SERVPERSON'] == True]
     else:
