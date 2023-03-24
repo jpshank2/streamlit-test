@@ -30,7 +30,7 @@ def screen(st):
         zip = st.session_state.newclient['client'][-1]['client_zip']
         country = st.session_state.newclient['client'][-1]['client_country']
         if country == 'United States':
-            state = st.session_state.newclient['client'][-1]['client_state']
+            state = [st.session_state.newclient['client'][-1]['client_state']]
         else:
             province = st.session_state.newclient['client'][-1]['client_province']
         
@@ -46,7 +46,7 @@ def screen(st):
             first = name[0]
             last = name[1]
             email = contact['CONTEMAIL']
-            state = contact['CONTSTATE'] 
+            state = [contact['CONTSTATE']]
             province = contact['CONTSTATE']
             country = contact['CONTCOUNTRY']
             if 'contact_index' not in st.session_state:
@@ -99,7 +99,7 @@ def screen(st):
 
     bottomOne.text_input('Contact City', city, key='contact_city', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
 
-    bottomTwo.selectbox('Contact State', [state], key='contact_state', disabled=(st.session_state.contact_same or st.session_state.existing_toggle)) if st.session_state.contact_country == 'United States' else bottomTwo.text_input('Contact Province', province, key='contact_province', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
+    bottomTwo.selectbox('Contact State', state, key='contact_state', disabled=(st.session_state.contact_same or st.session_state.existing_toggle)) if st.session_state.contact_country == 'United States' else bottomTwo.text_input('Contact Province', province, key='contact_province', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
     
     bottomThree.text_input('Contact Zip Code', zip, key='contact_zip', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
 
