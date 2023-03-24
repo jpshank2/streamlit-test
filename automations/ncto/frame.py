@@ -1,6 +1,10 @@
 #move from page to page in the def ClientTakeOn
 def next_page(st, screen):
-    if screen != 'home':
+    if screen == 'home':
+        st.session_state.pageCounter += 1
+    elif screen == 'services':
+        st.session_state.pageCounter += 1
+    else:
         prefix = screen + '_'
         allSessions = list(st.session_state.keys())
         sessionsForJSON = [k for k in allSessions if prefix in k]
@@ -10,8 +14,6 @@ def next_page(st, screen):
             JSONtoAdd[session] = st.session_state[session]
 
         st.session_state['newclient'][screen].append(JSONtoAdd)
-
-    st.session_state.pageCounter += 1
 
 
 def prev_page(st):

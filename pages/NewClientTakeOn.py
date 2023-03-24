@@ -34,6 +34,8 @@ if 'industries' not in st.session_state:
     st.session_state['industries'] = run_query("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true;", conn)
 if 'contacts' not in st.session_state:
     st.session_state['contacts'] = run_query("SELECT * FROM DIM_CONTACTS WHERE CONTTYPE = 1;", conn)
+if 'services' not in st.session_state:
+    st.session_state['services'] = run_query("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE")
 if 'newclient' not in st.session_state:
     st.session_state['newclient'] = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': []}
 

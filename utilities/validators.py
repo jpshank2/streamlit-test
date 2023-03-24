@@ -30,3 +30,6 @@ def validate_email(input):
         return False
     else:
         return True
+
+def validate_multi(input):
+    return True if len(input) > 0 else False

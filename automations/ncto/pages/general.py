@@ -3,7 +3,7 @@ from utilities.validators import validate_dropdown, validate_string
 
 def screen(st):
     st.session_state.valid = [False for i in range(4)]
-    st.session_state.clicks = [0 for i in range(4)]
+    # st.session_state.clicks = [0 for i in range(4)]
 
     leftCol, rightCol = st.columns(2)
 
