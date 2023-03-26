@@ -2,15 +2,13 @@ from utilities.validators import validate_dropdown
 
 def screen(st, service):
     servIndex = st.session_state.services[st.session_state.services['SERVTITLE'] == service].SERVINDEX.iloc[0]
-    st.write(servIndex)
     sameKey = 'services_' + servIndex + '_same'
     servicePartner = 'services_' + servIndex + '_partner'
     serviceManager = 'services_' + servIndex + '_manager'
     st.session_state.valid = [False for i in range(2)]
 
     st.markdown('### ' + service + ' Service Information')
-    st.write(st.session_state.services)
-
+    
     topOne, topTwo = st.columns(2)
     midOne, midTwo = st.columns(2)
     botOne, botTwo = st.columns(2)
@@ -26,14 +24,14 @@ def screen(st, service):
         partner = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True].EMPLOYEE]
         manager = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFMANAGER'] == True].EMPLOYEE]
 
-    topOne.selectbox(service + ' Partner', partner, key=servicePartner, disabled=st.session_state.services_same)
+    topOne.selectbox(service + ' Partner', partner, key=servicePartner, disabled=st.session_state[sameKey])
     st.session_state.valid[0] = validate_dropdown(st.session_state.services_partner, [''])
 
     if not st.session_state.valid[0]:
         with warnings:
             st.warning('Please select a service partner for this client!')
 
-    botOne.selectbox(service + ' Manager', manager, key=serviceManager, disabled=st.session_state.services_same)
+    botOne.selectbox(service + ' Manager', manager, key=serviceManager, disabled=st.session_state[sameKey])
     st.session_state.valid[1] = validate_dropdown(st.session_state.services_partner, [''])
 
     if not st.session_state.valid[1]:
