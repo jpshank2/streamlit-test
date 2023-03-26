@@ -1,6 +1,10 @@
 from utilities.validators import validate_dropdown
 
 def screen(st, service):
+    servIndex = st.session_state.services[st.session_state.services['SERVTITLE'] == service]
+    sameKey = 'services_' + servIndex + '_same'
+    servicePartner = 'services_' + servIndex + '_partner'
+    serviceManager = 'services_' + servIndex + '_manager'
     st.session_state.valid = [False for i in range(2)]
 
     st.markdown('### ' + service + ' Service Information')
@@ -12,23 +16,23 @@ def screen(st, service):
 
     warnings = st.expander('View warnings')
 
-    midTwo.checkbox('Same as Client Partner and Manager?', key='services_same', value=False)
+    midTwo.checkbox('Same as Client Partner and Manager?', key=sameKey, value=False)
 
-    if st.session_state.services_same:
+    if st.session_state[sameKey]:
         partner = [st.session_state.newclient['client'][-1]['client_partner']]
         manager = [st.session_state.newclient['client'][-1]['client_manager']]
     else:
         partner = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True].EMPLOYEE]
         manager = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFMANAGER'] == True].EMPLOYEE]
 
-    topOne.selectbox(service + ' Partner', partner, key='services_partner', disabled=st.session_state.services_same)
+    topOne.selectbox(service + ' Partner', partner, key=servicePartner, disabled=st.session_state.services_same)
     st.session_state.valid[0] = validate_dropdown(st.session_state.services_partner, [''])
 
     if not st.session_state.valid[0]:
         with warnings:
             st.warning('Please select a service partner for this client!')
 
-    botOne.selectbox(service + ' Manager', manager, key='services_partner', disabled=st.session_state.services_same)
+    botOne.selectbox(service + ' Manager', manager, key=serviceManager, disabled=st.session_state.services_same)
     st.session_state.valid[1] = validate_dropdown(st.session_state.services_partner, [''])
 
     if not st.session_state.valid[1]:
