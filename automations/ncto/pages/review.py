@@ -10,8 +10,9 @@ def screen(st):
     midOne, midTwo, midThree, midFour = st.columns(4)
     botOne, botTwo, botThree = st.columns(3)
 
-    topOne.markdown(general['general_client'])
-    topOne.caption('Client Name')
+    with topOne.container():
+        st.markdown(general['general_client'])
+        st.caption('Client Name')
 
     topTwo.markdown(general['general_office'])
     topTwo.caption('Client Office')
