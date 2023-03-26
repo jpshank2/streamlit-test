@@ -1,23 +1,18 @@
 #move from page to page in the def ClientTakeOn
 def next_page(st, screen):
+    prefix = screen + '_'
+    allSessions = list(st.session_state.keys())
+    sessionsForJSON = [k for k in allSessions if prefix in k]
+    JSONtoAdd = dict()
     if screen == 'home':
         st.session_state.pageCounter += 1
     elif screen == 'services':
-        try:
-            if st.session_state.serviceCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']) - 1:
-                st.session_state.serviceCounter += 1
-                st.write('go to next service')
-            else:
-                st.session_state.pageCounter += 1
-                st.write('go to next page')
-        except Exception as e:
-            st.write(e)
+        # write each service to dict of values
+        if st.session_state.serviceCounter < len(st.session_state['newclient']['attributes'][-1]['attributes_service']) - 1:
+            st.session_state.serviceCounter += 1
+        else:
+            st.session_state.pageCounter += 1
     else:
-        prefix = screen + '_'
-        allSessions = list(st.session_state.keys())
-        sessionsForJSON = [k for k in allSessions if prefix in k]
-        JSONtoAdd = dict()
-
         for session in sessionsForJSON:
             JSONtoAdd[session] = st.session_state[session]
 

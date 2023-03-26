@@ -1,9 +1,43 @@
-from utilities.validators import validate_multi
+from utilities.validators import validate_dropdown
 
 def screen(st, service):
-    st.session_state.valid = [True]#[False for i in range(2)]
+    st.session_state.valid = [False for i in range(2)]
 
     st.markdown('### ' + service + ' Service Information')
+    st.write(st.session_state.services)
+
+    topOne, topTwo = st.columns(2)
+    midOne, midTwo = st.columns(2)
+    botOne, botTwo = st.columns(2)
+
+    warnings = st.expander('View warnings')
+
+    midTwo.checkbox('Same as Client Partner and Manager?', key='services_same', value=False)
+
+    if st.session_state.services_same:
+        partner = [st.session_state.newclient['client'][-1]['client_partner']]
+        manager = [st.session_state.newclient['client'][-1]['client_manager']]
+    else:
+        partner = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFCLIENTRESPONSIBLE'] == True].EMPLOYEE]
+        manager = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFMANAGER'] == True].EMPLOYEE]
+
+    topOne.selectbox(service + ' Partner', partner, key='services_partner', disabled=st.session_state.services_same)
+    st.session_state.valid[0] = validate_dropdown(st.session_state.services_partner, [''])
+
+    if not st.session_state.valid[0]:
+        with warnings:
+            st.warning('Please select a service partner for this client!')
+
+    botOne.selectbox(service + ' Manager', manager, key='services_partner', disabled=st.session_state.services_same)
+    st.session_state.valid[1] = validate_dropdown(st.session_state.services_partner, [''])
+
+    if not st.session_state.valid[1]:
+        with warnings:
+            st.warning('Please select a service manager for this client!')
+
+    topTwo.empty()
+    midOne.empty()
+    botTwo.empty()
 
     st.write(st.session_state['newclient']['attributes'][-1]['attributes_service'])
     st.write(st.session_state.serviceCounter)
