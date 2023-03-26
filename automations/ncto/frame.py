@@ -24,9 +24,12 @@ def next_page(st, screen):
 
         st.session_state.pageCounter += 1
 
-
 def prev_page(st):
     st.session_state.pageCounter -= 1
+
+def reset(st):
+    st.session_state.pageCounter = 0
+    st.session_state.newclient = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': []}
 
 #NCTO function
 def clientTakeOn(st):
@@ -54,10 +57,13 @@ def clientTakeOn(st):
 
         leftButton, rightButton = st.columns(2)
 
-        if st.session_state.pageCounter > 0:
+        if st.session_state.pageCounter > 0 and st.session_state.pageCounter < len(pageList) - 1:
             leftButton.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
 
-        rightButton.button('Save & Next', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
+        if pageList[st.session_state.pageCounter]['name'] == 'End':
+            rightButton.button('Save & Next', key='next', on_click=reset, args=(st, ), disabled=(False in st.session_state['valid']))
+        else:
+            rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'Review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
     except Exception as e:
         st.write(e)
         st.write(st.session_state.newclient)
