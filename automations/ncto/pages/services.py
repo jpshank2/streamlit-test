@@ -1,7 +1,7 @@
 from utilities.validators import validate_dropdown
 
 def screen(st, service):
-    servIndex = st.session_state.services[st.session_state.services['SERVTITLE'] == service].iloc[0]
+    servIndex = st.session_state.services[st.session_state.services['SERVTITLE'] == service].SERVINDEX.iloc[0]
     st.write(servIndex)
     sameKey = 'services_' + servIndex + '_same'
     servicePartner = 'services_' + servIndex + '_partner'
