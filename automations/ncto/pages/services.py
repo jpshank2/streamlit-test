@@ -8,7 +8,7 @@ def screen(st, service):
     st.session_state.valid = [False for i in range(2)]
 
     st.markdown('### ' + service + ' Service Information')
-    
+
     topOne, topTwo = st.columns(2)
     midOne, midTwo = st.columns(2)
     botOne, botTwo = st.columns(2)
@@ -25,14 +25,14 @@ def screen(st, service):
         manager = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFMANAGER'] == True].EMPLOYEE]
 
     topOne.selectbox(service + ' Partner', partner, key=servicePartner, disabled=st.session_state[sameKey])
-    st.session_state.valid[0] = validate_dropdown(st.session_state.services_partner, [''])
+    st.session_state.valid[0] = validate_dropdown(st.session_state[servicePartner], [''])
 
     if not st.session_state.valid[0]:
         with warnings:
             st.warning('Please select a service partner for this client!')
 
     botOne.selectbox(service + ' Manager', manager, key=serviceManager, disabled=st.session_state[sameKey])
-    st.session_state.valid[1] = validate_dropdown(st.session_state.services_partner, [''])
+    st.session_state.valid[1] = validate_dropdown(st.session_state[serviceManager], [''])
 
     if not st.session_state.valid[1]:
         with warnings:
