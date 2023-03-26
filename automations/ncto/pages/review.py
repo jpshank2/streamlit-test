@@ -14,8 +14,9 @@ def screen(st):
         st.markdown(general['general_client'])
         st.caption('Client Name')
 
-    topTwo.markdown(general['general_office'])
-    topTwo.caption('Client Office')
+    with topTwo.container():
+        st.markdown(general['general_office'])
+        st.caption('Client Office')
 
     topThree.markdown(client['client_partner'])
     topThree.caption('Client Partner')
