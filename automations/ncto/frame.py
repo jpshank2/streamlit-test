@@ -65,7 +65,7 @@ def clientTakeOn(st):
             leftButton.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
 
         if pageList[st.session_state.pageCounter]['name'] == 'Submitted':
-            rightButton.button('Save & Next', key='next', on_click=reset, args=(st, ), disabled=(False in st.session_state['valid']))
+            rightButton.button('Enter a new client', key='next', on_click=reset, args=(st, ), disabled=(False in st.session_state['valid']))
         else:
             rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'Final Review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
     except Exception as e:
@@ -73,4 +73,4 @@ def clientTakeOn(st):
         st.write(st.session_state.newclient)
 
     progress_bar = st.progress(0)
-    progress_bar.progress(int(100 * (st.session_state.pageCounter / len(pageList))))
+    progress_bar.progress(int(100 * (st.session_state.pageCounter / (len(pageList) - 1))))
