@@ -30,15 +30,16 @@ def init_connection():
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 
-conn = init_connection()
+if 'conn' not in st.session_state:
+    st.session_state['conn'] = init_connection()
 
 try:
     st.markdown('### AR Reports')
     go_to_top()
-    create_ar_reports(st, conn)
+    create_ar_reports(st)
 
     st.markdown('### WIP Reports')
     go_to_top()
-    create_wip_reports(st, conn)
+    create_wip_reports(st)
 except Exception as e:
     st.write(e)

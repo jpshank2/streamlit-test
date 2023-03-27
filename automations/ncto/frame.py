@@ -33,6 +33,7 @@ def prev_page(st):
 
 def reset(st):
     st.session_state.pageCounter = 0
+    st.session_state.serviceCounter = 0
     st.session_state.newclient = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 
 #NCTO function

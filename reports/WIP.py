@@ -1,17 +1,17 @@
 from numpy import sum
 from pandas import pivot_table
-from utilities.queries import run_query
+from utilities.queries import get_rows
 
-def create_wip_reports(st, conn):
+def create_wip_reports(st):
     try:
         # rowNums = q.get_row_nums('TRANS_WIP', conn)
         # st.write(rowNums)
-        rows = run_query("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = get_rows("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
             WHERE WIP.ContIndex < 900000
-                AND WIP.WIPOUTSTANDING <> 0""", conn).copy()
+                AND WIP.WIPOUTSTANDING <> 0""").copy()
         
         outstanding_WIP = round(rows['WIPOUTSTANDING'].sum(), 2)
         

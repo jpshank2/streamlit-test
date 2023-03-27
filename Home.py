@@ -3,7 +3,7 @@
 #
 
 from streamlit import markdown, snow#, cache_resource, secrets, session_state
-# from utilities.queries import run_query
+# from utilities.queries import get_rows
 # from snowflake.connector import connect
 
 markdown("# Hello, jps-playground! :wave:")

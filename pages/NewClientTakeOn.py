@@ -1,7 +1,7 @@
 import streamlit as st
 from snowflake.connector import connect
 from automations.ncto.frame import clientTakeOn
-from utilities.queries import run_query
+from utilities.queries import get_rows
 from PIL import Image
 from requests import get
 from io import BytesIO
@@ -14,8 +14,9 @@ def init_connection():
         **st.secrets["snowflake"], client_session_keep_alive=True
     )
 
-conn = init_connection()
-
+# conn = init_connection()
+if 'conn' not in st.session_state:
+    st.session_state['conn'] = init_connection()
 if 'pageCounter' not in st.session_state:
     st.session_state['pageCounter'] = 0
 if 'valid' not in st.session_state:
@@ -23,19 +24,19 @@ if 'valid' not in st.session_state:
 if 'clicks' not in st.session_state:
     st.session_state['clicks'] = [0]
 if 'offices' not in st.session_state:
-    st.session_state['offices'] = run_query('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;', conn)
+    st.session_state['offices'] = get_rows('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;')
 if 'clients' not in st.session_state:
-    st.session_state['clients'] = run_query("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX, STATUS FROM DIM_CLIENT_MASTER;", conn)
+    st.session_state['clients'] = get_rows("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX, STATUS FROM DIM_CLIENT_MASTER;")
 if 'staff' not in st.session_state:
-    st.session_state['staff'] = run_query("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';", conn)
+    st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
 if 'entities' not in st.session_state:
-    st.session_state['entities'] = run_query("SELECT * FROM DIM_ENTITIES;", conn)
+    st.session_state['entities'] = get_rows("SELECT * FROM DIM_ENTITIES;")
 if 'industries' not in st.session_state:
-    st.session_state['industries'] = run_query("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true;", conn)
+    st.session_state['industries'] = get_rows("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true;")
 if 'contacts' not in st.session_state:
-    st.session_state['contacts'] = run_query("SELECT * FROM DIM_CONTACTS WHERE CONTTYPE = 1;", conn)
+    st.session_state['contacts'] = get_rows("SELECT * FROM DIM_CONTACTS WHERE CONTTYPE = 1;")
 if 'services' not in st.session_state:
-    st.session_state['services'] = run_query("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE", conn)
+    st.session_state['services'] = get_rows("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE")
 if 'newclient' not in st.session_state:
     st.session_state['newclient'] = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 

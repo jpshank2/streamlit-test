@@ -1,9 +1,9 @@
 from numpy import where
 from plotly.express import bar, pie
-from utilities.queries import run_query
+from utilities.queries import get_rows
 
 # @st.cache_data(ttl=3600)
-# def run_query(query, _conn):
+# def get_rows(query, _conn):
 #     with _conn.cursor() as cur:
 #         cur.execute(query)
 #         rows = cur.fetchall()
@@ -14,13 +14,13 @@ from utilities.queries import run_query
         
 #         return pd.DataFrame(results)
 
-def create_ar_reports(st, conn):
+def create_ar_reports(st):
     try:
-        rows = run_query("""SELECT AR.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = get_rows("""SELECT AR.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_AR AR 
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE 
-            WHERE DEBTTRANUNPAID <> 0;""", conn)
+            WHERE DEBTTRANUNPAID <> 0;""")
 
         office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
         office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
