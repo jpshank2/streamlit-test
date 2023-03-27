@@ -33,7 +33,7 @@ def prev_page(st):
 
 def reset(st):
     st.session_state.pageCounter = 0
-    st.session_state.newclient = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': []}
+    st.session_state.newclient = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 
 #NCTO function
 def clientTakeOn(st):
@@ -53,9 +53,9 @@ def clientTakeOn(st):
             if 'serviceCounter' not in st.session_state:
                 st.session_state['serviceCounter'] = 0
             screen.screen(st, st.session_state['newclient']['attributes'][-1]['attributes_service'][st.session_state.serviceCounter])
-        elif pageList[st.session_state.pageCounter]['name'] == 'Home':
-            st.session_state.valid = [True]
-            screen.screen(st)
+        # elif pageList[st.session_state.pageCounter]['name'] == 'Home':
+        #     st.session_state.valid = [True]
+        #     screen.screen(st)
         else:
             screen.screen(st)
 
@@ -64,7 +64,7 @@ def clientTakeOn(st):
         if st.session_state.pageCounter > 0 and st.session_state.pageCounter < len(pageList) - 1:
             leftButton.button('Previous Page', on_click=prev_page, args=(st,), key='previous')
 
-        if pageList[st.session_state.pageCounter]['name'] == 'End':
+        if pageList[st.session_state.pageCounter]['name'] == 'Submitted':
             rightButton.button('Save & Next', key='next', on_click=reset, args=(st, ), disabled=(False in st.session_state['valid']))
         else:
             rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'Final Review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
