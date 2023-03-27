@@ -5,7 +5,7 @@ def screen(st):
 
     topOne, topTwo = st.columns(2)
 
-    st.text_input('Client Address', 'Client Street', key='client_address')
+    st.text_input('Client Address', placeholder='Client Street', key='client_address')
     st.session_state.valid[4] = validate_string(st.session_state.client_address, ['Client Street'])
 
     bottomOne, bottomTwo, bottomThree, bottomFour = st.columns(4)
@@ -50,14 +50,14 @@ def screen(st):
         with warnings:
             st.warning('Please enter a valid address for this client!')
 
-    bottomFour.text_input('Client Country', 'United States', key='client_country')
+    bottomFour.text_input('Client Country', 'United States', key='client_country', placeholder='Client Country')
     st.session_state.valid[8] = validate_string(st.session_state.client_country, ['US', 'USA', 'United States of America'])
 
     if not st.session_state.valid[8]:
         with warnings:
             st.warning("Please enter a vaild country for this client! (For US clients please only use 'United States')")
 
-    bottomOne.text_input('Client City', 'Client City', key='client_city')
+    bottomOne.text_input('Client City', placeholder='Client City', key='client_city')
     st.session_state.valid[5] = validate_string(st.session_state.client_city, ['Client City'])
 
     if not st.session_state.valid[5]:
@@ -72,14 +72,14 @@ def screen(st):
             with warnings:
                 st.warning('Please select a state for this client!')
     else:
-        bottomTwo.text_input('Client Province', 'Client Province', key='client_province')
+        bottomTwo.text_input('Client Province', placeholder='Client Province', key='client_province')
         st.session_state.valid[6] = validate_string(st.session_state.client_province, ['Client Province'])
 
         if not st.session_state.valid[6]:
             with warnings:
                 st.warning('Please enter a valid province for this client!')
 
-    bottomThree.text_input('Client Zip Code', 'Numbers Only', key='client_zip')
+    bottomThree.text_input('Client Zip Code', placeholder='Numbers Only', key='client_zip')
     st.session_state.valid[7] = validate_nums(st.session_state.client_zip, 10000, 99999)
 
     if not st.session_state.valid[7]:

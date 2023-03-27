@@ -14,10 +14,10 @@ def screen(st):
 
     warnings = st.expander('View warnings')
 
-    topOne.text_input('Estimated Fees', 'Numbers Only', key='billings_fees')
+    topOne.text_input('Estimated Fees', placeholder='Numbers Only', key='billings_fees')
     st.session_state.valid[0] = validate_nums(st.session_state.billings_fees, 100, 100000000)
 
-    topTwo.text_input('Estimated Hours', 'Numbers Only', key='billings_hours')
+    topTwo.text_input('Estimated Hours', placeholder='Numbers Only', key='billings_hours')
     st.session_state.valid[1] = validate_nums(st.session_state.billings_hours, 1, 100000000)
 
     from datetime import datetime
@@ -28,7 +28,7 @@ def screen(st):
     upperMidOne.selectbox('Client Invoice Method', ('', 'Print and Mail', 'Email'), key='billings_invoice')
     st.session_state.valid[2] = validate_dropdown(st.session_state.billings_invoice, [''])
 
-    upperMidTwo.text_input('Billing Email', 'Required for Email Invoice', key='billings_email')
+    upperMidTwo.text_input('Billing Email', placeholder='Required for Email Invoice', key='billings_email')
     if st.session_state.billings_invoice == 'Email':
         st.session_state.valid[3] = validate_email(st.session_state.billings_email)
     elif st.session_state.billings_email != 'Required for Email Invoice' and st.session_state.billings_email != '':
@@ -38,7 +38,7 @@ def screen(st):
 
     lowerMidOne.checkbox('Client and Billing Address Same?', key='billings_same')
 
-    bottomFour.text_input('Billing Country', st.session_state.newclient['client'][-1]['client_country'] if st.session_state.billings_same else 'United States', key='billings_country', disabled=st.session_state.billings_same)
+    bottomFour.text_input('Billing Country', st.session_state.newclient['client'][-1]['client_country'] if st.session_state.billings_same else 'United States', key='billings_country', disabled=st.session_state.billings_same, placeholder='Billing Country')
 
     if st.session_state.billings_same:
         address = st.session_state.newclient['client'][-1]['client_address']
@@ -51,19 +51,19 @@ def screen(st):
         
         st.session_state.valid[4:9] = [True for j in range(5)]
     else:
-        address = 'Billing Street'
-        city = 'Billing City'
-        zip = 'Numbers Only'
+        address = ''
+        city = ''
+        zip = ''
         if st.session_state.billings_country == 'United States':
             bottomTwo.selectbox('Billing State', ["", "AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"], key='billings_state', disabled=st.session_state.billings_same)
         else:
-            bottomTwo.text_input('Billing Province', 'Billing Province', key='billings_province', disabled=st.session_state.billings_same)
+            bottomTwo.text_input('Billing Province', placeholder='Billing Province', key='billings_province', disabled=st.session_state.billings_same)
 
-    lowerMidTwo.text_input('Billing Address', address, key='billings_address', disabled=st.session_state.billings_same)
+    lowerMidTwo.text_input('Billing Address', address, placeholder='Billing Street', key='billings_address', disabled=st.session_state.billings_same)
 
-    bottomOne.text_input('Billing City', city, key='billings_city', disabled=st.session_state.billings_same)
+    bottomOne.text_input('Billing City', city, placeholder='Billing City', key='billings_city', disabled=st.session_state.billings_same)
     
-    bottomThree.text_input('Billing Zip Code', zip, key='billings_zip', disabled=st.session_state.billings_same)
+    bottomThree.text_input('Billing Zip Code', zip, placeholder='Numbers Only', key='billings_zip', disabled=st.session_state.billings_same)
 
     if not st.session_state.valid[0]:
         with warnings:

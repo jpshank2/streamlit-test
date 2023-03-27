@@ -3,14 +3,14 @@ from utilities.validators import validate_dropdown, validate_string, validate_nu
 def screen(st):
     st.session_state.valid = [False for i in range(9)]
     
-    address = 'Contact Street'
-    city = 'Contact City'
-    zip = 'Numbers Only'
-    first = 'First Name'
-    last = 'Last Name'
-    email = 'Contact Email'
+    address = ''
+    city = ''
+    zip = ''
+    first = ''
+    last = ''
+    email = ''
     state = ["", "AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"]
-    province = 'Contact Province'
+    province = ''
     country = 'United States'
 
     topOne, topTwo, topThree, topFour = st.columns(4)
@@ -62,28 +62,28 @@ def screen(st):
 
     # existingContact = st.columns(1)
 
-    topOne.text_input('First Name', first, key='contact_first', disabled=st.session_state.existing_toggle)
+    topOne.text_input('First Name', first, placeholder='First Name', key='contact_first', disabled=st.session_state.existing_toggle)
     st.session_state.valid[0] = validate_string(st.session_state.contact_first, ['First Name'])
 
     if not st.session_state.valid[0]:
         with warnings:
             st.warning('Please enter a valid first name for this contact!')
 
-    topTwo.text_input('Last Name', last, key='contact_last', disabled=st.session_state.existing_toggle)
+    topTwo.text_input('Last Name', last, placeholder='Last Name', key='contact_last', disabled=st.session_state.existing_toggle)
     st.session_state.valid[1] = validate_string(st.session_state.contact_last, ['Last Name'])
 
     if not st.session_state.valid[1]:
         with warnings:
             st.warning('Please enter a valid last name for this contact!')
 
-    topThree.text_input('Contact Email', email, key='contact_email', disabled=st.session_state.existing_toggle)
+    topThree.text_input('Contact Email', email, placeholder='Contact Email', key='contact_email', disabled=st.session_state.existing_toggle)
     st.session_state.valid[2] = validate_email(st.session_state.contact_email)
 
     if not st.session_state.valid[2]:
         with warnings:
             st.warning('Please enter a valid email for this contact!')
 
-    topFour.text_input('Contact Phone Number', 'Numbers Only', key='contact_phone', disabled=st.session_state.existing_toggle)
+    topFour.text_input('Contact Phone Number', placeholder='Numbers Only', key='contact_phone', disabled=st.session_state.existing_toggle)
     if st.session_state.contact_phone != 'Numbers Only' and st.session_state.contact_phone != '':
         st.session_state.valid[3] = validate_nums(st.session_state.contact_phone, 1000000000, 9999999999)
     else:
@@ -94,15 +94,15 @@ def screen(st):
             st.warning('Please enter a valid phone number for this contact! (Numbers only with area code)')
 
 
-    bottomFour.text_input('Contact Country', country, key='contact_country', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
+    bottomFour.text_input('Contact Country', country, placeholder='Contact Country', key='contact_country', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
 
-    midTwo.text_input('Contact Address', address, key='contact_address', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
+    midTwo.text_input('Contact Address', address, placeholder='Contact Street', key='contact_address', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
 
-    bottomOne.text_input('Contact City', city, key='contact_city', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
+    bottomOne.text_input('Contact City', city, placeholder='Contact City', key='contact_city', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
 
-    bottomTwo.selectbox('Contact State', state, key='contact_state', disabled=(st.session_state.contact_same or st.session_state.existing_toggle)) if st.session_state.contact_country == 'United States' else bottomTwo.text_input('Contact Province', province, key='contact_province', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
+    bottomTwo.selectbox('Contact State', state, key='contact_state', disabled=(st.session_state.contact_same or st.session_state.existing_toggle)) if st.session_state.contact_country == 'United States' else bottomTwo.text_input('Contact Province', province, placeholder='Contact Province', key='contact_province', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
     
-    bottomThree.text_input('Contact Zip Code', zip, key='contact_zip', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
+    bottomThree.text_input('Contact Zip Code', zip, placeholder='Contact Zip', key='contact_zip', disabled=(st.session_state.contact_same or st.session_state.existing_toggle))
 
     if not st.session_state.contact_same:
         st.session_state.valid[4] = validate_string(st.session_state.contact_address, ['Contact Street'])
