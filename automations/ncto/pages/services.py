@@ -41,3 +41,6 @@ def screen(st, service):
     topTwo.empty()
     midOne.empty()
     botTwo.empty()
+
+    st.write(st.session_state['serviceCounter'])
+    st.write(st.session_state['newclient']['attributes'])

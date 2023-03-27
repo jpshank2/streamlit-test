@@ -1,5 +1,6 @@
 from utilities.queries import run_query
 from random import randint
+from snowflake.connector import connect
 # from json import dumps
 
 def create_new_client(st):
@@ -10,4 +11,4 @@ def create_new_client(st):
     key = str(office) + new_client['general'][-1]['general_client'][:3] + str(randint(0, 999999))
     key = key.replace(' ', '_')
 
-    run_query(f'INSERT INTO NCTO.ENTERED_CLIENTS VALUES ({key}, {new_client});')
+    run_query(f'INSERT INTO NCTO.ENTERED_CLIENTS VALUES ({key}, {new_client});', connect(**st.secrets["snowflake"], client_session_keep_alive=True))
