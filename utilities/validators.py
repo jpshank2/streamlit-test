@@ -15,6 +15,8 @@ def validate_nums(input, minVal, maxVal):
 
     if search('[^0-9]+', input) != None:
         return False
+    elif len(input) < 1:
+        return False
     elif search('\D', input) == None:
         if int(input) >= minVal and int(input) <= maxVal:
             return True
