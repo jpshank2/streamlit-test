@@ -11,4 +11,4 @@ def create_new_client(st):
     key = str(office) + new_client['general'][-1]['general_client'][:3] + str(randint(0, 999999))
     key = key.replace(' ', '_')
 
-    insert_rows('NCTO', 'ENTERED_CLIENTS', [key, new_client], connect(**st.secrets["snowflake"], client_session_keep_alive=True))
+    insert_rows('NCTO', 'ENTERED_CLIENTS', [key, new_client])
