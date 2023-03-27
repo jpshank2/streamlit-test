@@ -11,45 +11,46 @@ def screen(st):
     midOne, midTwo, midThree, midFour = st.columns(4)
     botOne, botTwo, botThree = st.columns(3)
 
-    topOne.markdown(general['general_client'])
     topOne.caption('Client Name')
+    topOne.markdown(general['general_client'])
 
-    topTwo.markdown(general['general_office'])
     topTwo.caption('Client Office')
+    topTwo.markdown(general['general_office'])
 
-    topThree.markdown(client['client_partner'])
     topThree.caption('Client Partner')
+    topThree.markdown(client['client_partner'])
 
-    topFour.markdown(client['client_manager'])
     topFour.caption('Client Manager')
+    topFour.markdown(client['client_manager'])
 
-    upperMidOne.markdown(general['general_originator']) if general['general_type'] == 'New Client Relationship' else upperMidOne.markdown(general['general_relationship'])
     upperMidOne.caption('Client Originator') if general['general_type'] == 'New Client Relationship' else upperMidOne.caption('Client Relationship')
+    upperMidOne.markdown(general['general_originator']) if general['general_type'] == 'New Client Relationship' else upperMidOne.markdown(general['general_relationship'])
 
-    upperMidTwo.markdown(client['client_entity'])
     upperMidTwo.caption('Client Entity')
+    upperMidTwo.markdown(client['client_entity'])
 
-    upperMidThree.markdown(client['client_industry'])
     upperMidThree.caption('Client Industry')
+    upperMidThree.markdown(client['client_industry'])
 
-    midOne.markdown(contact['contact_address'] + '\n' + contact['contact_city'] + ', ' + contact['contact_state'] if contact['contact_country'] == 'United States' else contact['contact_province'] + ' ' + contact['contact_zip'] + ' ' + contact['contact_country'])
     midOne.caption('Contact Address')
+    midOne.markdown(contact['contact_address'] + '\n' + contact['contact_city'] + ', ' + contact['contact_state'] if contact['contact_country'] == 'United States' else contact['contact_province'] + ' ' + contact['contact_zip'] + ' ' + contact['contact_country'])
 
-    midTwo.markdown(billings['billings_address'] + '\n' + billings['billings_city'] + ', ' + billings['billings_state'] if billings['billings_country'] == 'United States' else billings['billings_province'] + ' ' + billings['billings_zip'] + ' ' + billings['billings_country'])
     midTwo.caption('Billing Address')
+    midTwo.markdown(billings['billings_address'] + '\n' + billings['billings_city'] + ', ' + billings['billings_state'] if billings['billings_country'] == 'United States' else billings['billings_province'] + ' ' + billings['billings_zip'] + ' ' + billings['billings_country'])
 
-    midThree.markdown(client['client_address'] + '\n' + client['client_city'] + ', ' + client['client_state'] if client['client_country'] == 'United States' else client['client_province'] + ' ' + client['client_zip'] + ' ' + client['client_country'])
     midThree.caption('Client Address')
+    midThree.markdown(client['client_address'] + '\n' + client['client_city'] + ', ' + client['client_state'] if client['client_country'] == 'United States' else client['client_province'] + ' ' + client['client_zip'] + ' ' + client['client_country'])
 
-    midFour.markdown(contact['contact_phone'] if contact['contact_phone'] != 'Numbers Only' and contact['contact_phone'] != '' else 'No phone number listed')
     midFour.caption('Contact Phone Number')
+    midFour.markdown(contact['contact_phone'] if contact['contact_phone'] != 'Numbers Only' and contact['contact_phone'] != '' else 'No phone number listed')
 
-    botOne.markdown('Create services table')
+    botOne.caption('Contact Email')
+    botOne.markdown(contact['contact_email'])
 
-    botTwo.markdown(contact['contact_email'])
-    botTwo.caption('Contact Email')
-
-    botTwo.markdown(billings['billings_invoice'])
     botTwo.caption('Client Invoice Method')
+    botTwo.markdown(billings['billings_invoice'])
 
-    botThree.text_input('Client Notes', placeholder='Enter Any Additional Notes, Jobs to be added, etc.')
+    botThree.text_input('Client Notes', placeholder='Enter Any Additional Notes, Jobs to be added, etc.', key='review_notes')
+
+    st.caption('Client Services')
+    st.markdown('Create services table')

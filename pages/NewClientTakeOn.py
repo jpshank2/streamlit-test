@@ -37,7 +37,7 @@ if 'contacts' not in st.session_state:
 if 'services' not in st.session_state:
     st.session_state['services'] = run_query("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE", conn)
 if 'newclient' not in st.session_state:
-    st.session_state['newclient'] = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': []}
+    st.session_state['newclient'] = {'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/DcFwdrQ.png').content))
 

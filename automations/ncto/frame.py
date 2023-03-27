@@ -1,4 +1,5 @@
-#move from page to page in the def ClientTakeOn
+from utilities.click_handlers import create_new_client
+
 def next_page(st, screen):
     prefix = screen + '_'
     allSessions = list(st.session_state.keys())
@@ -23,6 +24,9 @@ def next_page(st, screen):
         st.session_state['newclient'][screen].append(JSONtoAdd)
 
         st.session_state.pageCounter += 1
+        
+        if screen == 'review':
+            create_new_client(st)
 
 def prev_page(st):
     st.session_state.pageCounter -= 1
@@ -63,7 +67,7 @@ def clientTakeOn(st):
         if pageList[st.session_state.pageCounter]['name'] == 'End':
             rightButton.button('Save & Next', key='next', on_click=reset, args=(st, ), disabled=(False in st.session_state['valid']))
         else:
-            rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'Review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
+            rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
     except Exception as e:
         st.write(e)
         st.write(st.session_state.newclient)

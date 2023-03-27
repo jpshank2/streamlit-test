@@ -40,7 +40,7 @@ def screen(st):
         indSelect = [''] + [i for i in st.session_state.industries[st.session_state.industries['INDUSTRY'] != 'Individual'].INDUSTRY]
         indDisable = False
     topTwo.selectbox('Client Industry', indSelect, key='client_industry', disabled=indDisable)
-    st.session_state.valid[3] = validate_dropdown(st.session_state.client_industry, ['', 'Unknown'])
+    st.session_state.valid[3] = validate_dropdown(st.session_state.client_industry, ['', 'Unknown', 'No Selection'])
 
     if not st.session_state.valid[3]:
         with warnings:
