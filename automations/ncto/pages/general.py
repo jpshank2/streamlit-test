@@ -9,7 +9,7 @@ def screen(st):
         type_select = [general[-1]['general_type']]
         office = [general[-1]['general_office']]
         client = general[-1]['general_client']
-        originator = [general[-1]['general_originator']] if type_select == 'New Client Relationship' else ''
+        originator = [general[-1]['general_originator']] + [i for i in st.session_state.staff.EMPLOYEE] if type_select == 'New Client Relationship' else ['']
         relationship = [general[-1]['general_relationship']] if type_select == 'Subcode Needed for Existing Client' else ''
     else:
         type_select = ('', 'New Client Relationship', 'Subcode Needed for Existing Client')
