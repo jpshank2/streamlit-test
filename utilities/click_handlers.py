@@ -1,4 +1,4 @@
-from queries import run_query
+from utilities.queries import run_query
 from random import randint
 from json import dumps
 
