@@ -5,7 +5,7 @@ from pandas import DataFrame
 def get_rows(query):
     try:
         with session_state['conn'].cursor() as cur:
-            cur.execute(query)
+            cur.execute_async(query)
             rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
         return DataFrame.from_records(rows, columns=columns)
@@ -14,8 +14,9 @@ def get_rows(query):
     
 def insert_rows(schema, table, values):
     try:
-        values = ', '.join(values)
+        values = ','.join(values)
         with session_state['conn'].cursor() as cur:
             cur.execute(f'INSERT INTO {schema}.{table} VALUES ({values[:-1]});')
+        return cur.sfqid
     except Exception as e:
         return {'e': e}
