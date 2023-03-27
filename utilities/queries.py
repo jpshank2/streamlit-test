@@ -5,7 +5,7 @@ from pandas import DataFrame
 def get_rows(query):
     try:
         with session_state['conn'].cursor() as cur:
-            cur.execute_async(query)
+            cur.execute(query)
             rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
         return DataFrame.from_records(rows, columns=columns)
