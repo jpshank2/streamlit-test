@@ -67,7 +67,7 @@ def clientTakeOn(st):
         if pageList[st.session_state.pageCounter]['name'] == 'End':
             rightButton.button('Save & Next', key='next', on_click=reset, args=(st, ), disabled=(False in st.session_state['valid']))
         else:
-            rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
+            rightButton.button('Save & Next' if pageList[st.session_state.pageCounter]['name'] != 'Final Review' else 'Submit', key='next', on_click=next_page, args=(st, pageList[st.session_state.pageCounter]['module'].split('.')[-1]), disabled=(False in st.session_state['valid']))
     except Exception as e:
         st.write(e)
         st.write(st.session_state.newclient)
