@@ -13,7 +13,17 @@ def get_rows(query):
         return {'query': query, 'e': e, 'data': rows}
     
 def insert_rows(schema, table, values):
+    from json import dumps
     try:
+        sqlValues = str()
+        for value in values:
+            if type(value) == str:
+                sqlValues += f"'{value}',"
+            elif type(value) == dict:
+                sqlValues += f"{dumps(value)},"
+            else:
+                sqlValues += f"{value},"
+            
         values = ','.join(values)
         with session_state['conn'].cursor() as cur:
             cur.execute(f'INSERT INTO {schema}.{table} VALUES ({values[:-1]});')
