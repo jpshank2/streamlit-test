@@ -20,7 +20,7 @@ def insert_rows(schema, table, values):
             if type(value) == str:
                 sqlValues += f"'{value}',"
             elif type(value) == dict:
-                sqlValues += f"{dumps(value)},"
+                sqlValues += f"parse_json($${dumps(value)}$$),"
             else:
                 sqlValues += f"{value},"
             
@@ -29,4 +29,4 @@ def insert_rows(schema, table, values):
             cur.execute(f'INSERT INTO {schema}.{table} VALUES ({values[:-1]});')
         return cur.sfqid
     except Exception as e:
-        return {'e': e}
+        return {'e': e, 'value': sqlValues}
