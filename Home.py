@@ -7,7 +7,7 @@ from utilities.queries import get_rows
 # from snowflake.connector import connect
 # 
 
-markdown(f"# Hello, {experimental_user if experimental_user != None else 'Test User'}! :wave:")
+markdown(f"# Hello, {experimental_user.email if experimental_user.email != None else 'Test User'}! :wave:")
 snow()
 
 markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")

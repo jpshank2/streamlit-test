@@ -38,10 +38,10 @@ def reset(st):
 
 #NCTO function
 def clientTakeOn(st):
-    if st.session_state['user_email'] == None:
+    if st.experimental_user.email == None:
         domain = 'demo'
     else:
-        domain = st.session_state['user_email'].split('@')[-1]
+        domain = st.experimental_user.email.split('@')[-1]
 
     with open('utilities.switches.json') as raw_json:
         from json import load
