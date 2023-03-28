@@ -53,7 +53,19 @@ def screen(st):
     botThree.text_input('Client Notes', placeholder='Enter Any Additional Notes, Jobs to be added, etc.', key='review_notes')
 
     service_names = [i for i in attributes['attributes_service']]
+    partners = list()
+    managers = list()
+
+    for service in service_names:
+        service_index = st.session_state.services[st.session_state.services['SERVTITLE'] == service].SERVINDEX.iloc[0]
+        partner = f'services_{service_index}_partner'
+        manager = f'services_{service_index}_manager'
+
+        service_entry = [entry for index, entry in enumerate(allServices) if partner in entry]
+        partners.append(service_entry[-1][partner])
+        managers.append(service_entry[-1][manager])
+
 
     from pandas import DataFrame
     st.caption('Client Services')
-    st.write(DataFrame({'Client Service': service_names}))
+    st.write(DataFrame({'Client Service': service_names, 'Service Partner': partners, 'Service Manager': managers}))
