@@ -1,4 +1,5 @@
 from utilities.click_handlers import create_new_client
+from json import loads
 
 def next_page(st, screen):
     prefix = screen + '_'
@@ -40,7 +41,7 @@ def reset(st):
 def clientTakeOn(st):
 
     try:
-        pageList = st.session_state['switches'].NCTO_PAGES.iloc[0]
+        pageList = loads(st.session_state['switches'].NCTO_PAGES.iloc[0])
         st.write(pageList)
         # st.write(pageList.split('}, '))
     except:
