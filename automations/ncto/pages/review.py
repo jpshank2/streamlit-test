@@ -52,7 +52,8 @@ def screen(st):
 
     botThree.text_input('Client Notes', placeholder='Enter Any Additional Notes, Jobs to be added, etc.', key='review_notes')
 
-    service_names = [i for i in range(2)]
+    service_names = [i for i in attributes['attributes_service']]
 
+    from pandas import DataFrame
     st.caption('Client Services')
-    st.markdown('Create services table')
+    st.write(DataFrame({'Client Service': service_names}))
