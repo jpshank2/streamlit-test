@@ -1,5 +1,5 @@
 import streamlit as st
-from snowflake.connector import connect
+from utilities.queries import init_connection
 from reports.AR import create_ar_reports
 from reports.WIP import create_wip_reports
 
@@ -23,12 +23,6 @@ Pok pok messenger bag next level stumptown coloring book +1 plaid, vexillologist
 Drinking vinegar shoreditch ennui succulents kitsch live-edge, lomo semiotics literally. Craft beer try-hard VHS, portland vaporware bushwick iceland snackwave ramps forage tote bag. Fixie synth kogi banjo paleo. Pork belly cardigan kickstarter edison bulb hell of.
 
 Dummy text? More like dummy thicc text, amirite?""")
-
-@st.cache_resource
-def init_connection():
-    return connect(
-        **st.secrets["snowflake"], client_session_keep_alive=True
-    )
 
 if 'conn' not in st.session_state:
     st.session_state['conn'] = init_connection()

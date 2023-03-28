@@ -1,18 +1,10 @@
 import streamlit as st
-from snowflake.connector import connect
 from automations.ncto.frame import clientTakeOn
-from utilities.queries import get_rows
+from utilities.queries import get_rows, init_connection
 from PIL import Image
 from requests import get
 from io import BytesIO
 # import automations.ncto.frame as ncto
-
-
-@st.cache_resource
-def init_connection():
-    return connect(
-        **st.secrets["snowflake"], client_session_keep_alive=True
-    )
 
 # conn = init_connection()
 if 'conn' not in st.session_state:

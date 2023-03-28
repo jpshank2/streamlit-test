@@ -2,11 +2,12 @@
 # streamlit docs can be found here: https://docs.streamlit.io/
 #
 
-from streamlit import markdown, snow#, cache_resource, secrets, session_state
-# from utilities.queries import get_rows
+from streamlit import markdown, snow, experimental_user#, cache_resource, secrets, session_state
+from utilities.queries import get_rows
 # from snowflake.connector import connect
+# 
 
-markdown("# Hello, jps-playground! :wave:")
+markdown(f"# Hello, {experimental_user if experimental_user != None else 'Test User'}! :wave:")
 snow()
 
 markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
