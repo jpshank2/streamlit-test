@@ -10,7 +10,8 @@ def create_new_client(st):
         originator = int(st.session_state.staff[st.session_state.staff.EMPLOYEE == state_client['general'][-1]['general_originator']].STAFFINDEX.iloc[0])
     else:
         originator = 0
-        parent_client = st.session_state.clients[st.session_state.clients.PARENT.str.contains(state_client['general'][-1]['general_relationship'])]
+        relationship_code = state_client['general'][-1]['general_relationship'][-10:-5]
+        parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
         st.write(parent_client)
         # originator = parent_client.ORIGINATOR.iloc[0]
         # st.session_state.clients[st.session_state.clients.CLIENTDISPLAY == state_client['general'][-1]['general_relationship']].CODE.iloc[0]
