@@ -32,8 +32,8 @@ def create_new_client(st):
     new_client['generals']['relationship'] = relationship
     st.write(state_switches.VALIDATOR_SECTION.iloc[0])
     st.write(state_switches.VALIDATOR_FIELD.iloc[0])
-    st.write(state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]])
-    if state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]] in list(loads(state_switches.VALIDATOR_ADDRESSES.iloc[0]).keys()):
+    # st.write(state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]])
+    if state_client[state_switches.VALIDATOR_SECTION.iloc[0]][-1][state_switches.VALIDATOR_FIELD.iloc[0]] in list(loads(state_switches.VALIDATOR_ADDRESSES.iloc[0]).keys()):
         new_client['generals']['validator'] = loads(state_switches.VALIDATOR_ADDRESSES.iloc[0])[state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]]]
     else:
         new_client['generals']['validator'] = loads(state_switches.VALIDATOR_ADDRESSES.iloc[0])['default']
