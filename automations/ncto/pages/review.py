@@ -52,5 +52,7 @@ def screen(st):
 
     botThree.text_input('Client Notes', placeholder='Enter Any Additional Notes, Jobs to be added, etc.', key='review_notes')
 
+    service_names = [i for i in range(2)]
+
     st.caption('Client Services')
     st.markdown('Create services table')
