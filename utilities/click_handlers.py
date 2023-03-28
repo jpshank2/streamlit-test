@@ -13,7 +13,7 @@ def create_new_client(st):
         originator = 0
         relationship_code = state_client['general'][-1]['general_relationship'][-10:-5]
         parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
-        max_child = parent_client.child.astype(int).max()
+        max_child = parent_client.CHILD.astype(int).max()
         relationship = relationship_code + str(max_child + 1).zfill(3)
         # originator = parent_client.ORIGINATOR.iloc[0]
         # st.session_state.clients[st.session_state.clients.CLIENTDISPLAY == state_client['general'][-1]['general_relationship']].CODE.iloc[0]
