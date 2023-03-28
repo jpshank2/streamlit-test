@@ -1,8 +1,10 @@
 from utilities.queries import insert_rows
 from random import randint
+from json import loads
 
 def create_new_client(st):
     state_client = st.session_state['newclient']
+    state_switches = st.session_state['switches']
 
     office = st.session_state.offices[st.session_state.offices.OFFICENAME == state_client['general'][-1]['general_office']].OFFICEINDEX.iloc[0]
 
@@ -28,5 +30,9 @@ def create_new_client(st):
     new_client['generals']['client'] = state_client['general'][-1]['general_client']
     new_client['generals']['originator'] = originator
     new_client['generals']['relationship'] = relationship
+    if state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]] in list(loads(state_switches.VALIDATOR_ADDRESSES.iloc[0]).keys()):
+        new_client['generals']['validator'] = loads(state_switches.VALIDATOR_ADDRESSES.iloc[0])[state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]]]
+    else:
+        new_client['generals']['validator'] = loads(state_switches.VALIDATOR_ADDRESSES.iloc[0])['default']
 
     insert_rows('NCTO', 'ENTERED_CLIENTS', 'KEY, STATUS, CLIENT', [key, 'PENDING'], new_client)
