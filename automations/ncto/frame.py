@@ -43,7 +43,7 @@ def clientTakeOn(st):
     else:
         domain = st.experimental_user.email.split('@')[-1]
 
-    with open('utilities.switches.json') as raw_json:
+    with open('../../utilities/switches.json') as raw_json:
         from json import load
         switch = load(raw_json)
         pageList = switch[domain]['pageList']

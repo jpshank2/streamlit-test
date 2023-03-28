@@ -3,7 +3,7 @@
 #
 
 from streamlit import markdown, snow, experimental_user#, cache_resource, secrets, session_state
-from utilities.queries import get_rows
+# from utilities.queries import get_rows
 # from snowflake.connector import connect
 # 
 
