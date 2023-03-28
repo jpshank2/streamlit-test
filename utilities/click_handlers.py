@@ -7,9 +7,13 @@ def create_new_client(st):
     office = st.session_state.offices[st.session_state.offices.OFFICENAME == state_client['general'][-1]['general_office']].OFFICEINDEX.iloc[0]
 
     if state_client['general'][-1]['general_type'] == 'New Client Relationship':
-        switch = int(st.session_state.staff[st.session_state.staff.EMPLOYEE == state_client['general'][-1]['general_originator']].STAFFINDEX.iloc[0])
+        originator = int(st.session_state.staff[st.session_state.staff.EMPLOYEE == state_client['general'][-1]['general_originator']].STAFFINDEX.iloc[0])
     else:
-        switch = st.session_state.clients[st.session_state.clients.CLIENTDISPLAY == state_client['general'][-1]['general_relationship']].CODE.iloc[0]
+        originator = 0
+        parent_client = st.session_state.clients[st.session_state.clients.PARENT in state_client['general'][-1]['general_relationship']]
+        st.write(parent_client)
+        # originator = parent_client.ORIGINATOR.iloc[0]
+        # st.session_state.clients[st.session_state.clients.CLIENTDISPLAY == state_client['general'][-1]['general_relationship']].CODE.iloc[0]
 
     key = str(office) + state_client['general'][-1]['general_client'][:3] + str(randint(0, 999999))
     key = key.replace(' ', '_')
@@ -19,6 +23,6 @@ def create_new_client(st):
     new_client['generals']['entry'] = state_client['general'][-1]['general_type']
     new_client['generals']['office'] = state_client['general'][-1]['general_office']
     new_client['generals']['client'] = state_client['general'][-1]['general_client']
-    new_client['generals']['switch'] = switch
+    new_client['generals']['originator'] = originator
 
     insert_rows('NCTO', 'ENTERED_CLIENTS', 'KEY, STATUS, CLIENT', [key, 'PENDING'], new_client)
