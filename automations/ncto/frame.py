@@ -41,7 +41,7 @@ def clientTakeOn(st):
 
     try:
         pageList = st.session_state['switches'].NCTO_PAGES.iloc[0]
-        st.write(st.session_state['switches'].NCTO_PAGES)
+        st.write(pageList)
         # st.write(pageList.split('}, '))
     except:
         pageList = [{'name': 'General Information', 'module': 'automations.ncto.pages.general'}, {'name': 'Client Details', 'module': 'automations.ncto.pages.client'}, {'name': 'Contact Details', 'module': 'automations.ncto.pages.contact'}, {'name': 'Client Billings', 'module': 'automations.ncto.pages.billings'}, {'name': 'Client Attributes', 'module': 'automations.ncto.pages.attributes'}, {'name': 'Services', 'module': 'automations.ncto.pages.services'}, {'name': 'Final Review', 'module': 'automations.ncto.pages.review'}, {'name': 'Submitted', 'module': 'automations.ncto.pages.end'}]
