@@ -4,4 +4,3 @@ def screen(st):
     st.markdown('Thanks for submitting a client! Check your inbox for when your client is entered')
 
     st.write(st.session_state['newclient'])
-    st.write(st.session_state.clients)
