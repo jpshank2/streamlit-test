@@ -21,4 +21,4 @@ def create_new_client(st):
     new_client['generals']['client'] = state_client['general'][-1]['general_client']
     new_client['generals']['switch'] = switch
 
-    st.write(insert_rows('NCTO', 'ENTERED_CLIENTS', [key, new_client]))
+    st.write(insert_rows('NCTO', 'ENTERED_CLIENTS', [key], new_client))
