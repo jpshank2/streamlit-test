@@ -1,10 +1,9 @@
-from streamlit import cache_data, cache_resource, session_state, secrets, write
+from streamlit import cache_data, cache_resource, session_state, secrets
 from snowflake.connector import connect
 from pandas import DataFrame
 
 @cache_resource(ttl=3600)
 def init_connection():
-    write(__file__)
     return connect(
         **secrets["snowflake"], client_session_keep_alive=True
     )

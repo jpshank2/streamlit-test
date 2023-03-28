@@ -1,10 +1,16 @@
 import streamlit as st
-from utilities.queries import init_connection
+from utilities.queries import init_connection, get_rows
 from reports.AR import create_ar_reports
 from reports.WIP import create_wip_reports
 
 def go_to_top():
     return st.markdown('[Top of Page](#hello-reports)')
+
+if 'conn' not in st.session_state:
+    st.session_state['conn'] = init_connection()
+if 'switches' not in st.session_state:
+    domain = 'demo' if st.experimental_user.email == None else st.experimental_user.email.split('@')[-1]
+    st.session_state['switches'] = get_rows(f"SELECT * FROM STREAMLITAPP.MANAGED_IDENTITY_TEST WHERE DOMAIN = '{domain}'")
 
 st.markdown("# Hello, Reports! :wave:")
 
@@ -23,9 +29,6 @@ Pok pok messenger bag next level stumptown coloring book +1 plaid, vexillologist
 Drinking vinegar shoreditch ennui succulents kitsch live-edge, lomo semiotics literally. Craft beer try-hard VHS, portland vaporware bushwick iceland snackwave ramps forage tote bag. Fixie synth kogi banjo paleo. Pork belly cardigan kickstarter edison bulb hell of.
 
 Dummy text? More like dummy thicc text, amirite?""")
-
-if 'conn' not in st.session_state:
-    st.session_state['conn'] = init_connection()
 
 try:
     st.markdown('### AR Reports')
