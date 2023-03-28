@@ -40,7 +40,7 @@ def reset(st):
 def clientTakeOn(st):
 
     try:
-        pageList = st.session_state['switches'].NCTO_PAGES.iloc[0]
+        pageList = st.session_state['switches'].NCTO_PAGES.iloc[0].split(' }, ')
         st.write(pageList)
         # st.write(pageList.split('}, '))
     except:
