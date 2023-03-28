@@ -22,7 +22,7 @@ def insert_rows(schema, table, columns, values, json_val):
             else:
                 sqlValues += f"{value},"
         with session_state['conn'].cursor() as cur:
-            cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${json_val}$$);')
+            cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);')
         return cur.sfqid
     except Exception as e:
-        return {'e': e, 'query': f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${json_val}$$);'}
+        return {'e': e, 'query': f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);'}
