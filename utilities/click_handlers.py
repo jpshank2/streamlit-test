@@ -16,7 +16,7 @@ def create_new_client(st):
         relationship_code = state_client['general'][-1]['general_relationship'][-10:-5]
         parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
         max_child = parent_client.CHILD.astype(int).max()
-        relationship = relationship_code + str(max_child + 1).zfill(3)
+        relationship = relationship_code + '-' + str(max_child + 1).zfill(3)
         # originator = parent_client.ORIGINATOR.iloc[0]
         # st.session_state.clients[st.session_state.clients.CLIENTDISPLAY == state_client['general'][-1]['general_relationship']].CODE.iloc[0]
 
@@ -30,9 +30,7 @@ def create_new_client(st):
     new_client['generals']['client'] = state_client['general'][-1]['general_client']
     new_client['generals']['originator'] = originator
     new_client['generals']['relationship'] = relationship
-    st.write(state_switches.VALIDATOR_SECTION.iloc[0])
-    st.write(state_switches.VALIDATOR_FIELD.iloc[0])
-    # st.write(state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]])
+    new_client['generals']['submitter'] = 'jeremyshank@bmss.com' if st.experimental_user.email == None else st.experimental_user.email
     if state_client[state_switches.VALIDATOR_SECTION.iloc[0]][-1][state_switches.VALIDATOR_FIELD.iloc[0]] in list(loads(state_switches.VALIDATOR_ADDRESSES.iloc[0]).keys()):
         new_client['generals']['validator'] = loads(state_switches.VALIDATOR_ADDRESSES.iloc[0])[state_client[state_switches.VALIDATOR_SECTION.iloc[0]][state_switches.VALIDATOR_FIELD.iloc[0]]]
     else:
