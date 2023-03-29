@@ -41,4 +41,5 @@ with st.spinner('Loading necessary New Client Take On data...'):
     if 'newclient' not in st.session_state:
         st.session_state['newclient'] = loads(st.session_state['switches'].CLIENT_SESSION.iloc[0])#{'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 
+st.write(st.session_state['newclient'])
 clientTakeOn(st)
