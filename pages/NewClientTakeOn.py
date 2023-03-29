@@ -4,6 +4,7 @@ from utilities.queries import get_rows, init_connection
 from PIL import Image
 from requests import get
 from io import BytesIO
+from json import loads
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/DcFwdrQ.png').content))
 
@@ -38,6 +39,6 @@ with st.spinner('Loading necessary New Client Take On data...'):
     if 'services' not in st.session_state:
         st.session_state['services'] = get_rows("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE")
     if 'newclient' not in st.session_state:
-        st.session_state['newclient'] = st.session_state['switches'].CLIENT_SESSION.iloc[0]#{'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
+        st.session_state['newclient'] = loads(st.session_state['switches'].CLIENT_SESSION.iloc[0])#{'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 
 clientTakeOn(st)
