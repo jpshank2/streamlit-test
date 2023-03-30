@@ -66,7 +66,7 @@ def create_new_client(st):
     for service in service_names:
         service_index = st.session_state.services[st.session_state.services['SERVTITLE'] == service].SERVINDEX.iloc[0]
 
-        service_entry = [entry for index, entry in enumerate(state_client) if f'services_{service_index}_same' in entry]
+        service_entry = [entry for index, entry in enumerate(state_client['services']) if f'services_{service_index}_same' in entry]
         st.write(service_entry)
         new_client['services'].append({'partner': int(st.session_state.staff[st.session_state.staff.EMPLOYEE == service_entry[-1][f'services_{service_index}_partner']].STAFFINDEX.iloc[0]), 'manager': int(st.session_state.staff[st.session_state.staff.EMPLOYEE == service_entry[-1][f'services_{service_index}_manager']].STAFFINDEX.iloc[0]), 'index': service_index, 'service': service})
 
