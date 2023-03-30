@@ -17,7 +17,7 @@ def create_new_client(st):
         parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
         max_child = parent_client.CHILD.astype(int).max()
         client_code = relationship_code + '-' + str(max_child + 1).zfill(3)
-        originator = parent_client.ORIGINATOR.iloc[0]
+        originator = int(parent_client.ORIGINATOR.iloc[0])
 
     key = str(office) + state_client['general'][-1]['general_client'][:3] + str(randint(0, 999999))
     key = key.replace(' ', '_')
@@ -67,7 +67,7 @@ def create_new_client(st):
         service_index = st.session_state.services[st.session_state.services['SERVTITLE'] == service].SERVINDEX.iloc[0]
 
         service_entry = [entry for index, entry in enumerate(state_client['services']) if f'services_{service_index}_same' in entry]
-        st.write(service_entry)
         new_client['services'].append({'partner': int(st.session_state.staff[st.session_state.staff.EMPLOYEE == service_entry[-1][f'services_{service_index}_partner']].STAFFINDEX.iloc[0]), 'manager': int(st.session_state.staff[st.session_state.staff.EMPLOYEE == service_entry[-1][f'services_{service_index}_manager']].STAFFINDEX.iloc[0]), 'index': service_index, 'service': service})
 
+    st.write(new_client)
     insert_rows('NCTO', 'ENTERED_CLIENTS', 'KEY, STATUS, CLIENT', [key, 'PENDING'], new_client)
