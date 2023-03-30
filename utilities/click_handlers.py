@@ -41,8 +41,8 @@ def create_new_client(st):
     new_client['client']['industry'] = st.session_state.industries[st.session_state.industries.INDUSTRY == state_client['client'][-1]['client_industry']].INDUSTRYINDEX.iloc[0]
     new_client['client']['address'] = state_client['client'][-1]['client_address']
     new_client['client']['city'] = state_client['client'][-1]['client_city']
-    new_client['client']['state'] = state_client['client'][-1]['client_state'] if state_client['client'][-1]['client_state'] else ''
-    new_client['client']['province'] = state_client['client'][-1]['client_province'] if state_client['client'][-1]['client_province'] else ''
+    new_client['client']['state'] = state_client['client'][-1]['client_state'] if state_client['client'][-1]['client_country'] == 'United States' else ''
+    new_client['client']['province'] = state_client['client'][-1]['client_province'] if state_client['client'][-1]['client_country'] != 'United States' else ''
     new_client['client']['zip'] = state_client['client'][-1]['client_zip']
     new_client['client']['country'] = state_client['client'][-1]['client_country']
 
