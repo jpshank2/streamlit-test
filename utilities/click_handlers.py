@@ -48,7 +48,7 @@ def create_new_client(st):
 
     new_client['contact']['first'] = state_client['contact'][-1]['contact_first']
     new_client['contact']['last'] = state_client['contact'][-1]['contact_last']
-    new_client['contact']['index'] = state_client['contact'][-1]['contact_index']
+    new_client['contact']['index'] = int(state_client['contact'][-1]['contact_index'])
     new_client['contact']['email'] = state_client['contact'][-1]['contact_email']
     new_client['contact']['phone'] = state_client['contact'][-1]['contact_phone']
     new_client['contact']['address'] = state_client['contact'][-1]['contact_address']
@@ -69,19 +69,19 @@ def create_new_client(st):
         service_entry = [entry for index, entry in enumerate(state_client['services']) if f'services_{service_index}_same' in entry]
         new_client['services'].append({'partner': int(st.session_state.staff[st.session_state.staff.EMPLOYEE == service_entry[-1][f'services_{service_index}_partner']].STAFFINDEX.iloc[0]), 'manager': int(st.session_state.staff[st.session_state.staff.EMPLOYEE == service_entry[-1][f'services_{service_index}_manager']].STAFFINDEX.iloc[0]), 'index': service_index, 'service': service})
 
-    for key in new_client:
-        inner_dict = new_client[key]
-        for inner_key in inner_dict:
-            if type(inner_dict[inner_key]) != list:
-                value = inner_dict[inner_key]
-                value_type = type(value).__name__
-                st.write(f"{key}.{inner_key}: {value_type}")
-            else:
-                for list_dict in inner_dict:
-                    for list_key in list_dict:
-                        value = list_dict[list_key]
-                        value_type = type(value).__name__
-                        st.write(f"{key}.{inner_key}: {value_type}")
+    # for key in new_client:
+    #     inner_dict = new_client[key]
+    #     for inner_key in inner_dict:
+    #         if type(inner_dict[inner_key]) != list:
+    #             value = inner_dict[inner_key]
+    #             value_type = type(value).__name__
+    #             st.write(f"{key}.{inner_key}: {value_type}")
+    #         else:
+    #             for list_dict in inner_dict:
+    #                 for list_key in list_dict:
+    #                     value = list_dict[list_key]
+    #                     value_type = type(value).__name__
+    #                     st.write(f"{key}.{inner_key}: {value_type}")
 
 
     insert_rows('NCTO', 'ENTERED_CLIENTS', 'KEY, STATUS, CLIENT', [key, 'PENDING'], new_client)
