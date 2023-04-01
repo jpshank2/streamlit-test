@@ -12,11 +12,13 @@ def create_new_client(st):
         originator = int(st.session_state.staff[st.session_state.staff.EMPLOYEE == state_client['general'][-1]['general_originator']].STAFFINDEX.iloc[0])
         max_office_code = st.session_state.clients[st.session_state.clients.OFFICE == state_client['general'][-1]['general_office']].PARENT.astype(int).max()
         client_code = str(max_office_code + 1).zfill(5) + '-000'
+        contact_code = str(max_office_code + 2).zfill(5) + '-000'
     else:
         relationship_code = state_client['general'][-1]['general_relationship'][-10:-5]
         parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
         max_child = parent_client.CHILD.astype(int).max()
         client_code = relationship_code + '-' + str(max_child + 1).zfill(3)
+        contact_code = relationship_code + '-' + str(max_child + 2).zfill(3)
         originator = int(parent_client.ORIGINATOR.iloc[0])
 
     key = str(office) + state_client['general'][-1]['general_client'][:3] + str(randint(0, 999999))
@@ -57,6 +59,7 @@ def create_new_client(st):
     new_client['contact']['province'] = state_client['contact'][-1]['contact_zip'] if state_client['contact'][-1]['contact_zip'] else ''
     new_client['contact']['zip'] = state_client['contact'][-1]['contact_zip']
     new_client['contact']['country'] = state_client['contact'][-1]['contact_country']
+    new_client['contact']['code'] = contact_code
 
     new_client['billings']['fye'] = state_client['billings'][-1]['billings_fye'].strftime('%Y-%m-%d')
     new_client['billings']['invoice'] = 1 if state_client['billings'][-1]['billings_invoice'] == 'Email' else 0
