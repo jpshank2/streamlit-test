@@ -18,8 +18,11 @@ def create_new_client(st):
         parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
         max_child = parent_client.CHILD.astype(int).max()
         client_code = relationship_code + '-' + str(max_child + 1).zfill(3)
-        contact_code = relationship_code + '-' + str(max_child + 2).zfill(3)
         originator = int(parent_client.ORIGINATOR.iloc[0])
+        if state_client['contact'][-1]['contact_index'] == 0:
+            contact_code = relationship_code + '-' + str(max_child + 2).zfill(3)
+        else:
+            contact_code = st.session_state.contacts[st.session_state.contacts.CONTINDEX == state_client['contact'][-1]['contact_index']].CONTCODE.iloc[0]
 
     key = str(office) + state_client['general'][-1]['general_client'][:3] + str(randint(0, 999999))
     key = key.replace(' ', '_')
@@ -40,6 +43,7 @@ def create_new_client(st):
     new_client['client']['partner'] = int(st.session_state.staff[st.session_state.staff.EMPLOYEE == state_client['client'][-1]['client_partner']].STAFFINDEX.iloc[0])
     new_client['client']['manager'] = int(st.session_state.staff[st.session_state.staff.EMPLOYEE == state_client['client'][-1]['client_manager']].STAFFINDEX.iloc[0])
     new_client['client']['entity'] = st.session_state.entities[st.session_state.entities.ENTITYNAME == state_client['client'][-1]['client_entity']].ENTITYINDEX.iloc[0]
+    new_client['client']['entity_name'] = state_client['client'][-1]['client_entity']
     new_client['client']['industry'] = st.session_state.industries[st.session_state.industries.INDUSTRY == state_client['client'][-1]['client_industry']].INDUSTRYINDEX.iloc[0]
     new_client['client']['address'] = state_client['client'][-1]['client_address']
     new_client['client']['city'] = state_client['client'][-1]['client_city']
