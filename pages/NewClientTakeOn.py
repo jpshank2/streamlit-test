@@ -27,7 +27,7 @@ with st.spinner('Loading necessary New Client Take On data...'):
     if 'offices' not in st.session_state:
         st.session_state['offices'] = get_rows('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;')
     if 'clients' not in st.session_state:
-        st.session_state['clients'] = get_rows("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX, STATUS, OFFICE, ORIGINATOR, strtok_to_array(code, '-')[0]::string parent, strtok_to_array(code, '-')[1]::string child FROM DIM_CLIENT_MASTER WHERE NOT RLIKE(CODE, '.*[a-z].*', 'i') AND int(PARENT) < 99999;")
+        st.session_state['clients'] = get_rows("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX, STATUS, OFFICE, ORIGINATOR, strtok_to_array(code, '-')[0]::string parent, strtok_to_array(code, '-')[1]::string child FROM DIM_CLIENT_MASTER WHERE NOT RLIKE(CODE, '.*[a-z].*', 'i');")
     if 'staff' not in st.session_state:
         st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
     if 'entities' not in st.session_state:
