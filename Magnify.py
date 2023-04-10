@@ -2,10 +2,16 @@
 # streamlit docs can be found here: https://docs.streamlit.io/
 #
 
-from streamlit import markdown, snow, experimental_user#, cache_resource, secrets, session_state
+from streamlit import markdown, snow, experimental_user, session_state#, cache_resource, secrets, session_state
+from utilities.queries import get_rows, init_connection
 # from utilities.queries import get_rows
 # from snowflake.connector import connect
 # 
+
+if 'conn' not in session_state:
+    session_state['conn'] = init_connection()
+if 'user' not in session_state:
+    session_state['user'] = get_rows(f"SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{experimental_user.email}'")
 
 markdown(f"# Hello, {experimental_user.email if experimental_user.email != None else 'Test User'}! :wave:")
 snow()
