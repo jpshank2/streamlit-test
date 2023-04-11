@@ -1,4 +1,4 @@
-from streamlit import cache_data, cache_resource, session_state, secrets
+from streamlit import cache_data, cache_resource, session_state, secrets, write
 from snowflake.connector import connect
 from pandas import DataFrame
 from rsa import decrypt, PrivateKey
@@ -9,6 +9,7 @@ from ast import literal_eval
 def init_connection():
     key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
     conn_string = decrypt(b64decode(secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
+    write(conn_string.decode())
     return connect(    
         **literal_eval(conn_string.decode()), client_session_keep_alive=True
     )
