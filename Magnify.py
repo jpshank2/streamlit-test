@@ -17,4 +17,3 @@ from utilities.loading_screen import loading
 if 'company' not in st.session_state:
     loading(st)
     
-else:
