@@ -22,9 +22,15 @@ def validation_connection():
 
 
 @cache_data(ttl=3600)
-def get_rows(query, _conn=session_state['conn']):
+def get_rows(query, _conn=0):
+
+    if 'conn' in session_state:
+        conn = session_state['conn']
+    else:
+        conn = _conn
+
     try:
-        with _conn.cursor() as cur:
+        with conn.cursor() as cur:
             cur.execute(query)
             rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
