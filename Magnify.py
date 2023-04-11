@@ -16,4 +16,10 @@ from utilities.loading_screen import loading
 
 if 'company' not in st.session_state:
     loading(st)
-    
+
+if 'company' in st.session_state:
+    st.markdown(f"# Welcome to Magnify, {st.session_state['user']['EMPLOYEE'].iloc[0]}!")
+
+    # st.markdown(f"## Hello, {st.session_state['user']['EMPLOYEE'].iloc[0] if not st.session_state['user'].empty else 'Test User'}! :wave:")
+
+    st.markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
