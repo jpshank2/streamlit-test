@@ -1,4 +1,4 @@
-from streamlit import cache_data, cache_resource, session_state, secrets, write
+from streamlit import cache_data, cache_resource, session_state, secrets
 from snowflake.connector import connect
 from pandas import DataFrame
 from rsa import decrypt, PrivateKey
@@ -8,17 +8,23 @@ from ast import literal_eval
 @cache_resource(ttl=3600)
 def init_connection():
     key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
-    conn_string = decrypt(b64decode(secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
-    write(conn_string.decode())
+    conn_string = decrypt(b64decode(session_state['company']['CONNECTION']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))#secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
     return connect(    
         **literal_eval(conn_string.decode()), client_session_keep_alive=True
     )
 
+def validation_connection():
+    key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
+    conn_string = decrypt(b64decode(session_state['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))#secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
+    return connect(    
+        **literal_eval(conn_string.decode())
+    )
+
 
 @cache_data(ttl=3600)
-def get_rows(query):
+def get_rows(query, conn=session_state['conn']):
     try:
-        with session_state['conn'].cursor() as cur:
+        with conn.cursor() as cur:
             cur.execute(query)
             rows = cur.fetchall()
             columns = [column[0] for column in cur.description]
