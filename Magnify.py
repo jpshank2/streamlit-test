@@ -11,7 +11,7 @@ from utilities.queries import get_rows, init_connection
 if 'conn' not in session_state:
     session_state['conn'] = init_connection()
 if 'user' not in session_state:
-    session_state['user'] = get_rows(f"SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{experimental_user.email}'")
+    session_state['user'] = get_rows(f"SELECT * FROM CLIENT_BMSS_SANDBOX_DB.HDS_SSMS_PE.DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{experimental_user.email}'")
 
 markdown(f"# Hello, {experimental_user.email if experimental_user.email != None else 'Test User'}! :wave:")
 snow()

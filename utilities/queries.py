@@ -23,7 +23,7 @@ def get_rows(query):
             columns = [column[0] for column in cur.description]
         return DataFrame.from_records(rows, columns=columns)
     except Exception as e:
-        return {'query': query, 'e': e, 'data': rows}
+        return {'query': query, 'e': e, 'query': query}
     
 def insert_rows(schema, table, columns, values, json_val):
     from json import dumps
