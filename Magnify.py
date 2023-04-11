@@ -13,7 +13,7 @@ if 'conn' not in session_state:
 if 'user' not in session_state:
     session_state['user'] = get_rows(f"SELECT * FROM CLIENT_BMSS_SANDBOX_DB.HDS_SSMS_PE.DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{experimental_user.email}'")
 
-markdown(f"# Hello, {experimental_user.email if experimental_user.email != None else 'Test User'}! :wave:")
+markdown(f"# Hello, {session_state['user']['EMPLOYEE'] if experimental_user.email != None else 'Test User'}! :wave:")
 snow()
 
 markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
