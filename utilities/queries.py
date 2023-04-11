@@ -8,7 +8,7 @@ from ast import literal_eval
 @cache_resource(ttl=3600)
 def init_connection():
     key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
-    conn_string = decrypt(b64decode(session_state['company']['CONNECTION']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))#secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
+    conn_string = decrypt(b64decode(session_state['company']['CONNECTION'].iloc[0]), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
     return connect(    
         **literal_eval(conn_string.decode()), client_session_keep_alive=True
     )
