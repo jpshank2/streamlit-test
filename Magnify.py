@@ -14,7 +14,7 @@ from utilities.loading_screen import loading
 # if 'user' not in session_state:
 #     session_state['user'] = get_rows(f"SELECT * FROM CLIENT_BMSS_SANDBOX_DB.HDS_SSMS_PE.DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{experimental_user.email}'")
 
-if st.session_state['company']:
+if 'company' in st.session_state:
     st.markdown(f"# Hello, {st.session_state['user']['EMPLOYEE'].iloc[0] if not st.session_state['user'].empty else 'Test User'}! :wave:")
 
     st.markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
