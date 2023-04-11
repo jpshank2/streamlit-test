@@ -11,7 +11,7 @@ from io import BytesIO
 st.set_page_config(
     page_title='Magnify | Home',
     layout='wide',
-    page_icon=Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
+    page_icon=Image.open(BytesIO(get('https://i.imgur.com/sL3m54K.png').content))
 )
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
