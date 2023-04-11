@@ -3,16 +3,13 @@
 #
 
 import streamlit as st
-# from utilities.queries import get_rows, init_connection
-# from utilities.queries import get_rows
-# from snowflake.connector import connect
-# 
 from utilities.loading_screen import loading
+from PIL import Image
+from requests import get
+from io import BytesIO
 
-# if 'conn' not in session_state:
-#     session_state['conn'] = init_connection()
-# if 'user' not in session_state:
-#     session_state['user'] = get_rows(f"SELECT * FROM CLIENT_BMSS_SANDBOX_DB.HDS_SSMS_PE.DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{experimental_user.email}'")
+MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/2ffgLBo.png').content))
+st.image(MainHeaderImage, use_column_width = True)
 
 if 'company' not in st.session_state:
     loading(st)
