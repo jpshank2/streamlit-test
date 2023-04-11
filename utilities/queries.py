@@ -15,7 +15,7 @@ def init_connection():
 
 def validation_connection():
     key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
-    conn_string = decrypt(b64decode(session_state['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))#secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
+    conn_string = decrypt(b64decode(secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
     return connect(    
         **literal_eval(conn_string.decode())
     )

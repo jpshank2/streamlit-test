@@ -19,3 +19,5 @@ def loading(st):
                 st.session_state['conn'] = init_connection()
             if 'user' not in st.session_state:
                 st.session_state['user'] = get_rows(f"SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{email}'")
+
+            conn.close()
