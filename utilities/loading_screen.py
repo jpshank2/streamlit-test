@@ -1,6 +1,6 @@
 from utilities.queries import validation_connection, get_rows, init_connection
 def loading(st):
-    email = st.experimental_user.email
+    email = 'jeremyshank@bmss.com' if st.experimental_user.email == 'jpshank2@gmail.com' else st.experimental_user.email
     domain = email.split('@')[-1]
     st.write(email)
     st.write(domain)
