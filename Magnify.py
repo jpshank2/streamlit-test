@@ -8,7 +8,13 @@ from PIL import Image
 from requests import get
 from io import BytesIO
 
-MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/2ffgLBo.png').content))
+st.set_page_config(
+    page_title='Magnify | Home',
+    layout='wide',
+    page_icon=Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
+)
+
+MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
 st.image(MainHeaderImage, use_column_width = True)
 
 if 'company' not in st.session_state:

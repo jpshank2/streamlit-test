@@ -6,7 +6,13 @@ from PIL import Image
 from requests import get
 from io import BytesIO
 
-MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/2ffgLBo.png').content))
+st.set_page_config(
+    page_title='Magnify | Reports',
+    layout='wide',
+    page_icon=Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
+)
+
+MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
 st.image(MainHeaderImage, use_column_width = True)
 
 def go_to_top():
