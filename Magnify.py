@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
-st.image(MainHeaderImage, use_column_width = True)
+st.image(MainHeaderImage)#, use_column_width = True)
 
 if 'company' not in st.session_state:
     loading(st)
