@@ -18,7 +18,7 @@ def create_new_client(st):
         parent_client = st.session_state.clients[st.session_state.clients.PARENT == relationship_code]
         max_child = parent_client.CHILD.astype(int).max()
         client_code = relationship_code + '-' + str(max_child + 1).zfill(3)
-        originator = int(parent_client.ORIGINATOR.iloc[0])
+        originator = int(parent_client.CLIENT_ORIGINATOR_INDEX.iloc[0])
         if state_client['contact'][-1]['contact_index'] == 0:
             contact_code = relationship_code + '-' + str(max_child + 2).zfill(3)
         else:
