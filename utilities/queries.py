@@ -13,21 +13,34 @@ def init_connection():
         **literal_eval(conn_string.decode()), client_session_keep_alive=True
     )
 
-def validation_connection():
-    key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
-    conn_string = decrypt(b64decode(secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
-    return connect(    
-        **literal_eval(conn_string.decode())
-    )
+def validation_company(domain):
+    try:
+        key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
+        conn_string = decrypt(b64decode(secrets['snowflake-encrypted']['conn_string']), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
+        conn = connect(**literal_eval(conn_string.decode()))
+    except Exception as e:
+        return {'process': 'validation_company snowflake connection', 'error': e}
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute(f"SELECT * FROM COMPANIES WHERE DOMAIN = '{domain}'")
+            rows = cur.fetchall()
+            columns = [column[0] for column in cur.description]
+        
+        conn.close()
+
+        return DataFrame.from_records(rows, columns=columns)
+    except Exception as e:
+        conn.close()
+        return {'process': 'validation_company getting company data', 'error': e}
+    
 
 
 @cache_data(ttl=3600)
-def get_rows(query, _conn=0):
+def get_rows(query):
 
     if 'conn' in session_state:
         conn = session_state['conn']
-    else:
-        conn = _conn
 
     try:
         with conn.cursor() as cur:
