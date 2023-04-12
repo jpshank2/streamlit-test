@@ -14,7 +14,8 @@ st.set_page_config(
 )
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
-st.image(MainHeaderImage, use_column_width = True)
+one, two, three= st.columns(3)
+two.image(MainHeaderImage, use_column_width = True)
 
 if 'company' not in st.session_state:
     loading(st)
@@ -31,8 +32,7 @@ if 'company' in st.session_state:
         if 'valid' not in st.session_state:
             st.session_state['valid'] = [True]
         if 'switches' not in st.session_state:
-            domain = 'demo' if st.experimental_user.email == None else st.experimental_user.email.split('@')[-1]
-            st.session_state['switches'] = get_rows(f"SELECT * FROM STREAMLITAPP.MANAGED_IDENTITY_TEST WHERE DOMAIN = '{domain}';")
+            st.session_state['switches'] = get_rows(f"SELECT * FROM CONFIGURATIONS.NCTO;")
         if 'offices' not in st.session_state:
             st.session_state['offices'] = get_rows('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;')
         if 'clients' not in st.session_state:
@@ -48,6 +48,6 @@ if 'company' in st.session_state:
         if 'services' not in st.session_state:
             st.session_state['services'] = get_rows("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE")
         if 'newclient' not in st.session_state:
-            st.session_state['newclient'] = loads(st.session_state['switches'].CLIENT_SESSION.iloc[0])#{'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
+            st.session_state['newclient'] = loads(st.session_state['switches'].SESSION.iloc[0])#{'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
 
     clientTakeOn(st)

@@ -1,7 +1,15 @@
 from utilities.queries import validation_connection, get_rows, init_connection
 
 def loading(st):
-    email = 'jeremyshank@bmss.com' if st.experimental_user.email == 'jpshank2@gmail.com' else st.experimental_user.email
+    if st.experimental_user.email == 'jpshank2@gmail.com':
+        email = 'jeremyshank.com'
+    elif st.experimental_user.email == 'jdavidbrowncpa@gmail.com':
+        email = 'dbrown@bmss.com'
+    elif st.experimental_user.email == 'imesser@abacustechnologies.com':
+        email = 'kfluker@bmss.com'
+    else:
+        email = st.experimental_user.email
+        
     domain = email.split('@')[-1]
 
     with st.spinner('Curating your experience...'):
@@ -18,4 +26,4 @@ def loading(st):
             if 'user' not in st.session_state:
                 st.session_state['user'] = get_rows(f"SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{email}'")
 
-            conn.close()
+        conn.close()

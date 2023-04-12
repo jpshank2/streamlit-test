@@ -13,7 +13,8 @@ st.set_page_config(
 )
 
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
-st.image(MainHeaderImage, use_column_width = True)
+one, two, three= st.columns(3)
+two.image(MainHeaderImage, use_column_width = True)
 
 def go_to_top():
     return st.markdown('[Top of Page](#hello-reports)')
