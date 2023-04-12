@@ -24,6 +24,8 @@ if 'company' not in st.session_state:
 if 'company' in st.session_state:
     st.markdown(f"# Welcome to Magnify, {st.session_state['user']['EMPLOYEE'].iloc[0]}!")
 
-    # st.markdown(f"## Hello, {st.session_state['user']['EMPLOYEE'].iloc[0] if not st.session_state['user'].empty else 'Test User'}! :wave:")
+    if st.session_state['user'].EMPLOYEE.iloc[0] == 'Accounts Receivable':
+        st.selectbox('Pick a level to view as:', ['No Selection', 'Member', 'Senior Manager', 'Manager', 'Supervisor', 'Senior', 'Staff', 'Intern', 'Admin'], key='level_pick')
+        st.session_state['level'] = st.session_state['level_pick']
 
     st.markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")

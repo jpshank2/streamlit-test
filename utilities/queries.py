@@ -51,7 +51,7 @@ def get_rows(query):
     except Exception as e:
         return {'query': query, 'e': e, 'query': query}
     
-def insert_rows(schema, table, columns, values, json_val):
+def insert_rows(schema, table, columns, values, json_val=0):
     from json import dumps
     try:
         sqlValues = str()
@@ -61,7 +61,10 @@ def insert_rows(schema, table, columns, values, json_val):
             else:
                 sqlValues += f"{value},"
         with session_state['conn'].cursor() as cur:
-            cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);')
+            if json_val == 0:
+                cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues};')
+            else:
+                cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);')
         return cur.sfqid
     except Exception as e:
         return {'e': e, 'query': f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);'}

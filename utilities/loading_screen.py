@@ -1,14 +1,14 @@
 from utilities.queries import validation_company, get_rows, init_connection
 
 def loading(st):
-    if st.experimental_user.email == 'jpshank2@gmail.com':
-        email = 'jeremyshank@bmss.com'
-    elif st.experimental_user.email == 'jdavidbrowncpa@gmail.com':
+    # if st.experimental_user.email == 'jpshank2@gmail.com':
+    #     email = 'jeremyshank@bmss.com'
+    if st.experimental_user.email == 'jdavidbrowncpa@gmail.com':
         email = 'dbrown@bmss.com'
     elif st.experimental_user.email == 'imesser@abacustechnologies.com':
         email = 'kfluker@bmss.com'
     else:
-        email = st.experimental_user.email
+        email = 'ar@bmss.com'#st.experimental_user.email
         
     domain = email.split('@')[-1]
 
@@ -24,3 +24,5 @@ def loading(st):
                 st.session_state['conn'] = init_connection()
             if 'user' not in st.session_state:
                 st.session_state['user'] = get_rows(f"SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_EMAIL = '{email}'")
+            if 'level' not in st.session_state:
+                st.session_state['level'] = st.session_state['user'].LEVEL.iloc[0]
