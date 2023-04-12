@@ -26,6 +26,13 @@ if 'company' in st.session_state:
 
     if st.session_state['user'].EMPLOYEE.iloc[0] == 'Accounts Receivable':
         st.selectbox('Pick a level to view as:', ['No Selection', 'Member', 'Senior Manager', 'Manager', 'Supervisor', 'Senior', 'Staff', 'Intern', 'Admin'], key='level_pick')
-        st.session_state['level'] = st.session_state['level_pick']
+        if st.session_state['level_pick'] == 'Member':
+            st.session_state['level'] = 4
+        elif st.session_state['level_pick'] == 'Senior Manager':
+            st.session_state['level'] = 3
+        elif st.session_state['level_pick'] == 'Manager' or st.session_state['level_pick'] == 'Supervisor':
+            st.session_state['level'] = 2
+        else:
+            st.session_state['level'] = 1
 
     st.markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
