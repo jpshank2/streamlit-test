@@ -76,6 +76,7 @@ def level_4_wip(st):
         dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
         wip_df = st.session_state['wip'].copy()
+        st.write(wip_df)
 
         partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENTPARTNER.unique()])
         office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()])
