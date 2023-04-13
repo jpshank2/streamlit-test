@@ -92,7 +92,7 @@ def level_4_wip(st):
 
         partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
         partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y='CLIENT_PARTNER', orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_AR'))
+        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y='CLIENT_PARTNER', orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
         partner_table.write(filtered_df)
 
     except Exception as e:
