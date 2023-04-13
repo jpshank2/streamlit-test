@@ -7,7 +7,7 @@ def create_wip_reports(st):
     try:
         # rowNums = q.get_row_nums('TRANS_WIP', conn)
         # st.write(rowNums)
-        rows = get_rows("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = get_rows("""SELECT WIP.WIPOUTSTANDING, C.CLIENT_PARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
@@ -18,7 +18,7 @@ def create_wip_reports(st):
         
         st.markdown(f'Outstanding WIP is {outstanding_WIP}')
         
-        st.write(pivot_table(rows, index=['CLIENTPARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=sum))
+        st.write(pivot_table(rows, index=['CLIENT_PARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=sum))
 
         # office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
         # office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
@@ -78,7 +78,7 @@ def level_4_wip(st):
         wip_df = st.session_state['wip'].copy()
         st.write(wip_df)
 
-        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENTPARTNER.unique()])
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENT_PARTNER.unique()])
         office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()])
 
         if partner_filter == 'All' and office_filter == 'All':
@@ -86,13 +86,13 @@ def level_4_wip(st):
         elif partner_filter == 'All' and office_filter != 'All':
             filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
         elif partner_filter != 'All' and office_filter == 'All':
-            filtered_df = wip_df[wip_df['CLIENTPARTNER'] == partner_filter].copy()
+            filtered_df = wip_df[wip_df['CLIENT_PARTNER'] == partner_filter].copy()
         else:
-            filtered_df = wip_df[(wip_df['CLIENTPARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
+            filtered_df = wip_df[(wip_df['CLIENT_PARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
 
-        partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENTPARTNER']]
-        partner_df = filtered_df.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y='CLIENTPARTNER', orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_AR'))
+        partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
+        partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y='CLIENT_PARTNER', orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_AR'))
         partner_table.write(filtered_df)
 
     except Exception as e:
