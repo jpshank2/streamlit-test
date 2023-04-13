@@ -108,13 +108,13 @@ def level_4_wip(st):
         partner_visual.download_button(
             label='Download this data',
             data=partner_csv,
-            file_name='Outstanding WIP by Client Partner.xlsx'
+            file_name='Outstanding WIP by Client Partner.csv'
         )
         partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']])
         partner_table.download_button(
             label='Download this data',
             data=partner_csv,
-            file_name='Outstanding WIP by Client Partner.xlsx'
+            file_name='Outstanding WIP by Client Partner.csv'
         )
 
     except Exception as e:
