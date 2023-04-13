@@ -1,6 +1,7 @@
 from numpy import sum
 from pandas import pivot_table
 from utilities.queries import get_rows
+from utilities.click_handlers import convert_df
 from plotly.express import bar, pie
 
 def create_wip_reports(st):
@@ -101,10 +102,20 @@ def level_4_wip(st):
             partner_df = filtered_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             yVal = 'CLIENT'
 
-        # partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
-        # partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+        partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']])
+
         partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y=yVal, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
+        partner_visual.download_button(
+            label='Download this data',
+            data=partner_csv,
+            file_name='Outstanding WIP by Client Partner.xlsx'
+        )
         partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']])
+        partner_table.download_button(
+            label='Download this data',
+            data=partner_csv,
+            file_name='Outstanding WIP by Client Partner.xlsx'
+        )
 
     except Exception as e:
         st.write(e)
