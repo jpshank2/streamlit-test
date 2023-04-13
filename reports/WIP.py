@@ -82,17 +82,29 @@ def level_4_wip(st):
 
         if partner_filter == 'All' and office_filter == 'All':
             filtered_df = wip_df.copy()
+            partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
+            partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            yVal = 'Client Partner'
         elif partner_filter == 'All' and office_filter != 'All':
             filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
+            partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
+            partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            yVal = 'Client Partner'
         elif partner_filter != 'All' and office_filter == 'All':
             filtered_df = wip_df[wip_df['CLIENT_PARTNER'] == partner_filter].copy()
+            partner_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
+            partner_df = filtered_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            yVal = 'Client Office'
         else:
             filtered_df = wip_df[(wip_df['CLIENT_PARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
+            partner_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
+            partner_df = filtered_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            yVal = 'Client Office'
 
         partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
         partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y='CLIENT_PARTNER', orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
-        partner_table.write(filtered_df)
+        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y=yVal, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
+        partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']])
 
     except Exception as e:
         st.write(e)
