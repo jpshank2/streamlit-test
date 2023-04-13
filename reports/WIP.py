@@ -102,7 +102,7 @@ def level_4_wip(st):
             partner_df = filtered_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             yVal = 'CLIENT'
 
-        partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']])
+        partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].group_by(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
         partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y=yVal, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
         partner_visual.download_button(
@@ -111,7 +111,7 @@ def level_4_wip(st):
             file_name='Outstanding WIP by Client Partner.csv',
             key='partner_visual_download'
         )
-        partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']])
+        partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].group_by(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
         partner_table.download_button(
             label='Download this data',
             data=partner_csv,
