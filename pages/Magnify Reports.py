@@ -1,7 +1,8 @@
 import streamlit as st
+from utilities.queries import get_rows
 from utilities.loading_screen import loading
 from reports.AR import create_ar_reports
-from reports.WIP import create_wip_reports
+from reports.WIP import level_4_wip
 from PIL import Image
 from requests import get
 from io import BytesIO
@@ -47,6 +48,13 @@ if 'company' in st.session_state:
     Drinking vinegar shoreditch ennui succulents kitsch live-edge, lomo semiotics literally. Craft beer try-hard VHS, portland vaporware bushwick iceland snackwave ramps forage tote bag. Fixie synth kogi banjo paleo. Pork belly cardigan kickstarter edison bulb hell of.
 
     Dummy text? More like dummy thicc text, amirite?""")
+    if 'wip' not in st.session_state:
+        st.session_state = get_rows("""SELECT WIP.WIPOUTSTANDING, C.CLIENTPARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+            from TRANS_WIP WIP
+                INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
+                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
+            WHERE WIP.ContIndex < 900000
+                AND WIP.WIPOUTSTANDING <> 0""")
 
     try:
         st.markdown('### AR Reports')
@@ -55,6 +63,6 @@ if 'company' in st.session_state:
 
         st.markdown('### WIP Reports')
         go_to_top()
-        create_wip_reports(st)
+        level_4_wip(st)
     except Exception as e:
         st.write(e)

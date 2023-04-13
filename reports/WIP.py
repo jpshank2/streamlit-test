@@ -1,6 +1,7 @@
 from numpy import sum
 from pandas import pivot_table
 from utilities.queries import get_rows
+from plotly.express import bar, pie
 
 def create_wip_reports(st):
     try:
@@ -60,5 +61,38 @@ def create_wip_reports(st):
         # aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
         # st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods'))
         
+    except Exception as e:
+        st.write(e)
+
+def level_4_wip(st):
+    try:
+        static_one, static_two, static_three, static_four, static_five = st.columns(5)
+        filter_one, filter_two = st.columns(2)
+        visuals_one, visuals_two = st.columns(2)
+        partner_visual, partner_table = visuals_one.tabs(['Visual', 'Table'])
+        current_visual, current_table = visuals_one.tabs(['Visual', 'Table'])
+        office_visual, office_table = visuals_two.tabs(['Visual', 'Table'])
+        aging_visual, aging_table = visuals_two.tabs(['Visual', 'Table'])
+        dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
+
+        wip_df = st.session_state['wip'].copy()
+
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENTPARTNER.unique()])
+        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()])
+
+        if partner_filter == 'All' and office_filter == 'All':
+            filtered_df = wip_df.copy()
+        elif partner_filter == 'All' and office_filter != 'All':
+            filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
+        elif partner_filter != 'All' and office_filter == 'All':
+            filtered_df = wip_df[wip_df['CLIENTPARTNER'] == partner_filter].copy()
+        else:
+            filtered_df = wip_df[(wip_df['CLIENTPARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
+
+        partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENTPARTNER']]
+        partner_df = filtered_df.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y='CLIENTPARTNER', orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_AR'))
+        partner_table.write(filtered_df)
+
     except Exception as e:
         st.write(e)
