@@ -14,6 +14,9 @@ def level_1_wip(st):
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
 
+        month_banner = st.columns(1)
+        py_pie, cy_pie = st.columns(2)
+
         fy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(fye, fym, 1).strftime('%Y-%m-%d')) & (wip_df['CONTINDEX'] < 900000)]
         fy_wip_df['MONTH'] = fy_wip_df['WIPDATE'].dt.month_name()
         
@@ -23,16 +26,16 @@ def level_1_wip(st):
         
         cy_wip_service_df = cy_wip_df[cy_wip_df['CONTINDEX'] < 900000][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
         cy_wip_service_fig = pie(cy_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='CY WIP Hours by Service Title')
-        st.plotly_chart(cy_wip_service_fig, use_container_width=True)
+        cy_pie.plotly_chart(cy_wip_service_fig, use_container_width=True)
 
         py_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(st.session_state['today'].year - 2, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d'))]
         
         py_wip_service_df = py_wip_df[py_wip_df['CONTINDEX'] < 900000][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
         py_wip_service_fig = pie(py_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='PY WIP Hours by Service Title')
-        st.plotly_chart(py_wip_service_fig, use_container_width=True)
+        py_pie.plotly_chart(py_wip_service_fig, use_container_width=True)
         
         wip_service_fig = bar(fye_wip_service_df, x='MONTH', y='WIP_HOURS', color='SERVICETITLE', title='WIP Hours by Month and Service').update_xaxes(categoryorder='array', categoryarray=['June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'])
-        st.plotly_chart(wip_service_fig, use_container_width=True)
+        month_banner.plotly_chart(wip_service_fig, use_container_width=True)
         # cy_wip_df = wip_df
         # py_wip_df = wip_df
     except Exception as e:
