@@ -37,7 +37,7 @@ def level_1_wip(st):
         py_col.plotly_chart(py_wip_service_fig, use_container_width=True)
 
         cy_util_df = cy_wip_df[['WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
-        cy_util_df = cy_util_df.agg('sum')
+        cy_util_df = cy_util_df.agg('sum').reset_index()
         cy_util_df.columns = ['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS']
         st.write(cy_util_df)#.reset_index()
         st.write(cy_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS']])
