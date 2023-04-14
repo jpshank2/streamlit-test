@@ -14,7 +14,7 @@ def level_1_wip(st):
         # st.write(wip_df)
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
         fy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(fye - 1, 6, 1).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(fye, 6, 1).strftime('%Y-%m-%d'))]
-        fy_wip_df['MONTH'] = fy_wip_df['WIPWDATE'].dt.month
+        fy_wip_df['MONTH'] = fy_wip_df['WIPDATE'].dt.month
         fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
         st.write(bar(fye_wip_service_df, x='MONTH', y='WIP_HOURS', color='SERVICETITLE', title='WIP Hours by Month and Service'))
         # cy_wip_df = wip_df
