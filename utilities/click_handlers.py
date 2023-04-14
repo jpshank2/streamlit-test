@@ -1,7 +1,7 @@
 from utilities.queries import insert_rows
 from random import randint
 from json import loads
-from streamlit import cache
+from streamlit import cache_resource
 
 def create_new_client(st):
     state_client = st.session_state['newclient']
@@ -94,6 +94,6 @@ def create_new_client(st):
 
     insert_rows('NCTO', 'ENTERED_CLIENTS', 'KEY, STATUS, CLIENT', [key, 'PENDING'], new_client)
 
-@cache
+@cache_resource
 def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
