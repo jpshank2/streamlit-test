@@ -13,8 +13,9 @@ def level_1_wip(st):
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
         st.write(wip_df)
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
-        st.write(wip_df.dtypes)
         fy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(fye - 1, 6, 1).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(fye, 6, 1).strftime('%Y-%m-%d'))]
+        st.write(datetime(fye - 1, 6, 1).strftime('%Y-%m-%d'))
+        st.write(datetime(fye, 6, 1).strftime('%Y-%m-%d'))
         cy_wip_df = wip_df
         py_wip_df = wip_df
         st.write(fy_wip_df)
