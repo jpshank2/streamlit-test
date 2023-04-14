@@ -21,13 +21,13 @@ def level_1_wip(st):
 
         cy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))]
         
-        cy_wip_service_df = cy_wip_df[cy_wip_df['CONTINDEX' < 900000]][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
+        cy_wip_service_df = cy_wip_df[cy_wip_df['CONTINDEX'] < 900000][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
         cy_wip_service_fig = pie(cy_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='CY WIP Hours by Service Title')
         st.plotly_chart(cy_wip_service_fig, use_container_width=True)
 
         py_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(st.session_state['today'].year - 2, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d'))]
         
-        py_wip_service_df = py_wip_df[py_wip_df['CONTINDEX' < 900000]][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
+        py_wip_service_df = py_wip_df[py_wip_df['CONTINDEX'] < 900000][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
         py_wip_service_fig = pie(py_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='PY WIP Hours by Service Title')
         st.plotly_chart(py_wip_service_fig, use_container_width=True)
         
