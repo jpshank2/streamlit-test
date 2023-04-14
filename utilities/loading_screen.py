@@ -28,4 +28,4 @@ def loading(st):
             if 'level' not in st.session_state:
                 st.session_state['level'] = st.session_state['user'].LEVEL.iloc[0]
             if 'today' not in st.session_state:
-                st.session_state['today'] = datetime.now()
+                st.session_state['today'] = datetime.today()
