@@ -24,7 +24,7 @@ if 'company' not in st.session_state:
 if 'company' in st.session_state:
     st.markdown(f"# Welcome to Magnify, {st.session_state['user']['EMPLOYEE'].iloc[0]}!")
 
-    if st.session_state['user'].EMPLOYEE.iloc[0] == 'Accounts Receivable':
+    if st.session_state['user'].EMPLOYEE.iloc[0] == 'Fawn Smith':
         level_pick = st.selectbox('Pick a level to view as:', ['No Selection', 'Member', 'Senior Manager', 'Manager', 'Supervisor', 'Senior', 'Staff', 'Intern', 'Admin'], key='level_pick')
         if level_pick == 'Member':
             st.session_state['level'] = 4

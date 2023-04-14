@@ -4,26 +4,12 @@ from utilities.queries import get_rows
 from utilities.click_handlers import convert_df
 from plotly.express import bar, pie
 
-def create_wip_reports(st):
+def level_1_wip(st):
     try:
-        # rowNums = q.get_row_nums('TRANS_WIP', conn)
-        # st.write(rowNums)
-        rows = get_rows("""SELECT WIP.WIPOUTSTANDING, C.CLIENT_PARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
-            from TRANS_WIP WIP
-                INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
-                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
-            WHERE WIP.ContIndex < 900000
-                AND WIP.WIPOUTSTANDING <> 0""").copy()
-        
-        outstanding_WIP = round(rows['WIPOUTSTANDING'].sum(), 2)
-        
-        st.markdown(f'Outstanding WIP is {outstanding_WIP}')
-        
-        st.write(pivot_table(rows, index=['CLIENT_PARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=sum))
-
-        
-        # st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods'))
-        
+        st.markdown('hello')
+        wip_df = st.session_state['wip'].copy()
+        wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
+        st.write(wip_df)
     except Exception as e:
         st.write(e)
 
@@ -39,7 +25,8 @@ def level_4_wip(st):
         dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
         wip_df = st.session_state['wip'].copy()
-        wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
+        wip_df['WIPOUTSTANDING'] = wip_df['WIPOUTSTANDING'].round(2)
+        wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' WIP', 'Overdue 90+ WIP')
 
         total_outstanding_wip = wip_df['WIPOUTSTANDING'].sum()
 
@@ -88,8 +75,24 @@ def level_4_wip(st):
 
         aging_wip = filtered_df[['AGING_PERIOD', 'WIPOUTSTANDING']]
         aging_wip = aging_wip.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()
+
+        aging_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']])
+
         aging_visual.write(pie(aging_wip, values='OUTSTANDING_WIP', names='AGING_PERIOD', title='WIP Aging Periods'))
+        aging_visual.download_button(
+            label='Download this data',
+            data=aging_csv,
+            file_name='Aging WIP.csv',
+            key='aging_visual_download'
+        )
+
         aging_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']])
+        aging_table.download_button(
+            label='Download this data',
+            data=aging_csv,
+            file_name='Aging WIP.csv',
+            key='aging_table_download'
+        )
 
     except Exception as e:
         st.write(e)
