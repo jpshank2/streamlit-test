@@ -1,4 +1,5 @@
 from utilities.queries import validation_company, get_rows, init_connection
+from datetime import datetime
 
 def loading(st):
     # if st.experimental_user.email == 'jpshank2@gmail.com':
@@ -26,3 +27,5 @@ def loading(st):
                 st.session_state['user'] = get_rows(f"SELECT S.*, L.LEVEL_PERMISSION FROM DIM_STAFF_MASTER S INNER JOIN CONFIGURATIONS.LEVELS L ON L.LEVEL_DESC = S.LEVEL WHERE STAFF_EMAIL = '{email}'")
             if 'level' not in st.session_state:
                 st.session_state['level'] = st.session_state['user'].LEVEL.iloc[0]
+            if 'today' not in st.session_state:
+                st.session_state['today'] = datetime.now()

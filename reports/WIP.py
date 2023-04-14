@@ -1,15 +1,20 @@
 from numpy import sum, where
-from pandas import pivot_table
-from utilities.queries import get_rows
+# from pandas import pivot_table
+# from utilities.queries import get_rows
 from utilities.click_handlers import convert_df
 from plotly.express import bar, pie
+from datetime import datetime
 
 def level_1_wip(st):
     try:
-        st.markdown('hello')
+        fye = st.session_state['today'].year if st.session_state['today'].month < 3 else st.session_state['today'].year + 1
         wip_df = st.session_state['wip'].copy()
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
-        st.write(wip_df)
+        # st.write(wip_df)
+        fy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(fye - 1, 6, 1).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(fye, 6, 1).strftime('%Y-%m-%d'))]
+        cy_wip_df = wip_df
+        py_wip_df = wip_df
+        st.write(fy_wip_df)
     except Exception as e:
         st.write(e)
 
