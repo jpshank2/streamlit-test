@@ -49,12 +49,12 @@ if 'company' in st.session_state:
 
     Dummy text? More like dummy thicc text, amirite?""")
     if 'wip' not in st.session_state:
-        st.session_state['wip'] = get_rows("""SELECT WIP.WIPOUTSTANDING, C.CLIENT_PARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        st.session_state['wip'] = get_rows("""SELECT WIP.WIPOUTSTANDING, WIP.STAFFINDEX, C.CLIENT_PARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from TRANS_WIP WIP
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
-                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
-            WHERE WIP.ContIndex < 900000
-                AND WIP.WIPOUTSTANDING <> 0""")
+                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE""")
+            # WHERE WIP.ContIndex < 900000
+            #     AND WIP.WIPOUTSTANDING <> 0""")
 
     try:
         st.markdown('### AR Reports')

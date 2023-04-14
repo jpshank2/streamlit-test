@@ -25,6 +25,7 @@ def level_4_wip(st):
         dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
         wip_df = st.session_state['wip'].copy()
+        wip_df = wip_df[(wip_df['CONTINDEX'] < 900000) & (wip_df['WIPOUTSTANDING'] != 0)]
         wip_df['WIPOUTSTANDING'] = wip_df['WIPOUTSTANDING'].round(2)
         wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' WIP', 'Overdue 90+ WIP')
 
