@@ -11,14 +11,15 @@ def level_1_wip(st):
         wip_df = st.session_state['wip'].copy()
         from pandas import to_datetime
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
-        st.write(wip_df)
+        # st.write(wip_df)
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
         fy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(fye - 1, 6, 1).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(fye, 6, 1).strftime('%Y-%m-%d'))]
-        st.write(datetime(fye - 1, 6, 1).strftime('%Y-%m-%d'))
-        st.write(datetime(fye, 6, 1).strftime('%Y-%m-%d'))
-        cy_wip_df = wip_df
-        py_wip_df = wip_df
-        st.write(fy_wip_df)
+        fy_wip_df['MONTH'] = fy_wip_df['WIPWDATE'].dt.month
+        fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
+        st.write(bar(fye_wip_service_df, x='MONTH', y='WIP_HOURS', color='SERVICETITLE', title='WIP Hours by Month and Service'))
+        # cy_wip_df = wip_df
+        # py_wip_df = wip_df
+        # st.write(fy_wip_df)
     except Exception as e:
         st.write(e)
 
@@ -48,22 +49,22 @@ def level_4_wip(st):
         if partner_filter == 'All' and office_filter == 'All':
             filtered_df = wip_df.copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
-            partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'CLIENT_PARTNER'
         elif partner_filter == 'All' and office_filter != 'All':
             filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
-            partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'CLIENT_PARTNER'
         elif partner_filter != 'All' and office_filter == 'All':
             filtered_df = wip_df[wip_df['CLIENT_PARTNER'] == partner_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
-            partner_df = filtered_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            partner_df = partner_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'OFFICE'
         else:
             filtered_df = wip_df[(wip_df['CLIENT_PARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT']]
-            partner_df = filtered_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            partner_df = partner_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'CLIENT'
 
         partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
