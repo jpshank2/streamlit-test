@@ -63,8 +63,7 @@ if 'company' in st.session_state:
 
         st.markdown('### WIP Reports')
         go_to_top()
-        exec(f"""from reports.WIP import level_{st.session_state['level']}_wip as level_wip
-        level_wip(st)""")
+        exec(f"""from reports.WIP import level_{st.session_state['level']}_wip as level_wip\nlevel_wip(st)""")
         # wip_report = exec(f"from reports.WIP import level_{st.session_state['level']}_wip as level_wip")
         # level_wip = getattr(wip, f"level_{st.session_state['level']}_wip")
         # wip_report.level_wip(st)
