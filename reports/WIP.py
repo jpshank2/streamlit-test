@@ -9,6 +9,7 @@ def level_1_wip(st):
     try:
         fye = st.session_state['today'].year if st.session_state['today'].month < 3 else st.session_state['today'].year + 1
         wip_df = st.session_state['wip'].copy()
+        st.write(wip_df)
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
         # st.write(wip_df)
         fy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(fye - 1, 6, 1).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(fye, 6, 1).strftime('%Y-%m-%d'))]
