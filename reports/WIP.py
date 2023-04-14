@@ -7,7 +7,7 @@ from datetime import datetime
 
 def level_1_wip(st):
     try:
-        fye = st.session_state['today'].year if st.session_state['today'].month < 3 else st.session_state['today'].year + 1
+        fye = st.session_state['today'].year if st.session_state['today'].month < 6 else st.session_state['today'].year + 1
         wip_df = st.session_state['wip'].copy()
         from pandas import to_datetime
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
