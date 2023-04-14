@@ -2,7 +2,7 @@ import streamlit as st
 from utilities.queries import get_rows
 from utilities.loading_screen import loading
 from reports.AR import create_ar_reports
-from reports.WIP import level_4_wip
+# import reports.WIP as wip
 from PIL import Image
 from requests import get
 from io import BytesIO
@@ -63,6 +63,10 @@ if 'company' in st.session_state:
 
         st.markdown('### WIP Reports')
         go_to_top()
-        level_4_wip(st)
+        exec(f"""from reports.WIP import level_{st.session_state['level']}_wip as level_wip
+        level_wip(st)""")
+        # wip_report = exec(f"from reports.WIP import level_{st.session_state['level']}_wip as level_wip")
+        # level_wip = getattr(wip, f"level_{st.session_state['level']}_wip")
+        # wip_report.level_wip(st)
     except Exception as e:
         st.write(e)

@@ -1,4 +1,4 @@
-from numpy import sum
+from numpy import sum, where
 from pandas import pivot_table
 from utilities.queries import get_rows
 from utilities.click_handlers import convert_df
@@ -39,6 +39,7 @@ def level_4_wip(st):
         dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
         wip_df = st.session_state['wip'].copy()
+        wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
 
         total_outstanding_wip = wip_df['WIPOUTSTANDING'].sum()
 
@@ -51,26 +52,26 @@ def level_4_wip(st):
             filtered_df = wip_df.copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
             partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-            yVal = 'CLIENT_PARTNER'
+            partner_y_val = 'CLIENT_PARTNER'
         elif partner_filter == 'All' and office_filter != 'All':
             filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
             partner_df = filtered_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-            yVal = 'CLIENT_PARTNER'
+            partner_y_val = 'CLIENT_PARTNER'
         elif partner_filter != 'All' and office_filter == 'All':
             filtered_df = wip_df[wip_df['CLIENT_PARTNER'] == partner_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
             partner_df = filtered_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-            yVal = 'OFFICE'
+            partner_y_val = 'OFFICE'
         else:
             filtered_df = wip_df[(wip_df['CLIENT_PARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT']]
             partner_df = filtered_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
-            yVal = 'CLIENT'
+            partner_y_val = 'CLIENT'
 
         partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
-        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y=yVal, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
+        partner_visual.write(bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
         partner_visual.download_button(
             label='Download this data',
             data=partner_csv,
@@ -84,6 +85,11 @@ def level_4_wip(st):
             file_name='Outstanding WIP by Client Partner.csv',
             key='partner_table_download'
         )
+
+        aging_wip = filtered_df[['AGING_PERIOD', 'WIPOUTSTANDING']]
+        aging_wip = aging_wip.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()
+        aging_visual.write(pie(aging_wip, values='OUTSTANDING_WIP', names='AGING_PERIOD', title='WIP Aging Periods'))
+        aging_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']])
 
     except Exception as e:
         st.write(e)
