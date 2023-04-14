@@ -21,45 +21,7 @@ def create_wip_reports(st):
         
         st.write(pivot_table(rows, index=['CLIENT_PARTNER', 'CLIENT'], values=['WIPOUTSTANDING'], aggfunc=sum))
 
-        # office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
-        # office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-
-        # levels = [
-        #     st.selectbox('Office', ['All'] + [i for i in office_office_AR.OFFICE.unique()])
-        # ]
-
-
-        # if levels[0] == 'All':
-        #     office_AR_DF = office_office_AR
-        #     yVal = 'OFFICE'
-        #     title = 'AR by Office w/ drilldown'
-        # else:
-        #     office_partner_AR = rows[rows['OFFICE'] == levels[0]]
-        #     office_partner_AR = office_partner_AR[['CLIENTPARTNER', 'DEBTTRANUNPAID']]
-        #     levels.append(st.selectbox('Client Partner', ['All'] + [i for i in office_partner_AR.CLIENTPARTNER.unique()]))
-
-        #     office_AR_DF = office_partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-        #     yVal = 'CLIENTPARTNER'
-        #     title = levels[0] + ' AR by Client Partner w/ drilldown'
-
-        #     if levels[1] != 'All':
-        #         office_AR_DF = rows[(rows['OFFICE'] == levels[0]) & (rows['CLIENTPARTNER'] == levels[1])]
-        #         office_AR_DF = office_AR_DF[['CLIENT', 'DEBTTRANUNPAID']]
-        #         office_AR_DF = office_AR_DF.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-        #         yVal = 'CLIENT'
-        #         title = f'{levels[1]}\'s {levels[0]} AR by Client w/ drilldown'
-                
-        # st.write(px.bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title, text='OUTSTANDING_AR'))
-
-        # partner_AR = rows[['CLIENTPARTNER', 'DEBTTRANUNPAID']].copy()
-        # partner_AR = partner_AR.groupby('CLIENTPARTNER', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
-
-        # st.write(px.bar(partner_AR, y='CLIENTPARTNER', x='OUTSTANDING_AR', orientation='h', title='AR by Client Partner'))
-
-        # aging_AR = rows[['AGING_PERIOD_SORT', 'OG_PERIOD', 'DEBTTRANUNPAID']].copy()
-        # aging_AR['AGING_PERIOD'] = np.where(aging_AR['AGING_PERIOD_SORT'] < 4, aging_AR['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
-        # aging_AR = aging_AR[['AGING_PERIOD', 'DEBTTRANUNPAID']]
-        # aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('DEBTTRANUNPAID', 'sum')).reset_index()
+        
         # st.write(px.pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods'))
         
     except Exception as e:
@@ -77,6 +39,10 @@ def level_4_wip(st):
         dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
         wip_df = st.session_state['wip'].copy()
+
+        total_outstanding_wip = wip_df['WIPOUTSTANDING'].sum()
+
+        static_one.metric(label='Target < $4M', value=total_outstanding_wip, delta=('Outstanding WIP' if total_outstanding_wip < 4000000 else '-Outstanding WIP'))
 
         partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENT_PARTNER.unique()])
         office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()])
@@ -111,7 +77,7 @@ def level_4_wip(st):
             file_name='Outstanding WIP by Client Partner.csv',
             key='partner_visual_download'
         )
-        partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
+        partner_table.write(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']])
         partner_table.download_button(
             label='Download this data',
             data=partner_csv,
