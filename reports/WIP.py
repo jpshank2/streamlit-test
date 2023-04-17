@@ -22,7 +22,7 @@ def level_1_wip(st):
         wip_service_fig = bar(fye_wip_service_df, x='MONTH', y='WIP_HOURS', color='SERVICETITLE', title='WIP Hours by Month and Service').update_xaxes(categoryorder='array', categoryarray=['June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'])
         st.plotly_chart(wip_service_fig, use_container_width=True)
 
-        py_col, cy_col = st.columns(2)
+        py_col, cy_col = st.columns(2, gap='medium')
         py_col.markdown('#### Prior Year Data')
         cy_col.markdown('#### Current Year Data')
 
