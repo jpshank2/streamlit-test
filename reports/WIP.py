@@ -237,7 +237,7 @@ def level_4_wip(st):
         filtered_wip_60_90 = round((filtered_df['60_TO_90'].sum() / filtered_outstanding_wip) * 100, 2)
         filtered_overdue_wip = round((filtered_df['OVERDUEWIP'].sum() / filtered_outstanding_wip) * 100, 2)
 
-        dynamic_one.metric(label='Target < $4M', value=filtered_outstanding_wip, delta=('Outstanding WIP' if filtered_outstanding_wip < 4000000 else '-Outstanding WIP'))
+        dynamic_one.metric(label='Target < $4M', value=f'${filtered_outstanding_wip}', delta=('Outstanding WIP' if filtered_outstanding_wip < 4000000 else '-Outstanding WIP'))
         dynamic_two.metric(label='Target > 70%', value=filtered_percent_current, delta=('% WIP in Current' if filtered_percent_current > 70 else '-% WIP in Current'))
         dynamic_three.metric(label='Target < 20%', value=filtered_wip_30_60, delta=('% WIP in 31-60 Days' if filtered_wip_30_60 < 20 else '-% WIP in 31-60 Days'))
         dynamic_four.metric(label='Target < 15%', value=filtered_wip_60_90, delta=('% WIP in 61-90 Days' if filtered_wip_60_90 < 15 else '-% WIP in 61-90 Days'))
