@@ -170,7 +170,7 @@ def level_4_wip(st):
 
         office_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
-        office_fig = bar(office_df, x='OUTSTANDING_WIP', y=office_y_val, orientation='h', barmode='group', title='Firm WIP by Client Office', text='OUTSTANDING_WIP').update_layout(h_bar_style)
+        office_fig = bar(office_df, x='OUTSTANDING_WIP', y=office_y_val, orientation='h', barmode='group', title='Firm WIP by Client Office', text='OUTSTANDING_WIP').update_layout(h_bar_style).update_traces(texttemplate="%{value:$,.2f}")
         office_visual.plotly_chart(office_fig)
         office_visual.download_button(
             label='Download this data',
@@ -215,7 +215,7 @@ def level_4_wip(st):
         current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_WIP'] / current_df['OUTSTANDING_WIP']) * 100, 2)
         current_y_val = 'OFFICE'
 
-        current_fig = bar(current_df, x='PERCENT_CURRENT', y=current_y_val, orientation='h', barmode='group', title='Percent Current WIP by Client Office', text='PERCENT_CURRENT').update_layout(h_bar_style)
+        current_fig = bar(current_df, x='PERCENT_CURRENT', y=current_y_val, orientation='h', barmode='group', title='Percent Current WIP by Client Office', text='PERCENT_CURRENT').update_layout(h_bar_style).update_traces(texttemplate="%{value:.2f%}")
         current_visual.plotly_chart(current_fig)
         current_visual.download_button(
             label='Download this data',
