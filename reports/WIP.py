@@ -23,6 +23,8 @@ def level_1_wip(st):
         st.plotly_chart(wip_service_fig, use_container_width=True)
 
         py_col, cy_col = st.columns(2)
+        py_col.markdown('#### Prior Year Data')
+        cy_col.markdown('#### Current Year Data')
 
         cy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))]
         
