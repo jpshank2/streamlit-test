@@ -106,7 +106,7 @@ def level_4_wip(st):
         wip_60_90 = round((wip_df['60_TO_90'].sum() / total_outstanding_wip) * 100, 2)
         overdue_wip = round((wip_df['OVERDUEWIP'].sum() / total_outstanding_wip) * 100, 2)
 
-        static_one.metric(label='Target < $4M', value=total_outstanding_wip, delta=('Outstanding WIP' if total_outstanding_wip < 4000000 else '-Outstanding WIP'))
+        static_one.metric(label='Target < $4M', value='${:,.2f}'.format(total_outstanding_wip), delta=('Outstanding WIP' if total_outstanding_wip < 4000000 else '-Outstanding WIP'))
         static_two.metric(label='Target > 70%', value=percent_current, delta=('% WIP in Current' if percent_current > 70 else '-% WIP in Current'))
         static_three.metric(label='Target < 20%', value=wip_30_60, delta=('% WIP in 31-60 Days' if wip_30_60 < 20 else '-% WIP in 31-60 Days'))
         static_four.metric(label='Target < 15%', value=wip_60_90, delta=('% WIP in 61-90 Days' if wip_60_90 < 15 else '-% WIP in 61-90 Days'))
@@ -237,7 +237,7 @@ def level_4_wip(st):
         filtered_wip_60_90 = round((filtered_df['60_TO_90'].sum() / filtered_outstanding_wip) * 100, 2)
         filtered_overdue_wip = round((filtered_df['OVERDUEWIP'].sum() / filtered_outstanding_wip) * 100, 2)
 
-        dynamic_one.metric(label='Target < $4M', value=f'${filtered_outstanding_wip}', delta=('Outstanding WIP' if filtered_outstanding_wip < 4000000 else '-Outstanding WIP'))
+        dynamic_one.metric(label='Target < $4M', value='${:,.2f}'.format(filtered_outstanding_wip), delta=('Outstanding WIP' if filtered_outstanding_wip < 4000000 else '-Outstanding WIP'))
         dynamic_two.metric(label='Target > 70%', value=filtered_percent_current, delta=('% WIP in Current' if filtered_percent_current > 70 else '-% WIP in Current'))
         dynamic_three.metric(label='Target < 20%', value=filtered_wip_30_60, delta=('% WIP in 31-60 Days' if filtered_wip_30_60 < 20 else '-% WIP in 31-60 Days'))
         dynamic_four.metric(label='Target < 15%', value=filtered_wip_60_90, delta=('% WIP in 61-90 Days' if filtered_wip_60_90 < 15 else '-% WIP in 61-90 Days'))
