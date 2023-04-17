@@ -7,7 +7,7 @@ from datetime import datetime
 
 h_bar_style = {'xaxis_title_font_size': 18, 'yaxis_title_font_size': 18, 'yaxis_tickfont_size': 14, 'xaxis_tickfont_size': 14, 'title_font_size': 24}
 
-v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_size': 14, 'xaxis_tickfont_size': 14}
+v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_size': 18, 'xaxis_tickfont_size': 18}
 
 pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
