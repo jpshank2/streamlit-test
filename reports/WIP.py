@@ -212,7 +212,7 @@ def level_4_wip(st):
 
         current_df = filtered_df[['WIPOUTSTANDING', 'CURRENTWIP', 'OFFICE']]
         current_df = current_df.groupby(['OFFICE']).agg(CURRENT_WIP= ('CURRENTWIP', 'sum'), OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()
-        current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_WIP'] / current_df['OUTSTANDING_WIP']) * 100, 2)
+        current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_WIP'] / current_df['OUTSTANDING_WIP']), 2)
         current_y_val = 'OFFICE'
 
         current_fig = bar(current_df, x='PERCENT_CURRENT', y=current_y_val, orientation='h', barmode='group', title='Percent Current WIP by Client Office', text='PERCENT_CURRENT').update_layout(h_bar_style).update_traces(texttemplate="%{value:.2%}")
