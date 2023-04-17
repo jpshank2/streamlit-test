@@ -95,6 +95,8 @@ def level_4_wip(st):
         wip_df = wip_df[(wip_df['CONTINDEX'] < 900000) & (wip_df['WIPOUTSTANDING'] != 0)]
         wip_df['WIPOUTSTANDING'] = wip_df['WIPOUTSTANDING'].round(2)
         wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' WIP', 'Overdue 90+ WIP')
+        wip_df['CURRENTWIP'] = where(wip_df['AGING_PERIOD'] == '0-30 Days WIP', wip_df['WIPOUTSTANDING'], 0)
+        # wip_df['OVERDUEWIP'] = where(wip_df['AGING_PERIOD'] == '0-30 Days WIP', 0,  wip_df['WIPOUTSTANDING'])
 
         total_outstanding_wip = round(wip_df['WIPOUTSTANDING'].sum(), 2)
 
@@ -113,6 +115,11 @@ def level_4_wip(st):
             office_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
             office_df = office_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             office_y_val = 'OFFICE'
+
+            current_df = filtered_df[['WIPOUTSTANDING', 'CURRENTWIP', 'OFFICE']]
+            current_df = current_df.groupby(['OFFICE']).agg(CURRENT_WIP= ('CURRENTWIP', 'sum'), OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()
+            current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_WIP'] / current_df['OUTSTANDING_WIP']) * 100, 2)
+            current_y_val = 'OFFICE'
         elif partner_filter == 'All' and office_filter != 'All':
             filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
@@ -194,6 +201,24 @@ def level_4_wip(st):
             data=aging_csv,
             file_name='Aging WIP.csv',
             key='aging_table_download'
+        )
+
+        current_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
+
+        current_fig = bar(current_df, x='OUTSTANDING_WIP', y=current_y_val, orientation='h', barmode='group', title='Firm WIP by Client Office', text='OUTSTANDING_WIP').update_layout(h_bar_style)
+        current_visual.plotly_chart(current_fig)
+        current_visual.download_button(
+            label='Download this data',
+            data=current_csv,
+            file_name='Percentage Current WIP by Client Office.csv',
+            key='current_visual_download'
+        )
+        current_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']], use_container_width=True)
+        current_table.download_button(
+            label='Download this data',
+            data=current_csv,
+            file_name='Percentage Current WIP by Client Office.csv',
+            key='current_table_download'
         )
 
     except Exception as e:
