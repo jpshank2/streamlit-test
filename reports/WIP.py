@@ -105,24 +105,38 @@ def level_4_wip(st):
 
         if partner_filter == 'All' and office_filter == 'All':
             filtered_df = wip_df.copy()
+
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
             partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'CLIENT_PARTNER'
+
+            office_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
+            office_df = office_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
+            office_y_val = 'OFFICE'
         elif partner_filter == 'All' and office_filter != 'All':
             filtered_df = wip_df[wip_df['OFFICE'] == office_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER']]
             partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'CLIENT_PARTNER'
+
+            office_df = partner_df
+            office_y_val = partner_y_val
         elif partner_filter != 'All' and office_filter == 'All':
             filtered_df = wip_df[wip_df['CLIENT_PARTNER'] == partner_filter].copy()
             partner_df = filtered_df[['WIPOUTSTANDING', 'OFFICE']]
             partner_df = partner_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'OFFICE'
+
+            office_df = partner_df
+            office_y_val = partner_y_val
         else:
             filtered_df = wip_df[(wip_df['CLIENT_PARTNER'] == partner_filter) & (wip_df['OFFICE'] == office_filter)]
             partner_df = filtered_df[['WIPOUTSTANDING', 'CLIENT']]
             partner_df = partner_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_WIP = ('WIPOUTSTANDING', 'sum')).reset_index()
             partner_y_val = 'CLIENT'
+
+            office_df = partner_df
+            office_y_val = partner_y_val
 
         partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
@@ -134,12 +148,30 @@ def level_4_wip(st):
             file_name='Outstanding WIP by Client Partner.csv',
             key='partner_visual_download'
         )
-        partner_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']])
+        partner_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']], use_column_width=True)
         partner_table.download_button(
             label='Download this data',
             data=partner_csv,
             file_name='Outstanding WIP by Client Partner.csv',
             key='partner_table_download'
+        )
+
+        office_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
+
+        office_fig = bar(office_df, x='OUTSTANDING_WIP', y=office_y_val, orientation='h', barmode='group', title='Firm WIP by Client Office', text='OUTSTANDING_WIP').update_layout(h_bar_style)
+        office_visual.plotly_chart(office_fig)
+        office_visual.download_button(
+            label='Download this data',
+            data=office_csv,
+            file_name='Outstanding WIP by Client Office.csv',
+            key='office_visual_download'
+        )
+        office_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']], use_column_width=True)
+        office_table.download_button(
+            label='Download this data',
+            data=office_csv,
+            file_name='Outstanding WIP by Client Office.csv',
+            key='office_table_download'
         )
 
         aging_wip = filtered_df[['AGING_PERIOD', 'WIPOUTSTANDING']]
@@ -156,7 +188,7 @@ def level_4_wip(st):
             key='aging_visual_download'
         )
 
-        aging_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']])
+        aging_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']], use_column_width=True)
         aging_table.download_button(
             label='Download this data',
             data=aging_csv,
