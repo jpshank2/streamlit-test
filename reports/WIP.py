@@ -231,11 +231,11 @@ def level_4_wip(st):
             key='current_table_download'
         )
 
-        filtered_outstanding_wip = round(wip_df['WIPOUTSTANDING'].sum(), 2)
-        filtered_percent_current = round((wip_df['CURRENTWIP'].sum() / filtered_outstanding_wip) * 100, 2)
-        filtered_wip_30_60 = round((wip_df['30_TO_60'].sum() / filtered_outstanding_wip) * 100, 2)
-        filtered_wip_60_90 = round((wip_df['60_TO_90'].sum() / filtered_outstanding_wip) * 100, 2)
-        filtered_overdue_wip = round((wip_df['OVERDUEWIP'].sum() / filtered_outstanding_wip) * 100, 2)
+        filtered_outstanding_wip = round(filtered_df['WIPOUTSTANDING'].sum(), 2)
+        filtered_percent_current = round((filtered_df['CURRENTWIP'].sum() / filtered_outstanding_wip) * 100, 2)
+        filtered_wip_30_60 = round((filtered_df['30_TO_60'].sum() / filtered_outstanding_wip) * 100, 2)
+        filtered_wip_60_90 = round((filtered_df['60_TO_90'].sum() / filtered_outstanding_wip) * 100, 2)
+        filtered_overdue_wip = round((filtered_df['OVERDUEWIP'].sum() / filtered_outstanding_wip) * 100, 2)
 
         dynamic_one.metric(label='Target < $4M', value=filtered_outstanding_wip, delta=('Outstanding WIP' if filtered_outstanding_wip < 4000000 else '-Outstanding WIP'))
         dynamic_two.metric(label='Target > 70%', value=filtered_percent_current, delta=('% WIP in Current' if filtered_percent_current > 70 else '-% WIP in Current'))
