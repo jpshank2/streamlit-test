@@ -44,8 +44,8 @@ def level_1_wip(st):
         cy_util_df.style.format({
             'TOTAL_HOURS': "{:.2f}",
             'BILLABLE_HOURS': "{:.2f}",
-            'NON_BILL_HOURS': "{:.2f}",
-        }).hide_index()
+            'NON_BILL_HOURS': "{:.2f}"
+        }).hide()
 
         cy_col.dataframe(cy_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']], use_container_width=True)
 
