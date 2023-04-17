@@ -65,8 +65,11 @@ def level_1_wip(st):
         cy_real_df = cy_real_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
         cy_real_df['REALIZATION'] = round((cy_real_df['WIP_BILLED'] / cy_real_df['WIP_AMOUNT']) * 100, 2).astype(str) + '%'
         cy_real_df['EFF_RATE'] = round((cy_real_df['WIP_BILLED'] / cy_real_df['BILLABLE_HOURS']), 2)
+        cy_real_df['WIP_BILLED'] = cy_real_df['WIP_BILLED'].apply(lambda x: "${:,.2f}".format(x))
+        cy_real_df['WIP_AMOUNT'] = cy_real_df['WIP_AMOUNT'].apply(lambda x: "${:,.2f}".format(x))
+        cy_real_df['EFF_RATE'] = cy_real_df['EFF_RATE'].apply(lambda x: "${:,.2f}".format(x))
 
-        cy_col.dataframe(cy_real_df[['WIP_AMOUNT', 'WIP_BILLED', 'REALIZATION', 'EFF_RATE']], use_container_width=True)
+        cy_col.dataframe(cy_real_df[['WIP_AMOUNT', 'WIP_BILLED', 'EFF_RATE', 'REALIZATION']], use_container_width=True)
 
         py_real_df = py_wip_df[['STAFFINDEX', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
         py_real_df = py_real_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
@@ -76,7 +79,7 @@ def level_1_wip(st):
         py_real_df['WIP_AMOUNT'] = py_real_df['WIP_AMOUNT'].apply(lambda x: "${:,.2f}".format(x))
         py_real_df['EFF_RATE'] = py_real_df['EFF_RATE'].apply(lambda x: "${:,.2f}".format(x))
 
-        py_col.dataframe(py_real_df[['WIP_AMOUNT', 'WIP_BILLED', 'REALIZATION', 'EFF_RATE']], use_container_width=True)
+        py_col.dataframe(py_real_df[['WIP_AMOUNT', 'WIP_BILLED', 'EFF_RATE', 'REALIZATION']], use_container_width=True)
         
         # cy_wip_df = wip_df
         # py_wip_df = wip_df
