@@ -83,7 +83,7 @@ def level_1_wip(st):
 
         cy_client_df = cy_wip_df[['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
         cy_client_df = cy_client_df.groupby('CLIENT').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
-        cy_client_df['REALIZATION'] = round((cy_client_df['WIP_BILLED'] / cy_client_df['WIP_AMOUNT']) * 100, 2).astype(str) + '%'
+        cy_client_df['REALIZATION'] = round((cy_client_df['WIP_BILLED'] / cy_client_df['WIP_AMOUNT']) * 100, 2).astype(str) + '%' if cy_client_df['WIP_AMOUNT'] != 0 else '0%'
 
         cy_col.dataframe(cy_client_df[['CLIENT', 'BILLABLE_HOURS', 'REALIZATION']], use_container_width=True)
 
