@@ -1,7 +1,7 @@
 import streamlit as st
 from utilities.queries import get_rows
 from utilities.loading_screen import loading
-from reports.AR import create_ar_reports
+# from reports.AR import create_ar_reports
 # import reports.WIP as wip
 from PIL import Image
 from requests import get
@@ -48,22 +48,33 @@ if 'company' in st.session_state:
     st.markdown("""Drinking vinegar shoreditch ennui succulents kitsch live-edge, lomo semiotics literally. Craft beer try-hard VHS, portland vaporware bushwick iceland snackwave ramps forage tote bag. Fixie synth kogi banjo paleo. Pork belly cardigan kickstarter edison bulb hell of.""")
 
     st.markdown("""Dummy text? More like dummy thicc text, amirite?""")
-    if 'wip' not in st.session_state:
-        st.session_state['wip'] = get_rows("""SELECT WIP.WIPOUTSTANDING, WIP.STAFFINDEX, WIP.WIPHOURS, WIP.WIPAMOUNT, WIP.WIPBILLED, WIP.CONTINDEX, WIP.WIPDATE, WIP.SERVICETITLE, CASE WHEN WIP.CONTINDEX < 900000 THEN WIP.WIPHOURS ELSE 0 END AS BILLABLEHOURS, CASE WHEN WIP.CONTINDEX >= 900000 THEN WIP.WIPHOURS ELSE 0 END AS NONBILLABLEHOURS, C.CLIENT_PARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD, D.MONTH_NAME AS MONTH
-            from TRANS_WIP WIP
-                INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
-                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
-            WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
-            # WHERE WIP.ContIndex < 900000
-            #     AND WIP.WIPOUTSTANDING <> 0""")
-
+    
     try:
         st.markdown('### AR Reports')
         go_to_top()
+        if 'ar' not in st.session_state:
+            st.session_state['ar'] = get_rows("""select ar.debttranunpaid,
+    c.client,
+    c.office,
+    c.client_partner, 
+    D.AGING_PERIOD_SORT, 
+    D.AGING_PERIOD as OG_PERIOD, 
+    D.MONTH_NAME AS MONTH
+from trans_ar ar
+    inner join dim_client_master c on c.contindex = ar.contindex
+    inner join dim_dates d on d.calendar_date = ar.debttrandate
+where DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
+        exec(f"""from reports.AR import level_{st.session_state['level']}_ar as level_ar\nlevel_ar(st)""")
         # create_ar_reports(st)
 
         st.markdown('### WIP Reports')
         go_to_top()
+        if 'wip' not in st.session_state:
+            st.session_state['wip'] = get_rows("""SELECT WIP.WIPOUTSTANDING, WIP.STAFFINDEX, WIP.WIPHOURS, WIP.WIPAMOUNT, WIP.WIPBILLED, WIP.CONTINDEX, WIP.WIPDATE, WIP.SERVICETITLE, CASE WHEN WIP.CONTINDEX < 900000 THEN WIP.WIPHOURS ELSE 0 END AS BILLABLEHOURS, CASE WHEN WIP.CONTINDEX >= 900000 THEN WIP.WIPHOURS ELSE 0 END AS NONBILLABLEHOURS, C.CLIENT_PARTNER, C.CLIENT, C.OFFICE, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD, D.MONTH_NAME AS MONTH
+            from TRANS_WIP WIP
+                INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
+                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
+            WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
         exec(f"""from reports.WIP import level_{st.session_state['level']}_wip as level_wip\nlevel_wip(st)""")
         # wip_report = exec(f"from reports.WIP import level_{st.session_state['level']}_wip as level_wip")
         # level_wip = getattr(wip, f"level_{st.session_state['level']}_wip")

@@ -102,6 +102,12 @@ def level_1_wip(st):
     except Exception as e:
         st.write(e)
 
+def level_2_wip(st):
+    st.write('level 2')
+
+def level_3_wip(st):
+    st.write('level 3')
+
 def level_4_wip(st):
     try:
         static_one, static_two, static_three, static_four, static_five = st.columns(5)
