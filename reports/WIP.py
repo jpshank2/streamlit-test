@@ -11,7 +11,7 @@ v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_si
 
 pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
-dollar_text_template = "%{:,.2f}"
+dollar_text_template = ":,.2f"
 
 def level_1_wip(st):
     try:
