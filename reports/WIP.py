@@ -102,7 +102,7 @@ def level_4_wip(st):
 
         total_outstanding_wip = round(wip_df['WIPOUTSTANDING'].sum(), 2)
         percent_current = round((wip_df['CURRENTWIP'].sum() / total_outstanding_wip) * 100, 2)
-        wip_30_60 = round((wip_df['30_TO_90'].sum() / total_outstanding_wip) * 100, 2)
+        wip_30_60 = round((wip_df['30_TO_60'].sum() / total_outstanding_wip) * 100, 2)
         wip_60_90 = round((wip_df['60_TO_90'].sum() / total_outstanding_wip) * 100, 2)
         overdue_wip = round((wip_df['OVERDUEWIP'].sum() / total_outstanding_wip) * 100, 2)
 
