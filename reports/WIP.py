@@ -42,7 +42,7 @@ def level_1_wip(st):
         cy_util_df['UTILIZATION'] = cy_util_df['UTILIZATION'].astype(str)
         cy_util_df['UTILIZATION'] = cy_util_df['UTILIZATION'] + '%'
 
-        cy_col.write(cy_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']])
+        cy_col.dataframe(cy_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']], use_container_width=True)
 
         py_util_df = py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
         py_util_df = py_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
@@ -50,14 +50,14 @@ def level_1_wip(st):
         # py_util_df['UTILIZATION'] = py_util_df['UTILIZATION'].astype(str)
         # py_util_df['UTILIZATION'] = py_util_df['UTILIZATION'] + '%'
 
-        py_col.write(py_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']])
+        py_col.dataframe(py_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']], use_container_width=True)
 
         cy_real_df = cy_wip_df[['STAFFINDEX', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
         cy_real_df = cy_real_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
         cy_real_df['REALIZATION'] = round((cy_real_df['WIP_BILLED'] / cy_real_df['WIP_AMOUNT']) * 100, 2).astype(str) + '%'
-        cy_real_df['EFF_RATE'] = round((cy_real_df['WIP_BILLED'] / cy_real_df['BILLABLE_HOURS']) * 100, 2)
+        cy_real_df['EFF_RATE'] = round((cy_real_df['WIP_BILLED'] / cy_real_df['BILLABLE_HOURS']), 2)
 
-        cy_col.dataframe(cy_real_df[['WIP_AMOUNT', 'WIP_BILLED', 'REALIZATION', 'EFF_RATE']])
+        cy_col.dataframe(cy_real_df[['WIP_AMOUNT', 'WIP_BILLED', 'REALIZATION', 'EFF_RATE']], use_container_width=True)
         
         # cy_wip_df = wip_df
         # py_wip_df = wip_df
