@@ -44,6 +44,15 @@ def level_1_wip(st):
         cy_util_df['UTILIZATION'] = cy_util_df['UTILIZATION'] + '%'
 
         cy_col.write(cy_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']])
+
+        py_util_df = py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
+        py_util_df = py_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
+        #this is not rendering correctly, fix it
+        py_util_df['UTILIZATION'] = round((py_util_df['BILLABLE_HOURS'] / py_util_df['TOTAL_HOURS']) * 100, 2)
+        py_util_df['UTILIZATION'] = py_util_df['UTILIZATION'].astype(str)
+        py_util_df['UTILIZATION'] = py_util_df['UTILIZATION'] + '%'
+
+        py_col.write(py_util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']])
         
         # cy_wip_df = wip_df
         # py_wip_df = wip_df
