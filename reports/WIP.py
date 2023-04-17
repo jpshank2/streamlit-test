@@ -120,7 +120,7 @@ def level_4_wip(st):
 
         partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
-        partner_fig = bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP').update_layout(xaxis_title_font_size=18, yaxis_title_font_size=18, yaxis_font_size=18, xaxis_font_size=18,)
+        partner_fig = bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP').update_layout(xaxis_title_font_size=18, yaxis_title_font_size=18)#, yaxis_font_size=18, xaxis_font_size=18)
         partner_visual.plotly_chart(partner_fig)#write(bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
         partner_visual.download_button(
             label='Download this data',
