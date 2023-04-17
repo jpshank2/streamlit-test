@@ -120,8 +120,8 @@ def level_4_wip(st):
 
         partner_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
-        partner_fig = bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP').update_layout(xaxis_title_font_size=18, yaxis_title_font_size=18, font_size=14)#, yaxis_font_size=18, xaxis_font_size=18)
-        partner_visual.plotly_chart(partner_fig)#write(bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP'))
+        partner_fig = bar(partner_df, x='OUTSTANDING_WIP', y=partner_y_val, orientation='h', barmode='group', title='Firm WIP by Client Partner', text='OUTSTANDING_WIP').update_layout(xaxis_title_font_size=18, yaxis_title_font_size=18)#, yaxis_font_size=18, xaxis_font_size=18)
+        partner_visual.plotly_chart(partner_fig)
         partner_visual.download_button(
             label='Download this data',
             data=partner_csv,
@@ -141,7 +141,8 @@ def level_4_wip(st):
 
         aging_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']])
 
-        aging_visual.write(pie(aging_wip, values='OUTSTANDING_WIP', names='AGING_PERIOD', title='WIP Aging Periods'))
+        aging_fig = pie(aging_wip, values='OUTSTANDING_WIP', names='AGING_PERIOD', title='WIP Aging Periods').update_layout(font_size=18)
+        aging_visual.plotly_chart(aging_fig)
         aging_visual.download_button(
             label='Download this data',
             data=aging_csv,
