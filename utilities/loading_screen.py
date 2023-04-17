@@ -29,3 +29,5 @@ def loading(st):
                 st.session_state['level'] = st.session_state['user'].LEVEL.iloc[0]
             if 'today' not in st.session_state:
                 st.session_state['today'] = datetime.today()
+            if 'color_map' not in st.session_state:
+                st.session_state['color_map'] = get_rows(f"SELECT * FROM CONFIGURATIONS.SERVICE_COLORS")
