@@ -205,7 +205,7 @@ def level_4_wip(st):
 
         current_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
 
-        current_fig = bar(current_df, x='OUTSTANDING_WIP', y=current_y_val, orientation='h', barmode='group', title='Firm WIP by Client Office', text='OUTSTANDING_WIP').update_layout(h_bar_style)
+        current_fig = bar(current_df, x='PERCENT_CURRENT', y=current_y_val, orientation='h', barmode='group', title='Percent Current WIP by Client Office', text='PERCENT_CURRENT').update_layout(h_bar_style)
         current_visual.plotly_chart(current_fig)
         current_visual.download_button(
             label='Download this data',
