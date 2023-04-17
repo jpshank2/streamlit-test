@@ -78,7 +78,7 @@ def level_4_wip(st):
     try:
         static_one, static_two, static_three, static_four, static_five = st.columns(5)
         filter_one, filter_two = st.columns(2)
-        visuals_one, visuals_two = st.columns(2)
+        visuals_one, visuals_two = st.columns(2, gap='medium')
         partner_visual, partner_table = visuals_one.tabs(['Visual', 'Table'])
         current_visual, current_table = visuals_one.tabs(['Visual', 'Table'])
         office_visual, office_table = visuals_two.tabs(['Visual', 'Table'])
@@ -90,7 +90,7 @@ def level_4_wip(st):
         wip_df['WIPOUTSTANDING'] = wip_df['WIPOUTSTANDING'].round(2)
         wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' WIP', 'Overdue 90+ WIP')
 
-        total_outstanding_wip = wip_df['WIPOUTSTANDING'].sum()
+        total_outstanding_wip = round(wip_df['WIPOUTSTANDING'].sum(), 2)
 
         static_one.metric(label='Target < $4M', value=total_outstanding_wip, delta=('Outstanding WIP' if total_outstanding_wip < 4000000 else '-Outstanding WIP'))
 
