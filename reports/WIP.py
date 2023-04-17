@@ -108,9 +108,9 @@ def level_4_wip(st):
 
         static_one.metric(label='Target < $4M', value=total_outstanding_wip, delta=('Outstanding WIP' if total_outstanding_wip < 4000000 else '-Outstanding WIP'))
         static_two.metric(label='Target > 70%', value=percent_current, delta=('% WIP in Current' if percent_current > 70 else '-% WIP in Current'))
-        static_three.metric(label='Target < 20%', value=wip_30_60, delta=('Outstanding WIP' if wip_30_60 < 20 else '-Outstanding WIP'))
-        static_four.metric(label='Target < 15%', value=wip_60_90, delta=('Outstanding WIP' if wip_60_90 < 15 else '-Outstanding WIP'))
-        static_five.metric(label='Target < 5%', value=overdue_wip, delta=('Outstanding WIP' if overdue_wip < 5 else '-Outstanding WIP'))
+        static_three.metric(label='Target < 20%', value=wip_30_60, delta=('% WIP in 31-60 Days' if wip_30_60 < 20 else '-% WIP in 31-60 Days'))
+        static_four.metric(label='Target < 15%', value=wip_60_90, delta=('% WIP in 61-90 Days' if wip_60_90 < 15 else '-% WIP in 61-90 Days'))
+        static_five.metric(label='Target < 5%', value=overdue_wip, delta=('% WIP over 90 Days' if overdue_wip < 5 else '-% WIP over 90 Days'))
 
         partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENT_PARTNER.sort_values().unique()])
         office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()])
