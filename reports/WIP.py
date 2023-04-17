@@ -38,7 +38,6 @@ def level_1_wip(st):
         
         cy_wip_service_df = cy_wip_df[cy_wip_df['CONTINDEX'] < 900000][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
         cy_wip_service_colors = st.session_state['color_map'][st.session_state['color_map']['SERVICE'].isin(cy_wip_service_df['SERVICETITLE'].tolist())].set_index('SERVICE')['COLOR'].to_dict()
-        st.write(cy_wip_service_colors)
         cy_wip_service_fig = pie(cy_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='CY WIP Hours by Service Title', color_discrete_map=cy_wip_service_colors, color='SERVICETITLE').update_layout(pie_style)
         cy_col.plotly_chart(cy_wip_service_fig, use_container_width=True)
 
@@ -46,7 +45,7 @@ def level_1_wip(st):
         
         py_wip_service_df = py_wip_df[py_wip_df['CONTINDEX'] < 900000][['WIPHOURS', 'SERVICETITLE']].groupby(['SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['SERVICETITLE', 'WIP_HOURS']]
         py_wip_service_colors = st.session_state['color_map'][st.session_state['color_map']['SERVICE'].isin(py_wip_service_df['SERVICETITLE'].tolist())].set_index('SERVICE')['COLOR'].to_dict()
-        py_wip_service_fig = pie(py_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='PY WIP Hours by Service Title', color_discrete_map=py_wip_service_colors).update_layout(pie_style)
+        py_wip_service_fig = pie(py_wip_service_df, values='WIP_HOURS', names='SERVICETITLE', title='PY WIP Hours by Service Title', color_discrete_map=py_wip_service_colors, color='SERVICETITLE').update_layout(pie_style)
         py_col.plotly_chart(py_wip_service_fig, use_container_width=True)
 
         cy_util_df = cy_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
