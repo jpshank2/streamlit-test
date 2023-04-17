@@ -5,7 +5,7 @@ from utilities.click_handlers import convert_df
 from plotly.express import bar, pie
 from datetime import datetime
 
-h_bar_style = {'xaxis_title_font_size': 18, 'yaxis_title_font_size': 18, 'yaxis_tickfont_size': 14, 'xaxis_tickfont_size': 14, 'title_font_size': 24}
+h_bar_style = {'xaxis_title_font_size': 18, 'yaxis_title_font_size': 18, 'xaxis_tickfont_size': 18, 'title_font_size': 24} # yaxis_tickfont_size needs to be set on each graph
 
 v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_size': 18, 'xaxis_tickfont_size': 18}
 
