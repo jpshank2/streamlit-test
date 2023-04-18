@@ -116,7 +116,7 @@ def level_1_wip(st):
 
         py_util, py_real, py_eff = py_col.columns(3)
 
-        py_util.metric('Average Utilization for Level', '{:.2f}%'.format(py_benchmark_util), (py_benchmark_util - (round((py_util_df['BILLABLE_HOURS'].iloc[0] / py_util_df['TOTAL_HOURS'].iloc[0]) * 100, 2))))
+        py_util.metric('Average Utilization for Level', '{:.2f}%'.format(py_benchmark_util), round(round((py_util_df['BILLABLE_HOURS'].iloc[0] / py_util_df['TOTAL_HOURS'].iloc[0]) * 100, 2) - py_benchmark_util, 2))
 
         cy_client_df = cy_wip_df[['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
         cy_client_df = cy_client_df.groupby('CLIENT').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
