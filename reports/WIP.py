@@ -85,6 +85,7 @@ def level_1_wip(st):
         py_col.plotly_chart(py_wip_service_fig, use_container_width=True)
 
         cy_util_df = cy_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
+        st.write(cy_util_df)
         cy_util_df = cy_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
         cy_util_df['UTILIZATION'] = round((cy_util_df['BILLABLE_HOURS'] / cy_util_df['TOTAL_HOURS']) * 100, 2).astype(str) + '%'
 
