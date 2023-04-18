@@ -23,29 +23,35 @@ def level_1_wip(st):
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
         benchmark_df['WIPDATE'] = to_datetime(benchmark_df['WIPDATE'], format='%Y-%m-%d')
 
-        cy_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))][['STAFFINDEX', 'BILLABLEHOURS', 'WIPHOURS', 'WIPBILLED', 'WIPAMOUNT']]
+        cy_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))][['STAFFINDEX', 'BILLABLEHOURS', 'WIPHOURS', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']]
+        cy_benchmark_real_df = cy_benchmark_df[cy_benchmark_df['BILLABLE'] == 'True']
         cy_benchmark_df = cy_benchmark_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
+        cy_benchmark_real_df = cy_benchmark_real_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
         cy_benchmark_df['UTILIZATION'] = round((cy_benchmark_df['BILLABLE_HOURS'] / cy_benchmark_df['TOTAL_HOURS']) * 100, 2)
-        cy_benchmark_df['REALIZATION'] = round((cy_benchmark_df['WIP_BILLED'] / cy_benchmark_df[cy_benchmark_df['BILLABLE'] == 'True']['WIP_AMOUNT']) * 100, 2)
-        cy_benchmark_df['EFF_RATE'] = round((cy_benchmark_df['WIP_BILLED'] / cy_benchmark_df['BILLABLE_HOURS']), 2)
+        cy_benchmark_real_df['REALIZATION'] = round((cy_benchmark_real_df['WIP_BILLED'] / cy_benchmark_real_df['WIP_AMOUNT']) * 100, 2)
+        cy_benchmark_real_df['EFF_RATE'] = round((cy_benchmark_real_df['WIP_BILLED'] / cy_benchmark_real_df['BILLABLE_HOURS']), 2)
 
         cy_benchmark_util = cy_benchmark_df['UTILIZATION'].mean()
-        cy_benchmark_real = cy_benchmark_df['REALIZATION'].mean()
-        cy_benchmark_eff = cy_benchmark_df['EFF_RATE'].mean()
+        cy_benchmark_real = cy_benchmark_real_df['REALIZATION'].mean()
+        cy_benchmark_eff = cy_benchmark_real_df['EFF_RATE'].mean()
 
         cy_benchmark_df = None
+        cy_benchmark_real_df = None
 
-        py_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 2, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d'))][['STAFFINDEX', 'BILLABLEHOURS', 'WIPHOURS', 'WIPBILLED', 'WIPAMOUNT']]
+        py_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))][['STAFFINDEX', 'BILLABLEHOURS', 'WIPHOURS', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']]
+        py_benchmark_real_df = py_benchmark_df[py_benchmark_df['BILLABLE'] == 'True']
         py_benchmark_df = py_benchmark_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
+        py_benchmark_real_df = py_benchmark_real_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
         py_benchmark_df['UTILIZATION'] = round((py_benchmark_df['BILLABLE_HOURS'] / py_benchmark_df['TOTAL_HOURS']) * 100, 2)
-        py_benchmark_df['REALIZATION'] = round((py_benchmark_df['WIP_BILLED'] / py_benchmark_df[py_benchmark_df['BILLABLE'] == 'True']['WIP_AMOUNT']) * 100, 2)
-        py_benchmark_df['EFF_RATE'] = round((py_benchmark_df['WIP_BILLED'] / py_benchmark_df['BILLABLE_HOURS']), 2)
+        py_benchmark_real_df['REALIZATION'] = round((py_benchmark_real_df['WIP_BILLED'] / py_benchmark_real_df['WIP_AMOUNT']) * 100, 2)
+        py_benchmark_real_df['EFF_RATE'] = round((py_benchmark_real_df['WIP_BILLED'] / py_benchmark_real_df['BILLABLE_HOURS']), 2)
 
         py_benchmark_util = py_benchmark_df['UTILIZATION'].mean()
-        py_benchmark_real = py_benchmark_df['REALIZATION'].mean()
-        py_benchmark_eff = py_benchmark_df['EFF_RATE'].mean()
+        py_benchmark_real = py_benchmark_real_df['REALIZATION'].mean()
+        py_benchmark_eff = py_benchmark_real_df['EFF_RATE'].mean()
 
         py_benchmark_df = None
+        py_benchmark_real_df = None
         benchmark_df = None
 
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
