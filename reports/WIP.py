@@ -168,7 +168,7 @@ def level_4_wip(st):
 
         wip_df = st.session_state['wip'].copy()
         st.dataframe(wip_df.dtypes)
-        wip_df = wip_df[(wip_df['BILLABLE'] == True) & (wip_df['WIPOUTSTANDING'] != 0)]
+        wip_df = wip_df[(wip_df['BILLABLE'] == 'True') & (wip_df['WIPOUTSTANDING'] != 0)]
         st.dataframe(wip_df)
         wip_df['WIPOUTSTANDING'] = wip_df['WIPOUTSTANDING'].round(2)
         wip_df['AGING_PERIOD'] = where(wip_df['AGING_PERIOD_SORT'] < 4, wip_df['OG_PERIOD'] + ' WIP', 'Overdue 90+ WIP')
