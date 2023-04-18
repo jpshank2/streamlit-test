@@ -117,8 +117,8 @@ def level_1_wip(st):
         py_util, py_real, py_eff = py_col.columns(3)
 
         py_util.metric('Avg Utilization for Level PY', '{:.2f}%'.format(py_benchmark_util), round(round((py_util_df['BILLABLE_HOURS'].iloc[0] / py_util_df['TOTAL_HOURS'].iloc[0]) * 100, 2) - py_benchmark_util, 2))
-        py_real.metric('Avg Realization for Level PY', '{:.2f}%'.format(py_benchmark_real), round(round((py_real_df['WIP_BILLED'].astype(float) / py_real_df['WIP_AMOUNT'].astype(float)) * 100, 2) - py_benchmark_real, 2))
-        py_eff.metric('Avg Effective Rate for Level PY', '${:,.2f}%'.format(py_benchmark_eff), round(round((py_real_df['WIP_BILLED'].astype(float) / py_real_df['BILLABLE_HOURS'].astype(float)), 2) - py_benchmark_eff, 2))
+        py_real.metric('Avg Realization for Level PY', '{:.2f}%'.format(py_benchmark_real), round(round((py_real_df['WIP_BILLED'].replace('[\$,]', '', regex=True).astype(float) / py_real_df['WIP_AMOUNT'].replace('[\$,]', '', regex=True).astype(float)) * 100, 2) - py_benchmark_real, 2))
+        py_eff.metric('Avg Effective Rate for Level PY', '${:,.2f}%'.format(py_benchmark_eff), round(round((py_real_df['WIP_BILLED'].replace('[\$,]', '', regex=True).astype(float) / py_real_df['BILLABLE_HOURS'].replace('[\$,]', '', regex=True).astype(float)), 2) - py_benchmark_eff, 2))
 
         cy_client_df = cy_wip_df[['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
         cy_client_df = cy_client_df.groupby('CLIENT').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
