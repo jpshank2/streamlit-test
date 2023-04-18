@@ -50,13 +50,15 @@ def my_realization(wip, st):
     st.dataframe(real_df[['WIP_AMOUNT', 'WIP_BILLED', 'EFF_RATE', 'REALIZATION']], use_container_width=True)
 
 def my_benchmarks(wip):
-    benchmark_real_df = wip[wip['BILLABLE'] == 'True']
+    benchmark_real_df = wip[wip['BILLABLE'] == 'True'].groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
     benchmark_real_df['REALIZATION'] = round((benchmark_real_df['WIP_BILLED'] / benchmark_real_df['WIP_AMOUNT']) * 100, 2)
     benchmark_real_df['EFF_RATE'] = round((benchmark_real_df['WIP_BILLED'] / benchmark_real_df['BILLABLE_HOURS']), 2)
 
-    wip['UTILIZATION'] = round((wip['BILLABLE_HOURS'] / wip['TOTAL_HOURS']) * 100, 2)
+    benchmark_util_df = wip.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
 
-    benchmark_util = wip['UTILIZATION'].mean()
+    benchmark_util_df['UTILIZATION'] = round((benchmark_util_df['BILLABLE_HOURS'] / benchmark_util_df['TOTAL_HOURS']) * 100, 2)
+
+    benchmark_util = benchmark_util_df['UTILIZATION'].mean()
     benchmark_real = benchmark_real_df['REALIZATION'].mean()
     benchmark_eff = benchmark_real_df['EFF_RATE'].mean()
 
