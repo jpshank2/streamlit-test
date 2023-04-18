@@ -13,7 +13,7 @@ pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
 def level_1_wip(st):
     try:
-        fym = 6
+        fym = 5
         fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
         wip_df = st.session_state['wip'].copy()
         benchmark_df = st.session_state['wip'][['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT']].copy()
