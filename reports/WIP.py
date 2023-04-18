@@ -167,7 +167,7 @@ def level_4_wip(st):
         dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
         wip_df = st.session_state['wip'].copy()
-        st.dataframe(wip_df)
+        st.dataframe(wip_df.dtypes)
         wip_df = wip_df[(wip_df['BILLABLE'] == True) & (wip_df['WIPOUTSTANDING'] != 0)]
         st.dataframe(wip_df)
         wip_df['WIPOUTSTANDING'] = wip_df['WIPOUTSTANDING'].round(2)
