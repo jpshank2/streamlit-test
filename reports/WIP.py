@@ -155,7 +155,7 @@ def level_1_wip(st):
             my_hours_pie_service(py_wip_df, st, 'PY')
 
             st.markdown('##### Prior Year Hours and Utilization')
-            my_py_util = my_utilization(py_wip_df, st)
+            my_py_util = my_utilization(py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']], st)
             metric_one, metric_two, metric_three, metric_four = st.columns(4)
             metric_one.metric('Total Hours', '{:,.2f}'.format(my_py_util['total_hours']))
             metric_two.metric('Billable Hours', '{:,.2f}'.format(my_py_util['billable_hours']))
