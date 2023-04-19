@@ -129,29 +129,6 @@ def level_1_wip(st):
 
         py_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(st.session_state['today'].year - 2, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d'))]
 
-        with cy_col:
-            my_hours_pie_service(cy_wip_df, st, 'CY')
-
-            st.markdown('##### Current Year Hours and Utilization')
-            my_cy_util = my_utilization(cy_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
-            metric_one, metric_two = st.columns(2) 
-            metric_three, metric_four = st.columns(2)
-            metric_one.metric('Total Hours', '{:,.2f}'.format(my_cy_util['total_hours']))
-            metric_three.metric('Billable Hours', '{:,.2f}'.format(my_cy_util['billable_hours']))
-            metric_four.metric('Nonbillable Hours', '{:,.2f}'.format(my_cy_util['non_bill_hours']))
-            metric_two.metric('Utilization', '{:,.2f}%'.format(my_cy_util['utilization']))
-
-            st.markdown('##### Current Year Effective Rate and Realization')
-            my_cy_real = my_realization(cy_wip_df)
-            metric_one.metric('WIP Amount', '${:,.2f}'.format(my_cy_real['wip_amount']))
-            metric_two.metric('WIP Billed', '${:,.2f}'.format(my_cy_real['wip_billed']))
-            metric_three.metric('Effective Rate', '${:,.2f}'.format(my_cy_real['eff_rate']))
-            metric_four.metric('Realization', '{:,.2f}%'.format(my_cy_real['realization']))
-
-            cy_benchmarks = my_benchmarks(cy_benchmark_df)
-            util, real, rate = st.columns(3)
-            util.metric('Avg Utilization for Level CY', '{:.2f}%'.format(cy_benchmarks['util']['average']), cy_benchmarks['util']['diff'])
-
         with py_col:
             my_hours_pie_service(py_wip_df, st, 'PY')
 
@@ -170,6 +147,29 @@ def level_1_wip(st):
             metric_two.metric('WIP Billed', '${:,.2f}'.format(my_py_real['wip_billed']))
             metric_three.metric('Effective Rate', '${:,.2f}'.format(my_py_real['eff_rate']))
             metric_four.metric('Realization', '{:,.2f}%'.format(my_py_real['realization']))
+
+        with cy_col:
+            my_hours_pie_service(cy_wip_df, st, 'CY')
+
+            st.markdown('##### Current Year Hours and Utilization')
+            my_cy_util = my_utilization(cy_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
+            metric_one, metric_two = st.columns(2) 
+            metric_three, metric_four = st.columns(2)
+            metric_one.metric('Total Hours', '{:,.2f}'.format(my_cy_util['total_hours']), (my_cy_util['total_hours'] - my_py_util['total_hours']))
+            metric_three.metric('Billable Hours', '{:,.2f}'.format(my_cy_util['billable_hours']), (my_cy_util['billable_hours'] - my_py_util['billable_hours']))
+            metric_four.metric('Nonbillable Hours', '{:,.2f}'.format(my_cy_util['non_bill_hours']), (my_cy_util['non_bill_hours'] - my_py_util['non_bill_hours']))
+            metric_two.metric('Utilization', '{:,.2f}%'.format(my_cy_util['utilization']), (my_cy_util['utilization'] - my_py_util['utilization']))
+
+            st.markdown('##### Current Year Effective Rate and Realization')
+            my_cy_real = my_realization(cy_wip_df)
+            metric_one.metric('WIP Amount', '${:,.2f}'.format(my_cy_real['wip_amount']), (my_cy_real['wip_amount'] - my_cy_real['wip_amount']))
+            metric_two.metric('WIP Billed', '${:,.2f}'.format(my_cy_real['wip_billed']), (my_cy_real['wip_billed'] - my_cy_real['wip_billed']))
+            metric_three.metric('Effective Rate', '${:,.2f}'.format(my_cy_real['eff_rate']), (my_cy_real['eff_rate'] - my_cy_real['eff_rate']))
+            metric_four.metric('Realization', '{:,.2f}%'.format(my_cy_real['realization']), (my_cy_real['realization'] - my_cy_real['realization']))
+
+            cy_benchmarks = my_benchmarks(cy_benchmark_df)
+            util, real, rate = st.columns(3)
+            util.metric('Avg Utilization for Level CY', '{:.2f}%'.format(cy_benchmarks['util']['average']), cy_benchmarks['util']['diff'])
 
         # py_util_df = py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
         # py_util_df = py_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
