@@ -87,7 +87,7 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
     AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""")
     try:
         benchmark_df = wip_df[['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
-        wip_df = wip_df[st.session_state['wip']['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]].copy()
+        wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]].copy()
         # benchmark_df = st.session_state['wip'][st.session_state['wip']['LEVEL'] == st.session_state['user']['LEVEL'].iloc[0]][['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
         from pandas import to_datetime
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
