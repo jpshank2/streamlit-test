@@ -1,6 +1,6 @@
 from numpy import where
 # from pandas import pivot_table
-# from utilities.queries import get_rows
+from utilities.queries import get_rows
 from utilities.click_handlers import convert_df
 from plotly.express import bar, pie
 from datetime import datetime
@@ -61,9 +61,34 @@ def my_benchmarks(wip, util, real, rate):
     return {'util': {'average': benchmark_util, 'diff': (util - benchmark_util)}, 'real': {'average': benchmark_real, 'diff': (real - benchmark_real)}, 'rate': {'average': benchmark_rate, 'diff': (rate - benchmark_rate)}}
 
 def level_1_wip(st):
+    wip_df = get_rows(f"""SELECT WIP.WIPOUTSTANDING, 
+    WIP.STAFFINDEX,
+    S.LEVEL, 
+    WIP.WIPHOURS, 
+    WIP.WIPAMOUNT,
+    WIP.WIPBILLED, 
+    WIP.CONTINDEX, 
+    WIP.WIPDATE, 
+    WIP.SERVICETITLE, 
+    CASE WHEN WIP.BILLABLE = 'True' THEN WIP.WIPHOURS ELSE 0 END AS BILLABLEHOURS, 
+    CASE WHEN WIP.BILLABLE = 'False' THEN WIP.WIPHOURS ELSE 0 END AS NONBILLABLEHOURS,
+    WIP.BILLABLE,
+    C.CLIENT_PARTNER, 
+    C.CLIENT, 
+    C.OFFICE, 
+    D.AGING_PERIOD_SORT, 
+    D.AGING_PERIOD as OG_PERIOD, 
+    D.MONTH_NAME AS MONTH
+from TRANS_WIP WIP
+    INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
+    INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
+    INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = WIP.STAFFINDEX
+WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
+    AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""")
     try:
-        wip_df = st.session_state['wip'][st.session_state['wip']['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]].copy()
-        benchmark_df = st.session_state['wip'][st.session_state['wip']['LEVEL'] == st.session_state['user']['LEVEL'].iloc[0]][['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
+        benchmark_df = wip_df[['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
+        wip_df = wip_df[st.session_state['wip']['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]].copy()
+        # benchmark_df = st.session_state['wip'][st.session_state['wip']['LEVEL'] == st.session_state['user']['LEVEL'].iloc[0]][['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
         from pandas import to_datetime
         wip_df['WIPDATE'] = to_datetime(wip_df['WIPDATE'], format='%Y-%m-%d')
         benchmark_df['WIPDATE'] = to_datetime(benchmark_df['WIPDATE'], format='%Y-%m-%d')
@@ -103,7 +128,7 @@ def level_1_wip(st):
 
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
         cy_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))][['STAFFINDEX', 'BILLABLEHOURS', 'WIPHOURS', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']]
-        py_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))][['STAFFINDEX', 'BILLABLEHOURS', 'WIPHOURS', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']]
+        py_benchmark_df = benchmark_df[(benchmark_df['WIPDATE'] >= datetime(st.session_state['today'].year - 2, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (benchmark_df['WIPDATE'] < datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d'))]
 
         my_hours_month_service(wip_df, st)
 
