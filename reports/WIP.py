@@ -166,9 +166,9 @@ def level_1_wip(st):
             my_cy_real = my_realization(cy_wip_df)
             metric_real_one, metric_real_two = st.columns(2) 
             metric_real_three, metric_real_four = st.columns(2)
-            metric_real_one.metric('WIP Amount', '{:,.2f}'.format(my_cy_real['wip_amount']), '${:,.2f}'.format(my_cy_real['wip_amount'] - my_py_real['wip_amount']))
-            metric_real_two.metric('WIP Billed', '{:,.2f}'.format(my_cy_real['wip_billed']), '${:,.2f}'.format(my_cy_real['wip_billed'] - my_py_real['wip_billed']))
-            metric_real_three.metric('Effective Rate', '{:,.2f}'.format(my_cy_real['eff_rate']), '${:,.2f}'.format(my_cy_real['eff_rate'] - my_py_real['eff_rate']))
+            metric_real_one.metric('WIP Amount', '${:,.2f}'.format(my_cy_real['wip_amount']), '{:,.2f}'.format(my_cy_real['wip_amount'] - my_py_real['wip_amount']))
+            metric_real_two.metric('WIP Billed', '${:,.2f}'.format(my_cy_real['wip_billed']), '{:,.2f}'.format(my_cy_real['wip_billed'] - my_py_real['wip_billed']))
+            metric_real_three.metric('Effective Rate', '${:,.2f}'.format(my_cy_real['eff_rate']), '{:,.2f}'.format(my_cy_real['eff_rate'] - my_py_real['eff_rate']))
             metric_real_four.metric('Realization', '{:,.2f}%'.format(my_cy_real['realization']), '{:,.2f}%'.format(my_cy_real['realization'] - my_py_real['realization']))
 
             cy_benchmarks = my_benchmarks(cy_benchmark_df)
