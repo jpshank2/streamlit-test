@@ -127,7 +127,7 @@ def level_1_wip(st):
             metric_util_four.metric('Nonbillable Hours', '{:,.2f}'.format(my_py_util['non_bill_hours']), '~~~', 'off')
             metric_util_two.metric('Utilization', '{:,.2f}%'.format(my_py_util['utilization']), '~~~', 'off')
 
-            st.markdown('##### Prior Year Effective Rate and Realization')
+            st.markdown('\n##### Prior Year Effective Rate and Realization')
             my_py_real = my_realization(py_wip_df[py_wip_df['BILLABLE'] == 'True'][['BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']])
             metric_real_one, metric_real_two = st.columns(2) 
             metric_real_three, metric_real_four = st.columns(2)
@@ -154,7 +154,7 @@ def level_1_wip(st):
             metric_util_four.metric('Nonbillable Hours', '{:,.2f}'.format(my_cy_util['non_bill_hours']), '{:,.2f}'.format(my_cy_util['non_bill_hours'] - my_py_util['non_bill_hours']))
             metric_util_two.metric('Utilization', '{:,.2f}%'.format(my_cy_util['utilization']), '{:,.2f}%'.format(my_cy_util['utilization'] - my_py_util['utilization']))
 
-            st.markdown('##### Current Year Effective Rate and Realization')
+            st.markdown('\n##### Current Year Effective Rate and Realization')
             my_cy_real = my_realization(cy_wip_df[cy_wip_df['BILLABLE'] == 'True'][['BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']])
             metric_real_one, metric_real_two = st.columns(2) 
             metric_real_three, metric_real_four = st.columns(2)
