@@ -67,7 +67,7 @@ def create_ar_reports(st):
         st.write(e)
 
 def level_1_ar(st):
-    st.write('ar reports')
+    return True
 
 def level_2_ar(st):
     st.write('ar reports')
@@ -76,4 +76,5 @@ def level_3_ar(st):
     st.write('ar reports')
 
 def level_4_ar(st):
+    st.markdown('### AR Reports')
     st.write('ar reports')

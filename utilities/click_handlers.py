@@ -97,3 +97,6 @@ def create_new_client(st):
 @cache_resource
 def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
+
+def go_to_top(markdown):
+    return markdown('[Top of Page](#hello-reports)')
