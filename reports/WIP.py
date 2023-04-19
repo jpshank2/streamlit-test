@@ -159,9 +159,9 @@ def level_1_wip(st):
 
             cy_benchmarks = my_benchmarks(cy_benchmark_df, my_cy_util['utilization'], my_cy_real['realization'], my_cy_real['eff_rate'])
             util, real, rate = st.columns(3)
-            util.metric('Avg Utilization for Level CY', '{:.2f}%'.format(cy_benchmarks['util']['average']), cy_benchmarks['util']['diff'])
-            real.metric('Avg Realization for Level CY', '{:.2f}%'.format(cy_benchmarks['real']['average']), cy_benchmarks['real']['diff'])
-            rate.metric('Avg Effective Rate for Level CY', '{:.2f}%'.format(cy_benchmarks['rate']['average']), cy_benchmarks['rate']['diff'])
+            util.metric('Avg Utilization for Level CY', '{:.2f}%'.format(cy_benchmarks['util']['average']), '{:,.2f}%'.format(cy_benchmarks['util']['diff']))
+            real.metric('Avg Realization for Level CY', '{:.2f}%'.format(cy_benchmarks['real']['average']), '{:,.2f}%'.format(cy_benchmarks['real']['diff']))
+            rate.metric('Avg Effective Rate for Level CY', '${:,.2f}'.format(cy_benchmarks['rate']['average']), '{:,.2f}'.format(cy_benchmarks['rate']['diff']))
 
         # py_util_df = py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
         # py_util_df = py_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
