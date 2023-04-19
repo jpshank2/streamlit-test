@@ -37,8 +37,10 @@ def my_utilization(wip):
     # util_df['UTILIZATION'] = round((util_df['BILLABLE_HOURS'] / util_df['TOTAL_HOURS']) * 100, 2).astype(str) + '%'
 
     # st.dataframe(util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']], use_container_width=True)
+    total_hours = wip['WIPHOURS'].sum()
+    billable_hours = wip['BILLABLEHOURS'].sum()
     
-    return {'total_hours': wip['WIPHOURS'].sum(), 'billable_hours': wip['BILLABLEHOURS'].sum(), 'non_bill_hours': wip['NONBILLABLEHOURS'].sum(), 'utilization': round((wip['BILLABLE_HOURS'].sum() / wip['TOTAL_HOURS'].sum()) * 100, 2)}
+    return {'total_hours': total_hours, 'billable_hours': billable_hours, 'non_bill_hours': wip['NONBILLABLEHOURS'].sum(), 'utilization': round((billable_hours / total_hours) * 100, 2)}
 
 def my_realization(wip):
     real_df = wip[wip['BILLABLE'] == 'True'][['STAFFINDEX', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
