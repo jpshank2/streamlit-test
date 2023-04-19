@@ -198,7 +198,7 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
             rate.metric('Avg Effective Rate for Level PY', '${:,.2f}'.format(py_benchmarks['rate']['average']), '{:,.2f}'.format(py_benchmarks['rate']['diff']))
             
             st.markdown('##### Prior Year Billable Hours and Realization by Client')
-            my_hours_real_client(py_wip_df[['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'PY')
+            my_hours_real_client(py_wip_df[py_wip_df['BILLABLE'] == 'True'][['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'PY')
 
         with cy_col:
             my_hours_pie_service(cy_wip_df, st, 'CY')
@@ -228,7 +228,7 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
             rate.metric('Avg Effective Rate for Level CY', '${:,.2f}'.format(cy_benchmarks['rate']['average']), '{:,.2f}'.format(cy_benchmarks['rate']['diff']))
 
             st.markdown('##### Prior Year Billable Hours and Realization by Client')
-            my_hours_real_client(cy_wip_df[['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'CY')
+            my_hours_real_client(cy_wip_df[cy_wip_df['BILLABLE'] == 'True'][['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'CY')
 
         # py_util_df = py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
         # py_util_df = py_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
