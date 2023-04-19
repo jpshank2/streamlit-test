@@ -32,34 +32,20 @@ def my_hours_pie_service(wip, st, year):
     st.plotly_chart(wip_service_fig, use_container_width=True)
 
 def my_utilization(wip):
-    # util_df = wip[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
-    # util_df = util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
-    # util_df['UTILIZATION'] = round((util_df['BILLABLE_HOURS'] / util_df['TOTAL_HOURS']) * 100, 2).astype(str) + '%'
-
-    # st.dataframe(util_df[['TOTAL_HOURS', 'BILLABLE_HOURS', 'NON_BILL_HOURS', 'UTILIZATION']], use_container_width=True)
     total_hours = wip['WIPHOURS'].sum()
     billable_hours = wip['BILLABLEHOURS'].sum()
     
     return {'total_hours': total_hours, 'billable_hours': billable_hours, 'non_bill_hours': wip['NONBILLABLEHOURS'].sum(), 'utilization': round((billable_hours / total_hours) * 100, 2)}
 
 def my_realization(wip):
-    real_df = wip[wip['BILLABLE'] == 'True'][['STAFFINDEX', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']]
-    wip_amount = real_df['WIPAMOUNT'].sum()
-    wip_billed = real_df['WIPBILLED'].sum()
-    eff_rate = round((wip_billed / real_df['BILLABLEHOURS'].sum()), 2)
+    wip_amount = wip['WIPAMOUNT'].sum()
+    wip_billed = wip['WIPBILLED'].sum()
+    eff_rate = round((wip_billed / wip['BILLABLEHOURS'].sum()), 2)
     realization = round((wip_billed / wip_amount) * 100, 2)
-    # real_df = real_df.groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum')).reset_index()
-    # real_df['REALIZATION'] = round((real_df['WIP_BILLED'] / real_df['WIP_AMOUNT']) * 100, 2).astype(str) + '%'
-    # real_df['EFF_RATE'] = round((real_df['WIP_BILLED'] / real_df['BILLABLE_HOURS']), 2)
-    # real_df['WIP_BILLED'] = real_df['WIP_BILLED'].apply(lambda x: "${:,.2f}".format(x))
-    # real_df['WIP_AMOUNT'] = real_df['WIP_AMOUNT'].apply(lambda x: "${:,.2f}".format(x))
-    # real_df['EFF_RATE'] = real_df['EFF_RATE'].apply(lambda x: "${:,.2f}".format(x))
-
-    # st.dataframe(real_df[['WIP_AMOUNT', 'WIP_BILLED', 'EFF_RATE', 'REALIZATION']], use_container_width=True)
 
     return {'wip_amount': wip_amount, 'wip_billed': wip_billed, 'eff_rate': eff_rate, 'realization': realization}
 
-def my_benchmarks(wip):
+def my_benchmarks(wip, util, real, rate):
     benchmark_real_df = wip[wip['BILLABLE'] == 'True'].groupby('STAFFINDEX').agg(BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), TOTAL_HOURS=('WIPHOURS', 'sum'), WIP_BILLED=('WIPBILLED', 'sum'), WIP_AMOUNT=('WIPAMOUNT', 'sum'))
     benchmark_real_df['REALIZATION'] = round((benchmark_real_df['WIP_BILLED'] / benchmark_real_df['WIP_AMOUNT']) * 100, 2)
     benchmark_real_df['EFF_RATE'] = round((benchmark_real_df['WIP_BILLED'] / benchmark_real_df['BILLABLE_HOURS']), 2)
@@ -70,9 +56,9 @@ def my_benchmarks(wip):
 
     benchmark_util = benchmark_util_df['UTILIZATION'].mean()
     benchmark_real = benchmark_real_df['REALIZATION'].mean()
-    benchmark_eff = benchmark_real_df['EFF_RATE'].mean()
+    benchmark_rate = benchmark_real_df['EFF_RATE'].mean()
 
-    return {'util': {'average': benchmark_util, 'diff': 0}, 'real': {'average': benchmark_real, 'diff': 0}, 'rate': {'average': benchmark_eff, 'diff': 0}}
+    return {'util': {'average': benchmark_util, 'diff': (util - benchmark_util)}, 'real': {'average': benchmark_real, 'diff': (real - benchmark_real)}, 'rate': {'average': benchmark_rate, 'diff': (rate - benchmark_rate)}}
 
 def level_1_wip(st):
     try:
@@ -133,7 +119,7 @@ def level_1_wip(st):
             my_hours_pie_service(py_wip_df, st, 'PY')
 
             st.markdown('##### Prior Year Hours and Utilization')
-            my_py_util = my_utilization(py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
+            my_py_util = my_utilization(py_wip_df[['WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
             metric_util_one, metric_util_two = st.columns(2) 
             metric_util_three, metric_util_four = st.columns(2)
             metric_util_one.metric('Total Hours', '{:,.2f}'.format(my_py_util['total_hours']), '~~~', 'off')
@@ -142,7 +128,7 @@ def level_1_wip(st):
             metric_util_two.metric('Utilization', '{:,.2f}%'.format(my_py_util['utilization']), '~~~', 'off')
 
             st.markdown('##### Prior Year Effective Rate and Realization')
-            my_py_real = my_realization(py_wip_df)
+            my_py_real = my_realization(py_wip_df[py_wip_df['BILLABLE'] == 'True'][['BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']])
             metric_real_one, metric_real_two = st.columns(2) 
             metric_real_three, metric_real_four = st.columns(2)
             metric_real_one.metric('WIP Amount', '${:,.2f}'.format(my_py_real['wip_amount']), '~~~', 'off')
@@ -154,7 +140,7 @@ def level_1_wip(st):
             my_hours_pie_service(cy_wip_df, st, 'CY')
 
             st.markdown('##### Current Year Hours and Utilization')
-            my_cy_util = my_utilization(cy_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
+            my_cy_util = my_utilization(cy_wip_df[['WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
             metric_util_one, metric_util_two = st.columns(2) 
             metric_util_three, metric_util_four = st.columns(2)
             metric_util_one.metric('Total Hours', '{:,.2f}'.format(my_cy_util['total_hours']), '{:,.2f}'.format(my_cy_util['total_hours'] - my_py_util['total_hours']))
@@ -163,7 +149,7 @@ def level_1_wip(st):
             metric_util_two.metric('Utilization', '{:,.2f}%'.format(my_cy_util['utilization']), '{:,.2f}%'.format(my_cy_util['utilization'] - my_py_util['utilization']))
 
             st.markdown('##### Current Year Effective Rate and Realization')
-            my_cy_real = my_realization(cy_wip_df)
+            my_cy_real = my_realization(cy_wip_df[cy_wip_df['BILLABLE'] == 'True'][['BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']])
             metric_real_one, metric_real_two = st.columns(2) 
             metric_real_three, metric_real_four = st.columns(2)
             metric_real_one.metric('WIP Amount', '${:,.2f}'.format(my_cy_real['wip_amount']), '{:,.2f}'.format(my_cy_real['wip_amount'] - my_py_real['wip_amount']))
@@ -171,9 +157,11 @@ def level_1_wip(st):
             metric_real_three.metric('Effective Rate', '${:,.2f}'.format(my_cy_real['eff_rate']), '{:,.2f}'.format(my_cy_real['eff_rate'] - my_py_real['eff_rate']))
             metric_real_four.metric('Realization', '{:,.2f}%'.format(my_cy_real['realization']), '{:,.2f}%'.format(my_cy_real['realization'] - my_py_real['realization']))
 
-            cy_benchmarks = my_benchmarks(cy_benchmark_df)
+            cy_benchmarks = my_benchmarks(cy_benchmark_df, my_cy_util['utilization'], my_cy_real['realization'], my_cy_real['eff_rate'])
             util, real, rate = st.columns(3)
             util.metric('Avg Utilization for Level CY', '{:.2f}%'.format(cy_benchmarks['util']['average']), cy_benchmarks['util']['diff'])
+            real.metric('Avg Realization for Level CY', '{:.2f}%'.format(cy_benchmarks['real']['average']), cy_benchmarks['real']['diff'])
+            rate.metric('Avg Effective Rate for Level CY', '{:.2f}%'.format(cy_benchmarks['rate']['average']), cy_benchmarks['rate']['diff'])
 
         # py_util_df = py_wip_df[['STAFFINDEX', 'WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']]
         # py_util_df = py_util_df.groupby('STAFFINDEX').agg(TOTAL_HOURS=('WIPHOURS', 'sum'), BILLABLE_HOURS=('BILLABLEHOURS', 'sum'), NON_BILL_HOURS=('NONBILLABLEHOURS', 'sum')).reset_index()
