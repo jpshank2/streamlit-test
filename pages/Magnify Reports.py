@@ -33,8 +33,8 @@ if 'company' in st.session_state:
     if st.session_state['level'] == 4:
         st.markdown('[AR Reports](#ar-reports)')
         st.markdown('[WIP Reports](#wip-reports)')
-    else:
-        st.markdown('[WIP Reports](#wip-reports)')
+    # else:
+    #     st.markdown('[WIP Reports](#wip-reports)')
 
     # st.markdown('## random text to see if link actually works')
     # st.markdown("""I'm baby disrupt activated charcoal vaporware fashion axe. Pabst pinterest forage dreamcatcher, +1 same hashtag church-key. Post-ironic banh mi stumptown lumbersexual jianbing, kombucha tonx disrupt tote bag microdosing. Jianbing seitan wolf celiac, raw denim chia williamsburg. Kinfolk taxidermy sartorial prism yes plz, lomo chambray mlkshk food truck retro cold-pressed flannel microdosing marfa. Ascot vexillologist cronut authentic narwhal semiotics prism, mlkshk cred skateboard vinyl. Retro iPhone pop-up bruh snackwave YOLO palo santo plaid.""")

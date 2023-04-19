@@ -91,8 +91,7 @@ def my_hours_real_client(wip, st, year):
         )
 
 def level_1_wip(st):
-    st.markdown('### WIP Reports')
-    go_to_top(st.markdown)
+    st.markdown('## WIP Reports')
     wip_df = get_rows(f"""SELECT WIP.WIPOUTSTANDING, 
     WIP.STAFFINDEX,
     S.LEVEL, 
@@ -132,8 +131,8 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
         my_hours_month_service(wip_df, st)
 
         py_col, cy_col = st.columns(2, gap='medium')
-        py_col.markdown('#### Prior Year Data')
-        cy_col.markdown('#### Current Year Data')
+        py_col.markdown('### Prior Year Data')
+        cy_col.markdown('### Current Year Data')
 
         cy_wip_df = wip_df[(wip_df['WIPDATE'] >= datetime(st.session_state['today'].year - 1, st.session_state['today'].month, st.session_state['today'].day).strftime('%Y-%m-%d')) & (wip_df['WIPDATE'] < st.session_state['today'].strftime('%Y-%m-%d'))]
 
@@ -142,7 +141,7 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
         with py_col:
             my_hours_pie_service(py_wip_df, st, 'PY')
 
-            st.markdown('##### Prior Year Hours and Utilization')
+            st.markdown('#### Prior Year Hours and Utilization')
             my_py_util = my_utilization(py_wip_df[['WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
             metric_util_one, metric_util_two = st.columns(2) 
             metric_util_three, metric_util_four = st.columns(2)
@@ -166,13 +165,13 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
             real.metric('Avg Realization for Level PY', '{:.2f}%'.format(py_benchmarks['real']['average']), '{:,.2f}%'.format(py_benchmarks['real']['diff']))
             rate.metric('Avg Effective Rate for Level PY', '${:,.2f}'.format(py_benchmarks['rate']['average']), '{:,.2f}'.format(py_benchmarks['rate']['diff']))
             
-            st.markdown('##### Prior Year Billable Hours and Realization by Client')
+            st.markdown('#### Prior Year Billable Hours and Realization by Client')
             my_hours_real_client(py_wip_df[py_wip_df['BILLABLE'] == 'True'][['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'PY')
 
         with cy_col:
             my_hours_pie_service(cy_wip_df, st, 'CY')
 
-            st.markdown('##### Current Year Hours and Utilization')
+            st.markdown('#### Current Year Hours and Utilization')
             my_cy_util = my_utilization(cy_wip_df[['WIPHOURS', 'BILLABLEHOURS', 'NONBILLABLEHOURS']])
             metric_util_one, metric_util_two = st.columns(2) 
             metric_util_three, metric_util_four = st.columns(2)
@@ -196,8 +195,10 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
             real.metric('Avg Realization for Level CY', '{:.2f}%'.format(cy_benchmarks['real']['average']), '{:,.2f}%'.format(cy_benchmarks['real']['diff']))
             rate.metric('Avg Effective Rate for Level CY', '${:,.2f}'.format(cy_benchmarks['rate']['average']), '{:,.2f}'.format(cy_benchmarks['rate']['diff']))
 
-            st.markdown('##### Prior Year Billable Hours and Realization by Client')
+            st.markdown('#### Prior Year Billable Hours and Realization by Client')
             my_hours_real_client(cy_wip_df[cy_wip_df['BILLABLE'] == 'True'][['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'CY')
+        
+        go_to_top(st.markdown)
 
     except Exception as e:
         st.write(e)
@@ -209,7 +210,7 @@ def level_3_wip(st):
     st.write('level 3')
 
 def level_4_wip(st):
-    st.markdown('### WIP Reports')
+    st.markdown('## WIP Reports')
     go_to_top(st.markdown)
     wip_df = get_rows(f"""SELECT WIP.WIPOUTSTANDING, 
     WIP.STAFFINDEX,
