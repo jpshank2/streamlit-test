@@ -136,6 +136,12 @@ def level_1_wip(st):
             metric_real_three.metric('Effective Rate', '${:,.2f}'.format(my_py_real['eff_rate']), '~~~', 'off')
             metric_real_four.metric('Realization', '{:,.2f}%'.format(my_py_real['realization']), '~~~', 'off')
 
+            py_benchmarks = my_benchmarks(py_benchmark_df, my_py_util['utilization'], my_py_real['realization'], my_py_real['eff_rate'])
+            util, real, rate = st.columns(3)
+            util.metric('Avg Utilization for Level CY', '{:.2f}%'.format(py_benchmarks['util']['average']), '{:,.2f}%'.format(py_benchmarks['util']['diff']))
+            real.metric('Avg Realization for Level CY', '{:.2f}%'.format(py_benchmarks['real']['average']), '{:,.2f}%'.format(py_benchmarks['real']['diff']))
+            rate.metric('Avg Effective Rate for Level CY', '${:,.2f}'.format(py_benchmarks['rate']['average']), '{:,.2f}'.format(py_benchmarks['rate']['diff']))
+
         with cy_col:
             my_hours_pie_service(cy_wip_df, st, 'CY')
 
