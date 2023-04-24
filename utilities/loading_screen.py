@@ -2,14 +2,14 @@ from utilities.queries import validation_company, get_rows, init_connection
 from datetime import datetime
 
 def loading(st):
-    # if st.experimental_user.email == 'jpshank2@gmail.com':
-    #     email = 'jeremyshank@bmss.com'
-    if st.experimental_user.email == 'jdavidbrowncpa@gmail.com':
+    if st.experimental_user.email == 'jpshank2@gmail.com' or st.experimental_user.email == 'jeremyshank@bmss.com':
+        email = 'fsmith@bmss.com'
+    elif st.experimental_user.email == 'jdavidbrowncpa@gmail.com':
         email = 'dbrown@bmss.com'
     elif st.experimental_user.email == 'imesser@abacustechnologies.com':
         email = 'kfluker@bmss.com'
     else:
-        email = 'asullivan@bmss.com'#st.experimental_user.email
+        email = st.experimental_user.email
         
     domain = email.split('@')[-1]
 
