@@ -23,7 +23,7 @@ if 'staff' not in st.session_state:
     st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
 
 if 'company' in st.session_state:
-    with st.form:
+    with st.form('Review an employee'):
         st.text_input('What Job or Project are you reviewing?', key='review_project')
         st.selectbox('Select an employee', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='review_employee')
         st.radio('How did this employee do on the project?', ('Thumb\'s up', 'Okay', 'Thumb\'s down'), key='review_rating', horizontal=True)
