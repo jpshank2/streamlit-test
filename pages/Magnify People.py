@@ -25,6 +25,7 @@ if 'staff' not in st.session_state:
 if 'company' in st.session_state:
     review, request = st.columns(2)
     with review.form('review_form', clear_on_submit=True):
+        st.markdown('#### Review a fellow staff')
         st.text_input('What Job or Project are you reviewing?', key='review_project')
         st.selectbox('Select an employee', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='review_employee')
         st.radio('How did this employee do on the project?', ('Thumb\'s up', 'Okay', 'Thumb\'s down'), key='review_rating', horizontal=True)
@@ -33,6 +34,9 @@ if 'company' in st.session_state:
         st.form_submit_button('Submit', type='primary')
     
     with request.form('request_from', clear_on_submit=True):
+        st.markdown('#### Request a review')
         st.selectbox('Select an employee', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='request_employee')
         st.text_input('What Job or Project?', key='request_project')
         st.form_submit_button('Request a Review')
+
+    request.markdown('#### Outstanding requests:')
