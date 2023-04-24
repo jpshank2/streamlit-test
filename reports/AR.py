@@ -1,18 +1,14 @@
 from numpy import where
 from plotly.express import bar, pie
 from utilities.queries import get_rows
+from utilities.click_handlers import convert_df, go_to_top
 
-# @st.cache_data(ttl=3600)
-# def get_rows(query, _conn):
-#     with _conn.cursor() as cur:
-#         cur.execute(query)
-#         rows = cur.fetchall()
-#         columns = [column[0] for column in cur.description]
-#         results = list()
-#         for row in rows:
-#             results.append(dict(zip(columns, row)))
-        
-#         return pd.DataFrame(results)
+h_bar_style = {'xaxis_title_font_size': 18, 'yaxis_title_font_size': 18, 'xaxis_tickfont_size': 18, 'title_font_size': 24, 'font_size': 18} # yaxis_tickfont_size needs to be set on each graph
+
+v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_size': 18, 'xaxis_tickfont_size': 18}
+
+pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
+
 
 def create_ar_reports(st):
     try:
@@ -76,5 +72,185 @@ def level_3_ar(st):
     st.write('ar reports')
 
 def level_4_ar(st):
-    st.markdown('### AR Reports')
-    st.write('ar reports')
+    st.markdown('## AR Reports')
+    go_to_top(st.markdown)
+    ar_df = get_rows(f"""SELECT AR.DEBTTRANUNPAID AS UNPAID_INVOICE, 
+    S.STAFFINDEX,
+    S.LEVEL,
+    AR.DEBTTRANTYPE,
+    AR.CONTINDEX, 
+    AR.DEBTTRANDATE AS AR_DATE, 
+    C.CLIENT_PARTNER, 
+    C.CLIENT, 
+    C.OFFICE, 
+    D.AGING_PERIOD_SORT, 
+    D.AGING_PERIOD as OG_PERIOD, 
+    D.MONTH_NAME AS MONTH
+from TRANS_AR AR
+    INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+    INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = C.CLIENT_PARTNER_IDX
+    INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
+WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
+
+    try:
+        static_one, static_two, static_three, static_four, static_five = st.columns(5)
+        filter_one, filter_two = st.columns(2)
+        visuals_one, visuals_two = st.columns(2, gap='medium')
+        partner_visual, partner_table = visuals_one.tabs(['Visual', 'Table'])
+        current_visual, current_table = visuals_one.tabs(['Visual', 'Table'])
+        office_visual, office_table = visuals_two.tabs(['Visual', 'Table'])
+        aging_visual, aging_table = visuals_two.tabs(['Visual', 'Table'])
+        dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
+
+        ar_df['UNPAID_INVOICE'] = ar_df['UNPAID_INVOICE'].round(2)
+        ar_df['AGING_PERIOD'] = where(ar_df['AGING_PERIOD_SORT'] < 4, ar_df['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
+        ar_df['CURRENTAR'] = where(ar_df['AGING_PERIOD'] == '0-30 Days AR', ar_df['UNPAID_INVOICE'], 0)
+        ar_df['30_TO_60'] = where(ar_df['AGING_PERIOD'] == '31-60 Days AR', ar_df['UNPAID_INVOICE'], 0)
+        ar_df['60_TO_90'] = where(ar_df['AGING_PERIOD'] == '61-90 Days AR', ar_df['UNPAID_INVOICE'], 0)
+        ar_df['OVERDUEAR'] = where(ar_df['AGING_PERIOD'] == 'Overdue 90+ AR', ar_df['UNPAID_INVOICE'], 0)
+
+        total_outstanding_AR = round(ar_df['UNPAID_INVOICE'].sum(), 2)
+        percent_current = round((ar_df['CURRENTAR'].sum() / total_outstanding_AR) * 100, 2)
+        AR_30_60 = round((ar_df['30_TO_60'].sum() / total_outstanding_AR) * 100, 2)
+        AR_60_90 = round((ar_df['60_TO_90'].sum() / total_outstanding_AR) * 100, 2)
+        overdue_AR = round((ar_df['OVERDUEAR'].sum() / total_outstanding_AR) * 100, 2)
+
+        static_one.metric(label='Target < $2M', value='${:,.2f}'.format(total_outstanding_AR), delta=('Outstanding AR' if total_outstanding_AR < 2000000 else '-Outstanding AR'))
+        static_two.metric(label='Target > 75%', value='{:.2f}%'.format(percent_current), delta=('% AR in Current' if percent_current > 75 else '-% AR in Current'))
+        static_three.metric(label='Target < 15%', value='{:.2f}%'.format(AR_30_60), delta=('% AR in 31-60 Days' if AR_30_60 < 15 else '-% AR in 31-60 Days'))
+        static_four.metric(label='Target < 10%', value='{:.2f}%'.format(AR_60_90), delta=('% AR in 61-90 Days' if AR_60_90 < 10 else '-% AR in 61-90 Days'))
+        static_five.metric(label='Target < 5%', value='{:.2f}%'.format(overdue_AR), delta=('% AR over 90 Days' if overdue_AR < 5 else '-% AR over 90 Days'))
+
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in ar_df.CLIENT_PARTNER.sort_values().unique()])
+        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in ar_df.OFFICE.unique()])
+
+        if partner_filter == 'All' and office_filter == 'All':
+            filtered_df = ar_df.copy()
+
+            partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER']]
+            partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
+            partner_y_val = 'CLIENT_PARTNER'
+
+            office_df = filtered_df[['UNPAID_INVOICE', 'OFFICE']]
+            office_df = office_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
+            office_y_val = 'OFFICE'
+        elif partner_filter == 'All' and office_filter != 'All':
+            filtered_df = ar_df[ar_df['OFFICE'] == office_filter].copy()
+            partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER']]
+            partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
+            partner_y_val = 'CLIENT_PARTNER'
+
+            office_df = partner_df
+            office_y_val = partner_y_val
+        elif partner_filter != 'All' and office_filter == 'All':
+            filtered_df = ar_df[ar_df['CLIENT_PARTNER'] == partner_filter].copy()
+            partner_df = filtered_df[['UNPAID_INVOICE', 'OFFICE']]
+            partner_df = partner_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
+            partner_y_val = 'OFFICE'
+
+            office_df = partner_df
+            office_y_val = partner_y_val
+        else:
+            filtered_df = ar_df[(ar_df['CLIENT_PARTNER'] == partner_filter) & (ar_df['OFFICE'] == office_filter)]
+            partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT']]
+            partner_df = partner_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
+            partner_y_val = 'CLIENT'
+
+            office_df = partner_df
+            office_y_val = partner_y_val
+
+        partner_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
+
+        partner_fig = bar(partner_df, x='OUTSTANDING_AR', y=partner_y_val, orientation='h', barmode='group', title='Firm AR by Client Partner', text='OUTSTANDING_AR').update_layout(h_bar_style).update_traces(texttemplate="%{value:$,.2f}")
+        partner_visual.plotly_chart(partner_fig)
+        partner_visual.download_button(
+            label='Download this data',
+            data=partner_csv,
+            file_name='Outstanding AR by Client Partner.csv',
+            key='partner_visual_download'
+        )
+        partner_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_AR']], use_container_width=True)
+        partner_table.download_button(
+            label='Download this data',
+            data=partner_csv,
+            file_name='Outstanding AR by Client Partner.csv',
+            key='partner_table_download'
+        )
+
+        office_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
+
+        office_fig = bar(office_df, x='OUTSTANDING_AR', y=office_y_val, orientation='h', barmode='group', title='Firm AR by Client Office', text='OUTSTANDING_AR').update_layout(h_bar_style).update_traces(texttemplate="%{value:$,.2f}")
+        office_visual.plotly_chart(office_fig)
+        office_visual.download_button(
+            label='Download this data',
+            data=office_csv,
+            file_name='Outstanding AR by Client Office.csv',
+            key='office_visual_download'
+        )
+        office_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_AR']], use_container_width=True)
+        office_table.download_button(
+            label='Download this data',
+            data=office_csv,
+            file_name='Outstanding AR by Client Office.csv',
+            key='office_table_download'
+        )
+
+        aging_AR = filtered_df[['AGING_PERIOD', 'UNPAID_INVOICE']]
+        aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()
+
+        aging_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_AR']])
+
+        aging_fig = pie(aging_AR, values='OUTSTANDING_AR', names='AGING_PERIOD', title='AR Aging Periods').update_layout(pie_style)
+        aging_visual.plotly_chart(aging_fig)
+        aging_visual.download_button(
+            label='Download this data',
+            data=aging_csv,
+            file_name='Aging AR.csv',
+            key='aging_visual_download'
+        )
+
+        aging_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_AR']], use_container_width=True)
+        aging_table.download_button(
+            label='Download this data',
+            data=aging_csv,
+            file_name='Aging AR.csv',
+            key='aging_table_download'
+        )
+
+        current_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
+
+        current_df = filtered_df[['UNPAID_INVOICE', 'CURRENTAR', 'OFFICE']]
+        current_df = current_df.groupby(['OFFICE']).agg(CURRENT_AR= ('CURRENTAR', 'sum'), OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()
+        current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_AR'] / current_df['OUTSTANDING_AR']) * 100, 2)
+        current_y_val = 'OFFICE'
+
+        current_fig = bar(current_df, x='PERCENT_CURRENT', y=current_y_val, orientation='h', barmode='group', title='Percent Current AR by Client Office', text='PERCENT_CURRENT').update_layout(h_bar_style).update_traces(texttemplate="%{value:.2f}%")
+        current_visual.plotly_chart(current_fig)
+        current_visual.download_button(
+            label='Download this data',
+            data=current_csv,
+            file_name='Percentage Current AR by Client Office.csv',
+            key='current_visual_download'
+        )
+        current_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_AR']], use_container_width=True)
+        current_table.download_button(
+            label='Download this data',
+            data=current_csv,
+            file_name='Percentage Current AR by Client Office.csv',
+            key='current_table_download'
+        )
+
+        filtered_outstanding_AR = round(filtered_df['UNPAID_INVOICE'].sum(), 2)
+        filtered_percent_current = round((filtered_df['CURRENTAR'].sum() / filtered_outstanding_AR) * 100, 2)
+        filtered_AR_30_60 = round((filtered_df['30_TO_60'].sum() / filtered_outstanding_AR) * 100, 2)
+        filtered_AR_60_90 = round((filtered_df['60_TO_90'].sum() / filtered_outstanding_AR) * 100, 2)
+        filtered_overdue_AR = round((filtered_df['OVERDUEAR'].sum() / filtered_outstanding_AR) * 100, 2)
+
+        dynamic_one.metric(label='Target < $4M', value='${:,.2f}'.format(filtered_outstanding_AR), delta=('Outstanding AR' if filtered_outstanding_AR < 4000000 else '-Outstanding AR'))
+        dynamic_two.metric(label='Target > 70%', value='{:.2f}%'.format(filtered_percent_current), delta=('% AR in Current' if filtered_percent_current > 70 else '-% AR in Current'))
+        dynamic_three.metric(label='Target < 20%', value='{:.2f}%'.format(filtered_AR_30_60), delta=('% AR in 31-60 Days' if filtered_AR_30_60 < 20 else '-% AR in 31-60 Days'))
+        dynamic_four.metric(label='Target < 15%', value='{:.2f}%'.format(filtered_AR_60_90), delta=('% AR in 61-90 Days' if filtered_AR_60_90 < 15 else '-% AR in 61-90 Days'))
+        dynamic_five.metric(label='Target < 5%', value='{:.2f}%'.format(filtered_overdue_AR), delta=('% AR over 90 Days' if filtered_overdue_AR < 5 else '-% AR over 90 Days'))
+
+    except Exception as e:
+        st.write(e)
