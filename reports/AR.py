@@ -75,8 +75,6 @@ def level_4_ar(st):
     st.markdown('## AR Reports')
     go_to_top(st.markdown)
     ar_df = get_rows(f"""SELECT AR.DEBTTRANUNPAID AS UNPAID_INVOICE, 
-    S.STAFFINDEX,
-    S.LEVEL,
     AR.DEBTTRANTYPE,
     AR.CONTINDEX, 
     AR.DEBTTRANDATE AS AR_DATE, 
@@ -88,9 +86,9 @@ def level_4_ar(st):
     D.MONTH_NAME AS MONTH
 from TRANS_AR AR
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
-    INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = C.CLIENT_PARTNER_IDX
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
-WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
+WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
+""")
 
     try:
         static_one, static_two, static_three, static_four, static_five = st.columns(5)
@@ -167,14 +165,14 @@ WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=partner_csv,
             file_name='Outstanding AR by Client Partner.csv',
-            key='partner_visual_download'
+            key='AR_partner_visual_download'
         )
         partner_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_AR']], use_container_width=True)
         partner_table.download_button(
             label='Download this data',
             data=partner_csv,
             file_name='Outstanding AR by Client Partner.csv',
-            key='partner_table_download'
+            key='AR_partner_table_download'
         )
 
         office_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
@@ -185,14 +183,14 @@ WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=office_csv,
             file_name='Outstanding AR by Client Office.csv',
-            key='office_visual_download'
+            key='AR_office_visual_download'
         )
         office_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_AR']], use_container_width=True)
         office_table.download_button(
             label='Download this data',
             data=office_csv,
             file_name='Outstanding AR by Client Office.csv',
-            key='office_table_download'
+            key='AR_office_table_download'
         )
 
         aging_AR = filtered_df[['AGING_PERIOD', 'UNPAID_INVOICE']]
@@ -206,7 +204,7 @@ WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=aging_csv,
             file_name='Aging AR.csv',
-            key='aging_visual_download'
+            key='AR_aging_visual_download'
         )
 
         aging_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_AR']], use_container_width=True)
@@ -214,7 +212,7 @@ WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=aging_csv,
             file_name='Aging AR.csv',
-            key='aging_table_download'
+            key='AR_aging_table_download'
         )
 
         current_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
@@ -230,14 +228,14 @@ WHERE DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=current_csv,
             file_name='Percentage Current AR by Client Office.csv',
-            key='current_visual_download'
+            key='AR_current_visual_download'
         )
         current_table.dataframe(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_AR']], use_container_width=True)
         current_table.download_button(
             label='Download this data',
             data=current_csv,
             file_name='Percentage Current AR by Client Office.csv',
-            key='current_table_download'
+            key='AR_current_table_download'
         )
 
         filtered_outstanding_AR = round(filtered_df['UNPAID_INVOICE'].sum(), 2)

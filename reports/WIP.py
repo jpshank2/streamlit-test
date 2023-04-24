@@ -31,7 +31,7 @@ def my_hours_month_service(wip, st):
             label='Download this data',
             data=month_service_csv,
             file_name='WIP Hours by Month and Service.csv',
-            key='month_service_download'
+            key='WIP_month_service_download'
         )
 
 def my_hours_pie_service(wip, st, year):
@@ -45,7 +45,7 @@ def my_hours_pie_service(wip, st, year):
             label='Download this data',
             data=hours_service_csv,
             file_name=f'{year} WIP Hours by Service Title.csv',
-            key=f'{year}_hours_service_download'
+            key=f'WIP_{year}_hours_service_download'
         )
 
 def my_utilization(wip):
@@ -87,7 +87,7 @@ def my_hours_real_client(wip, st, year):
             label='Download this data',
             data=hours_real_csv,
             file_name=f'{year} WIP Hours by Client.csv',
-            key=f'{year}_hours_real_download'
+            key=f'WIP_{year}_hours_real_download'
         )
 
 def level_1_wip(st):
@@ -114,7 +114,7 @@ from TRANS_WIP WIP
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = WIP.STAFFINDEX
-WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1)
+WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3)
     AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""")
     try:
         benchmark_df = wip_df[['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
@@ -234,7 +234,7 @@ from TRANS_WIP WIP
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = WIP.STAFFINDEX
-WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
+WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3);""")
 
     try:
         static_one, static_two, static_three, static_four, static_five = st.columns(5)
@@ -312,14 +312,14 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=partner_csv,
             file_name='Outstanding WIP by Client Partner.csv',
-            key='partner_visual_download'
+            key='WIP_partner_visual_download'
         )
         partner_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']], use_container_width=True)
         partner_table.download_button(
             label='Download this data',
             data=partner_csv,
             file_name='Outstanding WIP by Client Partner.csv',
-            key='partner_table_download'
+            key='WIP_partner_table_download'
         )
 
         office_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
@@ -330,14 +330,14 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=office_csv,
             file_name='Outstanding WIP by Client Office.csv',
-            key='office_visual_download'
+            key='WIP_office_visual_download'
         )
         office_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']], use_container_width=True)
         office_table.download_button(
             label='Download this data',
             data=office_csv,
             file_name='Outstanding WIP by Client Office.csv',
-            key='office_table_download'
+            key='WIP_office_table_download'
         )
 
         aging_wip = filtered_df[['AGING_PERIOD', 'WIPOUTSTANDING']]
@@ -351,7 +351,7 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=aging_csv,
             file_name='Aging WIP.csv',
-            key='aging_visual_download'
+            key='WIP_aging_visual_download'
         )
 
         aging_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'AGING_PERIOD', 'OUTSTANDING_WIP']], use_container_width=True)
@@ -359,7 +359,7 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=aging_csv,
             file_name='Aging WIP.csv',
-            key='aging_table_download'
+            key='WIP_aging_table_download'
         )
 
         current_csv = convert_df(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index())
@@ -375,14 +375,14 @@ WHERE WIPDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")
             label='Download this data',
             data=current_csv,
             file_name='Percentage Current WIP by Client Office.csv',
-            key='current_visual_download'
+            key='WIP_current_visual_download'
         )
         current_table.dataframe(filtered_df[['WIPOUTSTANDING', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_WIP=('WIPOUTSTANDING', 'sum')).reset_index()[['CLIENT_PARTNER', 'CLIENT', 'OFFICE', 'OUTSTANDING_WIP']], use_container_width=True)
         current_table.download_button(
             label='Download this data',
             data=current_csv,
             file_name='Percentage Current WIP by Client Office.csv',
-            key='current_table_download'
+            key='WIP_current_table_download'
         )
 
         filtered_outstanding_wip = round(filtered_df['WIPOUTSTANDING'].sum(), 2)
