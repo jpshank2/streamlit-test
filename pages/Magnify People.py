@@ -35,3 +35,4 @@ if 'company' in st.session_state:
     with request.form('request_from', clear_on_submit=True):
         st.selectbox('Select an employee', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='request_employee')
         st.text_input('What Job or Project?', key='request_project')
+        st.form_submit_button('Request a Review')
