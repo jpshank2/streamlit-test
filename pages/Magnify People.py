@@ -60,7 +60,7 @@ if 'company' in st.session_state:
         st.write(st.session_state['review_valid'])
         st.write(st.session_state['review_more'])
         
-        st.form_submit_button('Submit', type='primary', on_click=submit_review, args=(st.session_state['review_employee'], st.session_state['review_project'], st.session_state['review_rating'], st.session_state['review_more'], st.session_state['review_less']))
+        st.form_submit_button('Submit', type='primary', on_click=submit_review, args=(st))
     
     with request.form('request_from', clear_on_submit=True):
         st.markdown('#### Request a review')

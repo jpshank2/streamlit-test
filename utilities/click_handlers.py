@@ -110,5 +110,6 @@ def fill_request(df, session):
 
     session['req_link'] = df['IDX']
 
-def submit_review(staff, project, rating, more, less, st):
-    st.write(staff, project, rating, more, less)
+def submit_review(st):
+    session = st.session_state
+    st.write(session['review_employee'], session['review_project'], session['review_rating'], session['review_more'], session['review_less'])
