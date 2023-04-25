@@ -51,19 +51,20 @@ if 'company' in st.session_state:
 
     reviews = get_rows(f"""select r.Date,
         r.project,
-        s.staff_name as Sender,
+        s.employee as Sender,
         r.rating,
         r.see_more,
         r.see_less
     from people.review r
         inner join dim_staff_master s on s.staffindex = r.sender
     where r.recipient = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-        AND r.Date BETWEEN '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' AND '{datetime(fye, fym, 1)}';""")
+        AND r.Date BETWEEN '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' AND '{datetime(fye, fym, 1)}'
+    ORDER BY R.DATE;""")
     
     review_table.dataframe(reviews, use_container_width=True)
 
     review_pie_df = reviews.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index()
 
-    review_pie.plotly_chart(pie(review_pie_df, values='TOTAL', names='RATING'))
+    review_pie.plotly_chart(pie(review_pie_df, values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
 
     review_pie_df = None
