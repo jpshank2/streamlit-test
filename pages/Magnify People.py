@@ -62,4 +62,4 @@ if 'company' in st.session_state:
     
     review_table.dataframe(reviews, use_container_width=True)
 
-    review_pie = pie(reviews, values=reviews.value_counts().RATING, names='RATING')
+    review_pie = pie(reviews, values=reviews.value_counts('RATING'), names='RATING')
