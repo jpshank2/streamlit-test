@@ -103,8 +103,8 @@ def go_to_top(markdown):
 
 def fill_request(df, session):
     staff = df['EMPLOYEE']
-    # st.session_state['staff_select'] = [staff]
-    session['review_employee'] = [staff]
+    session['staff_select'] = [staff]
+    # session['review_employee'] = [staff]
     project = df['PROJECT']
     session['review_project'] = project
 
