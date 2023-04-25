@@ -45,11 +45,19 @@ if 'company' in st.session_state:
 
     review_request, this_request, remove_request = request.columns([1, 3, 1])
 
-    review_request.button(":heavy_check_mark:")
+    review_request.button(":heavy_check_mark:", help='Fill out this requested review!')
     this_request.markdown("Request info")
-    remove_request.button(":x:")
+    remove_request.button(":x:", help='Remove this requested review')
     
     request.markdown('#### My Sent Outstanding Requests')
+    request.dataframe(get_rows(f"""select R.DATE
+        ,S.EMPLOYEE
+        ,R.PROJECT
+    from people.requests R
+        INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.RECIPIENT
+    WHERE R.REVIEW_LINK IS NULL
+        AND R.SENDER = {st.session_state['user']['STAFFINDEX'].iloc[0]}
+    ORDER BY R.DATE;"""))
 
     st.markdown('#### My Reviews:')
     fym = 5
