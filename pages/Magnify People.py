@@ -32,11 +32,14 @@ if 'company' in st.session_state:
     if 'staff_select' not in st.session_state:
         st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
 
+    if 'project_input' not in st.session_state:
+        st.session_state['project_input'] = ''
+
     review, request = st.columns(2)
     with review.form('review_form', clear_on_submit=True):
         st.markdown('#### Review a fellow staff')
         st.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
-        st.text_input('What Job or Project are you reviewing?', key='review_project')
+        st.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
         st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
         st.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
         st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')

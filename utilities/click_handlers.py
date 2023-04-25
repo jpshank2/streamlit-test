@@ -106,6 +106,6 @@ def fill_request(df, session):
     session['staff_select'] = [staff]
     # session['review_employee'] = [staff]
     project = df['PROJECT']
-    session['review_project'] = project
+    session['project_input'] = project
 
     session['req_link'] = df['IDX']
