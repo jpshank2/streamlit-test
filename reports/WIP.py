@@ -12,15 +12,14 @@ v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_si
 pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
 def my_hours_month_service(wip, st):
-    st.dataframe(wip)
     fym = 5
     fye_sort = ['May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April']
     fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
-        
+
+    st.write(fye)
+
     fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1).strftime('%Y-%m-%d')) & (wip['BILLABLE'] == 'True')]
 
-    st.dataframe(fy_wip_df)
-    
     fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
 
     fy_wip_service_colors = st.session_state['color_map'][st.session_state['color_map']['SERVICE'].isin(fye_wip_service_df['SERVICETITLE'].tolist())].set_index('SERVICE')['COLOR'].to_dict()
