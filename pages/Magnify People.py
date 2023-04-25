@@ -28,11 +28,11 @@ if 'company' in st.session_state:
     review, request = st.columns(2)
     with review.form('review_form', clear_on_submit=True):
         st.markdown('#### Review a fellow staff')
-        st.selectbox('Staff to review', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='review_employee')
+        st.selectbox('Staff to review', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE], key='review_employee')
         st.text_input('What Job or Project are you reviewing?', key='review_project')
-        st.radio('How did this employee do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
-        st.text_area('See more', placeholder='What did this employee do well that you\'d like to see more?', key='review_more')
-        st.text_area('See less', placeholder='What did this employee do that you\'d like to see less?', key='review_less')
+        st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
+        st.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
+        st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
         st.form_submit_button('Submit', type='primary')
     
     with request.form('request_from', clear_on_submit=True):
@@ -41,7 +41,15 @@ if 'company' in st.session_state:
         st.text_input('What Job or Project?', key='request_project')
         st.form_submit_button('Request a Review')
 
-    request.markdown('#### Outstanding requests:')
+    request.markdown('#### My Recieved Outstanding Requests:')
+
+    review_request, this_request, remove_request = request.columns([1, 3, 1])
+
+    review_request.button(":heavy_check_mark:")
+    this_request.markdown("Request info")
+    remove_request.button(":x:")
+    
+    request.markdown('#### My Sent Outstanding Requests')
 
     st.markdown('#### My Reviews:')
     fym = 5
