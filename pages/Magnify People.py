@@ -4,7 +4,7 @@ from requests import get
 from io import BytesIO
 from utilities.loading_screen import loading
 from utilities.queries import get_rows
-from utilities.click_handlers import fill_request
+from utilities.click_handlers import fill_request, submit_review
 from utilities.validators import validate_dropdown, validate_string
 from datetime import datetime
 from plotly.express import pie
@@ -51,16 +51,16 @@ if 'company' in st.session_state:
         
         st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
         
-        review_more = st.text_input('See more')#, placeholder='What did this co-worker do well that you\'d like to see more?')
-        st.write(review_more)
-        st.session_state['review_valid'][2] = validate_string(review_more, [''])
+        st.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
+        st.session_state['review_valid'][2] = validate_string(st.session_state['review_more'], [''])
         
-        review_less = st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
-        # st.session_state['review_valid'][3] = validate_string(st.session_state['review_less'], [''])
+        st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
+        st.session_state['review_valid'][3] = validate_string(st.session_state['review_less'], [''])
 
         st.write(st.session_state['review_valid'])
+        st.write(st.session_state['review_more'])
         
-        st.form_submit_button('Submit', type='primary', disabled=(False in st.session_state['review_valid']))
+        st.form_submit_button('Submit', type='primary', on_click=submit_review(st.session_state['review_employee'], st.session_state['review_project'], st.session_state['review_rating'], st.session_state['review_more'], st.session_state['review_less']))
     
     with request.form('request_from', clear_on_submit=True):
         st.markdown('#### Request a review')

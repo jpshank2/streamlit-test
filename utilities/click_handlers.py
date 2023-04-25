@@ -109,3 +109,6 @@ def fill_request(df, session):
     session['project_input'] = project
 
     session['req_link'] = df['IDX']
+
+def submit_review(staff, project, rating, more, less, st):
+    st.write(staff, project, rating, more, less)
