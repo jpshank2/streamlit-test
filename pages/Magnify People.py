@@ -4,6 +4,7 @@ from requests import get
 from io import BytesIO
 from utilities.loading_screen import loading
 from utilities.queries import get_rows
+from utilities.click_handlers import fill_request
 from datetime import datetime
 from plotly.express import pie
 
@@ -25,10 +26,16 @@ if 'staff' not in st.session_state:
     st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
 
 if 'company' in st.session_state:
+    if 'req_link' not in st.session_state:
+        st.session_state['req_link'] = 0
+
+    if 'staff_select' not in st.session_state:
+        st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
+
     review, request = st.columns(2)
     with review.form('review_form', clear_on_submit=True):
         st.markdown('#### Review a fellow staff')
-        st.selectbox('Staff to review', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE], key='review_employee')
+        st.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
         st.text_input('What Job or Project are you reviewing?', key='review_project')
         st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
         st.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
@@ -44,6 +51,7 @@ if 'company' in st.session_state:
     recieved_requests = get_rows(f"""select R.DATE
         ,S.EMPLOYEE
         ,R.PROJECT
+        ,R.IDX
     from people.requests R
         INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
     WHERE R.REVIEW_LINK IS NULL
@@ -58,8 +66,8 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         for i in range(recieved_requests.shape[0]):
-            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}')
-            this_request.markdown(f"{recieved_requests.iloc[i]['PROJECT']} from {recieved_requests.iloc[i]['EMPLOYEE']}")
+            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(recieved_requests.iloc[i], st.session_state))
+            this_request.markdown(f"**{recieved_requests.iloc[i]['PROJECT']}** from **{recieved_requests.iloc[i]['EMPLOYEE']}**")
             remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
 
     sent_requests = get_rows(f"""select R.DATE

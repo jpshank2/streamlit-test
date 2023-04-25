@@ -100,3 +100,12 @@ def convert_df(df):
 
 def go_to_top(markdown):
     return markdown('[Top of Page](#hello-reports)')
+
+def fill_request(df, session):
+    staff = df['EMPLOYEE']
+    # st.session_state['staff_select'] = [staff]
+    session['review_employee'] = [staff]
+    project = df['PROJECT']
+    session['review_project'] = project
+
+    session['req_link'] = df['IDX']
