@@ -62,4 +62,8 @@ if 'company' in st.session_state:
     
     review_table.dataframe(reviews, use_container_width=True)
 
-    review_pie = pie(reviews, values=reviews.value_counts('RATING'), names='RATING')
+    review_pie_df = reviews.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index()
+
+    review_pie.plotly_chart(pie(review_pie_df, values='TOTAL', names='RATING'))
+
+    review_pie_df = None
