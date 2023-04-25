@@ -72,7 +72,10 @@ if 'company' in st.session_state:
     ORDER BY R.DATE;""")
     
     request.markdown('#### My Sent Outstanding Requests')
-    request.markdown('No outstanding sent requests!') if sent_requests.empty else request.dataframe(sent_requests)
+    if sent_requests.empty:
+        request.markdown('No outstanding sent requests!')
+    else:
+        request.dataframe(sent_requests)
 
     st.markdown('#### My Reviews:')
     fym = 5
