@@ -12,6 +12,7 @@ v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_si
 pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
 def my_hours_month_service(wip, st):
+    st.dataframe(wip)
     fym = 5
     fye_sort = ['May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April']
     fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
