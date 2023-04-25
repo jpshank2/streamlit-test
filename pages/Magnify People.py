@@ -47,7 +47,7 @@ if 'company' in st.session_state:
     fym = 5
     fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
 
-    review_table, review_pie = st.columns([2, 1])
+    review_pie, review_table = st.columns([3, 4])
 
     reviews = get_rows(f"""select r.Date,
         r.project,

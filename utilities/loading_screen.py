@@ -3,7 +3,7 @@ from datetime import datetime
 
 def loading(st):
     if st.experimental_user.email == 'jpshank2@gmail.com' or st.experimental_user.email == 'jeremyshank@bmss.com':
-        email = 'fsmith@bmss.com'
+        email = 'sshirley@bmss.com'
     elif st.experimental_user.email == 'jdavidbrowncpa@gmail.com':
         email = 'dbrown@bmss.com'
     elif st.experimental_user.email == 'imesser@abacustechnologies.com':
