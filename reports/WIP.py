@@ -17,6 +17,8 @@ def my_hours_month_service(wip, st):
     fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
         
     fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1).strftime('%Y-%m-%d')) & (wip['BILLABLE'] == 'True')]
+
+    st.dataframe(fy_wip_df)
     
     fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
 
@@ -211,7 +213,6 @@ def level_3_wip(st):
 
 def level_4_wip(st):
     st.markdown('## WIP Reports')
-    go_to_top(st.markdown)
     wip_df = get_rows(f"""SELECT WIP.WIPOUTSTANDING, 
     WIP.STAFFINDEX,
     S.LEVEL, 
@@ -397,5 +398,6 @@ WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3);""")
         dynamic_four.metric(label='Target < 15%', value='{:.2f}%'.format(filtered_wip_60_90), delta=('% WIP in 61-90 Days' if filtered_wip_60_90 < 15 else '-% WIP in 61-90 Days'))
         dynamic_five.metric(label='Target < 5%', value='{:.2f}%'.format(filtered_overdue_wip), delta=('% WIP over 90 Days' if filtered_overdue_wip < 5 else '-% WIP over 90 Days'))
 
+        go_to_top(st.markdown)
     except Exception as e:
         st.write(e)

@@ -73,7 +73,6 @@ def level_3_ar(st):
 
 def level_4_ar(st):
     st.markdown('## AR Reports')
-    go_to_top(st.markdown)
     ar_df = get_rows(f"""SELECT AR.DEBTTRANUNPAID AS UNPAID_INVOICE, 
     AR.DEBTTRANTYPE,
     AR.CONTINDEX, 
@@ -250,5 +249,6 @@ WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
         dynamic_four.metric(label='Target < 15%', value='{:.2f}%'.format(filtered_AR_60_90), delta=('% AR in 61-90 Days' if filtered_AR_60_90 < 15 else '-% AR in 61-90 Days'))
         dynamic_five.metric(label='Target < 5%', value='{:.2f}%'.format(filtered_overdue_AR), delta=('% AR over 90 Days' if filtered_overdue_AR < 5 else '-% AR over 90 Days'))
 
+        go_to_top(st.markdown)
     except Exception as e:
         st.write(e)
