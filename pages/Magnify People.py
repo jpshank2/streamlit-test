@@ -51,7 +51,7 @@ if 'company' in st.session_state:
         
         st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
         
-        review_more = st.text_area('See more')#, placeholder='What did this co-worker do well that you\'d like to see more?')
+        review_more = st.text_input('See more')#, placeholder='What did this co-worker do well that you\'d like to see more?')
         st.write(review_more)
         st.session_state['review_valid'][2] = validate_string(review_more, [''])
         
