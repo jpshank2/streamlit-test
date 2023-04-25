@@ -19,7 +19,7 @@ def my_hours_month_service(wip, st):
     st.write(f"WIPDATE >= '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' and WIPDATE < '{datetime(fye, fym, 1).strftime('%Y-%m-%d')}' and BILLABLE == 'True'")
 
     # fy_wip_df = wip.query("WIPDATE >= @start_date", inplace=True)
-    fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1))] #& (wip['BILLABLE'] == 'True')]
+    fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1)) & (wip['BILLABLE'] == 'True')]
     st.dataframe(fy_wip_df)
     fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
 
@@ -117,7 +117,7 @@ from TRANS_WIP WIP
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = WIP.STAFFINDEX
-WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3)
+WHERE TRANSTYPE = 1
     AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""")
     try:
         benchmark_df = wip_df[['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
