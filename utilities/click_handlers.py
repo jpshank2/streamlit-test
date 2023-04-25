@@ -113,3 +113,7 @@ def fill_request(df, session):
 def submit_review(st):
     session = st.session_state
     st.write(session['review_employee'], session['review_project'], session['review_rating'], session['review_more'], session['review_less'])
+
+    st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
+
+    st.session_state['project_input'] = ''
