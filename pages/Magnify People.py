@@ -58,6 +58,7 @@ if 'company' in st.session_state:
         st.session_state['review_valid'][3] = validate_string(st.session_state['review_less'], [''])
 
         st.write(st.session_state['review_valid'])
+        st.write(st.session_state['review_more'])
         
         st.form_submit_button('Submit', type='primary', disabled=(False in st.session_state['review_valid']))
     
