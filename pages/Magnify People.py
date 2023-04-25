@@ -56,6 +56,8 @@ if 'company' in st.session_state:
         
         st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
         st.session_state['review_valid'][3] = validate_string(st.session_state['review_less'], [''])
+
+        st.write(st.session_state['review_valid'])
         
         st.form_submit_button('Submit', type='primary', disabled=(False in st.session_state['review_valid']))
     
