@@ -16,7 +16,7 @@ def my_hours_month_service(wip, st):
     fye_sort = ['May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April']
     fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
 
-    st.write("WIPDATE >= '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' and WIPDATE < '{datetime(fye, fym, 1).strftime('%Y-%m-%d')}' and BILLABLE == 'True'")
+    st.write(f"WIPDATE >= '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' and WIPDATE < '{datetime(fye, fym, 1).strftime('%Y-%m-%d')}' and BILLABLE == 'True'")
 
     fy_wip_df = wip.query(f"WIPDATE >= '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' and WIPDATE < '{datetime(fye, fym, 1).strftime('%Y-%m-%d')}' and BILLABLE == 'True'", inplace=True)
     # fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1).strftime('%Y-%m-%d')) & (wip['BILLABLE'] == 'True')]
