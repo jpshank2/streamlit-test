@@ -36,27 +36,28 @@ if 'company' in st.session_state:
     if 'project_input' not in st.session_state:
         st.session_state['project_input'] = ''
 
-    review_valid = [False for i in range(4)]
+    if 'review_valid' not in st.session_state:
+        st.session_state['review_valid']= [False for i in range(4)]
     request_valid = [False for i in range(2)]
 
     review, request = st.columns(2)
     with review.form('review_form', clear_on_submit=True):
         st.markdown('#### Review a fellow staff')
         st.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
-        review_valid[0] = validate_dropdown(st.session_state['review_employee'], [''])
+        st.session_state['review_valid'][0] = validate_dropdown(st.session_state['review_employee'], [''])
 
         st.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
-        review_valid[1] = validate_string(st.session_state['review_project'], '')
+        st.session_state['review_valid'][1] = validate_string(st.session_state['review_project'], '')
         
         st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
         
         st.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
-        review_valid[2] = validate_string(st.session_state['review_more'], '')
+        st.session_state['review_valid'][2] = validate_string(st.session_state['review_more'], '')
         
         st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
-        review_valid[3] = validate_string(st.session_state['review_less'], '')
+        st.session_state['review_valid'][3] = validate_string(st.session_state['review_less'], '')
         
-        st.form_submit_button('Submit', type='primary', disabled=(False in review_valid))
+        st.form_submit_button('Submit', type='primary', disabled=(False in st.session_state['review_valid']))
     
     with request.form('request_from', clear_on_submit=True):
         st.markdown('#### Request a review')
