@@ -19,7 +19,7 @@ def my_hours_month_service(wip, st):
     st.write(datetime(fye - 1, fym, 1).strftime('%Y-%m-%d'))
     st.write(datetime(fye, fym, 1).strftime('%Y-%m-%d'))
 
-    fy_wip_df = wip.query(f"WIPDATE >= {datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')} and WIPDATE < {datetime(fye, fym, 1).strftime('%Y-%m-%d')} and BILLABLE == 'True'")
+    fy_wip_df = wip.query(f"WIPDATE >= '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' and WIPDATE < '{datetime(fye, fym, 1).strftime('%Y-%m-%d')}' and BILLABLE == 'True'", inplace=True)
     # fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1).strftime('%Y-%m-%d')) & (wip['BILLABLE'] == 'True')]
     st.dataframe(fy_wip_df)
     fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
