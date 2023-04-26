@@ -1,4 +1,4 @@
-from streamlit import cache_data, cache_resource, session_state, secrets, write
+from streamlit import cache_data, cache_resource, session_state, secrets
 from snowflake.connector import connect
 from pandas import DataFrame
 from rsa import decrypt, PrivateKey
@@ -62,7 +62,6 @@ def insert_rows(schema, table, columns, values, json_val=0):
                 sqlValues += f"{value},"
         with session_state['conn'].cursor() as cur:
             if json_val == 0:
-                write(f"INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues[:-1]};")
                 cur.execute(f"INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues[:-1]};")
             else:
                 cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);')

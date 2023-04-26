@@ -135,3 +135,5 @@ def submit_review(session):
         WHERE R.REVIEW_LINK IS NULL
             AND R.RECIPIENT = {session['user']['STAFFINDEX'].iloc[0]}
         ORDER BY R.DATE;""")
+    from streamlit import write
+    write(session['received_requests'])
