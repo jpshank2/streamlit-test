@@ -62,5 +62,5 @@ def level_4_people(st):
 
     morale_viz, morale_tab = st.tabs(['Visual', 'Table'])
 
-    morale_viz.plotly_chart(line(grouped_morale_df, x='MONTH', y='AGG', color=color_val, markers=True, hover_name=color_val, hover_data=hover_data, title=title))    
+    morale_viz.plotly_chart(line(grouped_morale_df, x='MONTH', y='AVERAGE_AGG', color=color_val, markers=True, hover_name=color_val, hover_data=hover_data, title=title), use_container_width=True)    
     morale_tab.dataframe(morale_df[['STAFF_NAME', 'LEVEL', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']])
