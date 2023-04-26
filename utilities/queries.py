@@ -62,8 +62,8 @@ def insert_rows(schema, table, columns, values, json_val=0):
                 sqlValues += f"{value},"
         with session_state['conn'].cursor() as cur:
             if json_val == 0:
-                write(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues};')
-                cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues};')
+                write(f"INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues[:-1]};")
+                cur.execute(f"INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues[:-1]};")
             else:
                 cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);')
         return cur.sfqid
