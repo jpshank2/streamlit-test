@@ -20,4 +20,6 @@ def level_4_people(st):
 
     boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True)
 
-    st.plotly_chart(boost_fig)
+    boost_viz, boost_tab = st.tabs(['Visual', 'Table'])
+    boost_viz.plotly_chart(boost_fig)
+    boost_tab.dataframe(boost_df[['EMPLOYEE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']])
