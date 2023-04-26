@@ -126,6 +126,10 @@ def submit_review(session):
 
     session['project_input'] = ''
 
+    from time import sleep
+
+    sleep(3)
+
     session['received_requests'] = get_rows(f"""select R.DATE
             ,S.EMPLOYEE
             ,R.PROJECT
