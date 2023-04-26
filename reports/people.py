@@ -46,5 +46,14 @@ def level_4_people(st):
         staff_select = staff_drop.selectbox('Staff', ['All'] + [i for i in morale_df.STAFF_NAME.sort_values().unique()])
     else:
         staff_select = staff_drop.selectbox('Staff', ['All'] + [i for i in morale_df[morale_df['LEVEL'] == level_select].STAFF_NAME.sort_values().unique()])
+
+    if level_select == 'All' and staff_select != 'All':
+        morale_df = morale_df[morale_df['STAFF_NAME'] == staff_select]
+    elif level_select != 'All' and staff_select == 'All':
+        morale_df = morale_df[morale_df['LEVEL'] == level_select]
+    elif level_select != 'All' and staff_select != 'All':
+        morale_df = morale_df[(morale_df['LEVEL'] == level_select) & (morale_df['STAFF_NAME'] == staff_select)]
+    else:
+        morale_df = morale_df
     
     st.dataframe(morale_df)
