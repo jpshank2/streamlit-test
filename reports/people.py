@@ -92,4 +92,4 @@ def level_4_people(st):
     review_pie, review_tab = st.columns(2)
 
     review_tab.dataframe(review_df)
-    review_pie.plotly_chat(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
+    review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
