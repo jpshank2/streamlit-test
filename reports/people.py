@@ -18,7 +18,7 @@ def level_4_people(st):
         p.*
         from people.demo_boost p;""")
 
-    boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, hover_name='EMPLOYEE', hover_data=['DATE', 'AGG', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE'])
+    boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, hover_name='EMPLOYEE', hover_data={'EMPLOYEE': False, 'AGG': True, 'ENTHUSIASM': True, 'MEANING': True, 'PRIDE': True, 'CHALLENGE': True, 'ENERGY': True, 'STRONG': True, 'RECOVERY': True, 'ENDURANCE': True})
 
     boost_viz, boost_tab = st.tabs(['Visual', 'Table'])
     boost_viz.plotly_chart(boost_fig, use_container_width=True)
