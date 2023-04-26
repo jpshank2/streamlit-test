@@ -120,7 +120,7 @@ def submit_review(session):
     else:
         insert_rows('people', 'review', 'DATE, SENDER, RECIPIENT, PROJECT, SEE_MORE, SEE_LESS, RATING, REQUEST_LINK', [session['today'].strftime('%Y-%m-%d'), session['user']['STAFFINDEX'].iloc[0], recipient, session['review_project'], session['review_more'], session['review_less'], session['review_rating'], session['req_link']])
 
-        update_rows('people', 'reqests', 'REVIEW_LINK', -1, 'IDX', session['req_link'])
+        update_rows('people', 'requests', 'REVIEW_LINK', -1, 'IDX', session['req_link'])
 
     session['staff_select'] = [''] + [i for i in session.staff[session.staff['STAFFINDEX'] != session['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
 
