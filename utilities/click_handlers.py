@@ -1,4 +1,4 @@
-from utilities.queries import insert_rows
+from utilities.queries import insert_rows, update_rows
 from random import randint
 from json import loads
 from streamlit import cache_resource
@@ -114,8 +114,13 @@ def submit_review(session):
     # session = st.session_state
 
     recipient = session.staff[session.staff['EMPLOYEE'] == session['review_employee']]['STAFFINDEX'].iloc[0]
+    
+    if session['req_link'] == 0:
+        insert_rows('people', 'review', 'DATE, SENDER, RECIPIENT, PROJECT, SEE_MORE, SEE_LESS, RATING', [session['today'].strftime('%Y-%m-%d'), session['user']['STAFFINDEX'].iloc[0], recipient, session['review_project'], session['review_more'], session['review_less'], session['review_rating']])
+    else:
+        insert_rows('people', 'review', 'DATE, SENDER, RECIPIENT, PROJECT, SEE_MORE, SEE_LESS, RATING, REQUEST_LINK', [session['today'].strftime('%Y-%m-%d'), session['user']['STAFFINDEX'].iloc[0], recipient, session['review_project'], session['review_more'], session['review_less'], session['review_rating'], session['req_link']])
 
-    insert_rows('people', 'review', 'DATE, SENDER, RECIPIENT, PROJECT, SEE_MORE, SEE_LESS, RATING', [session['today'].strftime('%Y-%m-%d'), session['user']['STAFFINDEX'].iloc[0], recipient, session['review_project'], session['review_more'], session['review_less'], session['review_rating']])
+        update_rows('people', 'reqests', 'REVIEW_LINK', -1, 'IDX', session['req_link'])
 
     session['staff_select'] = [''] + [i for i in session.staff[session.staff['STAFFINDEX'] != session['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
 
