@@ -79,7 +79,7 @@ def level_4_people(st):
     review_df = get_rows(f"""select r.Date,
         r.project,
         s.employee as Sender,
-        rec.employee as Recipient
+        rec.employee as Recipient,
         r.rating,
         r.see_more,
         r.see_less
