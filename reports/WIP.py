@@ -12,9 +12,9 @@ v_bar_style = {'legend_font_size': 18, 'title_font_size': 24, 'yaxis_tickfont_si
 pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
 def my_hours_month_service(wip, st):
-    fym = 5
+    fym = st.session_state['company'].FISCAL_MONTH.iloc[0]
     fye_sort = ['May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April']
-    fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
+    fye = st.session_state['fye']
 
     fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1)) & (wip['BILLABLE'] == 'True')]
     

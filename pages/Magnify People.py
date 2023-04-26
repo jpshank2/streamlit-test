@@ -95,8 +95,6 @@ if 'company' in st.session_state:
         request.dataframe(sent_requests)
 
     st.markdown('#### My Reviews:')
-    fym = 5
-    fye = st.session_state['today'].year if st.session_state['today'].month < fym else st.session_state['today'].year + 1
 
     review_pie, review_table = st.columns([3, 4])
 
@@ -109,7 +107,7 @@ if 'company' in st.session_state:
     from people.review r
         inner join dim_staff_master s on s.staffindex = r.sender
     where r.recipient = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-        AND r.Date BETWEEN '{datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')}' AND '{datetime(fye, fym, 1)}'
+        AND r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""")
     
     review_table.dataframe(reviews, use_container_width=True)

@@ -32,5 +32,7 @@ def loading(st):
                     st.session_state['level'] = st.session_state['user'].LEVEL_PERMISSION.iloc[0]
             if 'today' not in st.session_state:
                 st.session_state['today'] = datetime.today()
+            if 'fye' not in st.session_state:
+                st.session_state['fye'] = st.session_state['today'].year if st.session_state['today'].month < st.session_state['company'].FISCAL_MONTH.iloc[0] else st.session_state['today'].year + 1
             if 'color_map' not in st.session_state:
                 st.session_state['color_map'] = get_rows(f"SELECT * FROM CONFIGURATIONS.SERVICE_COLORS")
