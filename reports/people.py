@@ -1,6 +1,7 @@
-from plotly.express import line
+from plotly.express import line, pie
 from utilities.queries import get_rows
 from utilities.click_handlers import go_to_top
+from datetime import datetime
 
 def level_1_people(st):
     st.write('people 1')
@@ -74,3 +75,21 @@ def level_4_people(st):
 
     morale_viz.plotly_chart(line(grouped_morale_df, x='DATE', y='AVERAGE_AGG', color=color_val, markers=True, hover_name=color_val, hover_data=hover_data, title=title), use_container_width=True)    
     morale_tab.dataframe(morale_df[['STAFF_NAME', 'LEVEL', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']])
+
+    review_df = get_rows(f"""select r.Date,
+        r.project,
+        s.employee as Sender,
+        rec.employee as Recipient
+        r.rating,
+        r.see_more,
+        r.see_less
+    from people.review r
+        inner join dim_staff_master s on s.staffindex = r.sender
+        inner join dim_staff_master rec on rec.staffindex = r.recipient
+    where r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['fym'], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['fym'], 1)}'
+    ORDER BY R.DATE;""")
+
+    review_pie, review_tab = st.columns(2)
+
+    review_tab.dataframe(review_df)
+    review_pie.plotly_chat(pie(review_df[['RATING']].groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
