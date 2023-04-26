@@ -42,7 +42,7 @@ def level_4_people(st):
 
     from pandas import to_datetime
     morale_df['DATE'] = to_datetime(morale_df['DATE'])
-    morale_df['DATE'] = morale_df['DATE'].dt.strftime('%b %Y')
+    morale_df['DATE'] = morale_df['DATE'].dt.strftime('%m / %Y')
     
     level_drop, staff_drop = st.columns(2)
     level_select = level_drop.selectbox('Staff Level', ['All'] + [i for i in morale_df.LEVEL.sort_values().unique()])
