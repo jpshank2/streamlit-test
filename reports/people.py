@@ -33,3 +33,11 @@ def level_4_people(st):
     boost_viz, boost_tab = st.tabs(['Visual', 'Table'])
     boost_viz.plotly_chart(boost_fig, use_container_width=True)
     boost_tab.dataframe(boost_df[['EMPLOYEE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG', 'TOTAL_HOURS', 'UTILIZATION']])
+
+    morale_df = get_rows("""select s.staff_name, s.level, m.*, enthusiasm + meaning + pride + challenge + energy + strong + recovery + endurance as agg
+        from people.morale m
+            inner join dim_staff_master s on s.staffindex = m.staff
+        where s.staff_status = 'Active' and
+            s.level not in ('No Selection', 'Unknown');""")
+    
+    st.dataframe(morale_df)
