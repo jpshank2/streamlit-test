@@ -40,7 +40,8 @@ def level_4_people(st):
         where s.staff_status = 'Active' and
             s.level not in ('No Selection', 'Unknown');""")
 
-    # from pandas import to_datetime
+    from pandas import to_datetime
+    morale_df['DATE'] = to_datetime(morale_df['DATE'])
     morale_df['DATE'] = morale_df['DATE'].dt.strftime('%b %Y')
     
     level_drop, staff_drop = st.columns(2)
