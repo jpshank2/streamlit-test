@@ -71,12 +71,12 @@ if 'company' in st.session_state:
 
     review_request, this_request, remove_request = request.columns([1, 3, 1])
 
-    if st.session_state['recieved_requests'].empty:
+    if st.session_state['received_requests'].empty:
         request.markdown('No outstanding receieved requests!')
     else:
-        for i in range(st.session_state['recieved_requests'].shape[0]):
-            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['recieved_requests'].iloc[i], st.session_state))
-            this_request.markdown(f"**{st.session_state['recieved_requests'].iloc[i]['PROJECT']}** from **{st.session_state['recieved_requests'].iloc[i]['EMPLOYEE']}**")
+        for i in range(st.session_state['received_requests'].shape[0]):
+            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i], st.session_state))
+            this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
             remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
 
     sent_requests = get_rows(f"""select R.DATE
