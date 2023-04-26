@@ -65,7 +65,7 @@ def insert_rows(schema, table, columns, values, json_val=0):
                 cur.execute(f"INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues[:-1]};")
             else:
                 cur.execute(f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);')
-        return cur.sfqid
+        # return cur.sfqid
     except Exception as e:
         return {'e': e, 'query': f'INSERT INTO {schema}.{table}({columns}) SELECT {sqlValues} PARSE_JSON($${dumps(json_val)}$$);'}
     
@@ -73,6 +73,6 @@ def update_rows(schema, table, set_col, set_val, where_col, where_val):
     try:
         with session_state['conn'].cursor() as cur:
             cur.execute(f'UPDATE {schema}.{table} SET {set_col} = {set_val} WHERE {where_col} = {where_val};')
-        return cur.sfqid
+        # return cur.sfqid
     except Exception as e:
         return {'e': e, 'query': f'UPDATE {schema}.{table} SET {set_col} = {set_val} WHERE {where_col} = {where_val};'}
