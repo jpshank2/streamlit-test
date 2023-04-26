@@ -48,7 +48,7 @@ if 'company' in st.session_state:
 
         st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
         
-        st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'st': st})
+        st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'session': st.session_state})
     
     with request.form('request_from', clear_on_submit=True):
         st.markdown('#### Request a review')

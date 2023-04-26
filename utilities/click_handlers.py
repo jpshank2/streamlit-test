@@ -110,10 +110,13 @@ def fill_request(df, session):
 
     session['req_link'] = df['IDX']
 
-def submit_review(st):
-    session = st.session_state
-    st.write(session['review_employee'], session['review_project'], session['review_rating'], session['review_more'], session['review_less'])
+def submit_review(session):
+    # session = st.session_state
 
-    st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
+    recipient = session.staff[session.staff['EMPLOYEE'] == session['review_employee']]['STAFFINDEX'].iloc[0]
 
-    st.session_state['project_input'] = ''
+    insert_rows('people', 'review', 'DATE, SENDER, RECIPIENT, PROJECT, SEE_MORE, SEE_LESS, RATING', [session['today'].strftime('%Y-%m-%d'), session['user']['STAFFINDEX'].iloc[0], recipient, session['review_project'], session['review_more'], session['review_less'], session['review_rating']])
+
+    session['staff_select'] = [''] + [i for i in session.staff[session.staff['STAFFINDEX'] != session['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
+
+    session['project_input'] = ''
