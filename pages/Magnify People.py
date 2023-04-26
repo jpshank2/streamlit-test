@@ -56,26 +56,27 @@ if 'company' in st.session_state:
         st.text_input('What Job or Project?', key='request_project')
         st.form_submit_button('Request a Review')
 
-    recieved_requests = get_rows(f"""select R.DATE
-        ,S.EMPLOYEE
-        ,R.PROJECT
-        ,R.IDX
-    from people.requests R
-        INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
-    WHERE R.REVIEW_LINK IS NULL
-        AND R.RECIPIENT = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-    ORDER BY R.DATE;""")
+    if 'received_requests' not in st.session_state:
+        st.session_state['received_requests'] = get_rows(f"""select R.DATE
+            ,S.EMPLOYEE
+            ,R.PROJECT
+            ,R.IDX
+        from people.requests R
+            INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
+        WHERE R.REVIEW_LINK IS NULL
+            AND R.RECIPIENT = {st.session_state['user']['STAFFINDEX'].iloc[0]}
+        ORDER BY R.DATE;""")
 
     request.markdown('#### My Recieved Outstanding Requests:')
 
     review_request, this_request, remove_request = request.columns([1, 3, 1])
 
-    if recieved_requests.empty:
+    if st.session_state['recieved_requests'].empty:
         request.markdown('No outstanding receieved requests!')
     else:
-        for i in range(recieved_requests.shape[0]):
-            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(recieved_requests.iloc[i], st.session_state))
-            this_request.markdown(f"**{recieved_requests.iloc[i]['PROJECT']}** from **{recieved_requests.iloc[i]['EMPLOYEE']}**")
+        for i in range(st.session_state['recieved_requests'].shape[0]):
+            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['recieved_requests'].iloc[i], st.session_state))
+            this_request.markdown(f"**{st.session_state['recieved_requests'].iloc[i]['PROJECT']}** from **{st.session_state['recieved_requests'].iloc[i]['EMPLOYEE']}**")
             remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
 
     sent_requests = get_rows(f"""select R.DATE

@@ -1,4 +1,4 @@
-from utilities.queries import insert_rows, update_rows
+from utilities.queries import insert_rows, update_rows, get_rows
 from random import randint
 from json import loads
 from streamlit import cache_resource
@@ -125,3 +125,13 @@ def submit_review(session):
     session['staff_select'] = [''] + [i for i in session.staff[session.staff['STAFFINDEX'] != session['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
 
     session['project_input'] = ''
+
+    session['received_requests'] = get_rows(f"""select R.DATE
+            ,S.EMPLOYEE
+            ,R.PROJECT
+            ,R.IDX
+        from people.requests R
+            INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
+        WHERE R.REVIEW_LINK IS NULL
+            AND R.RECIPIENT = {session['user']['STAFFINDEX'].iloc[0]}
+        ORDER BY R.DATE;""")
