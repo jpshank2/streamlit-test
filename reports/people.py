@@ -47,12 +47,18 @@ def level_4_people(st):
     else:
         staff_select = staff_drop.selectbox('Staff', ['All'] + [i for i in morale_df[morale_df['LEVEL'] == level_select].STAFF_NAME.sort_values().unique()])
 
-    if level_select == 'All' and staff_select != 'All':
+    if staff_select != 'All':
         morale_df = morale_df[morale_df['STAFF_NAME'] == staff_select]
+        grouped_morale_df = morale_df[['STAFF_NAME', 'MONTH', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']].groupby(['STAFF_NAME', 'MONTH'], as_index=False).agg(AVERAGE_ENTHUSIASM=('ENTHUSIASM', 'mean'), AVERAGE_MEANING=('MEANING', 'mean'), AVERAGE_PRIDE=('PRIDE', 'mean'), AVERAGE_CHALLENGE=('CHALLENGE', 'mean'), AVERAGE_ENERGY=('ENERGY', 'mean'), AVERAGE_STRENGTH=('STRONG', 'mean'), AVERAGE_RECOVERY=('RECOVERY', 'mean'), AVERAGE_ENDURANCE=('ENDURANCE', 'mean'), AVERAGE_AGG=('AGG', 'mean')).reset_index()
+        color_val = 'STAFF_NAME'
+        hover_data = {'STAFF_NAME': False, 'AVERAGE_AGG': True, 'AVERAGE_ENTHUSIASM': True, 'AVERAGE_MEANING': True, 'AVERAGE_PRIDE': True, 'AVERAGE_CHALLENGE': True, 'AVERAGE_ENERGY': True, 'AVERAGE_STRENGTH': True, 'AVERAGE_RECOVERY': True, 'AVERAGE_ENDURANCE': True}
+        title = 'Average Morale by Staff and Month'
     elif level_select != 'All' and staff_select == 'All':
         morale_df = morale_df[morale_df['LEVEL'] == level_select]
-    elif level_select != 'All' and staff_select != 'All':
-        morale_df = morale_df[(morale_df['LEVEL'] == level_select) & (morale_df['STAFF_NAME'] == staff_select)]
+        grouped_morale_df = morale_df[['STAFF_NAME', 'MONTH', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']].groupby(['STAFF_NAME', 'MONTH'], as_index=False).agg(AVERAGE_ENTHUSIASM=('ENTHUSIASM', 'mean'), AVERAGE_MEANING=('MEANING', 'mean'), AVERAGE_PRIDE=('PRIDE', 'mean'), AVERAGE_CHALLENGE=('CHALLENGE', 'mean'), AVERAGE_ENERGY=('ENERGY', 'mean'), AVERAGE_STRENGTH=('STRONG', 'mean'), AVERAGE_RECOVERY=('RECOVERY', 'mean'), AVERAGE_ENDURANCE=('ENDURANCE', 'mean'), AVERAGE_AGG=('AGG', 'mean')).reset_index()
+        color_val = 'STAFF_NAME'
+        hover_data = {'STAFF_NAME': False, 'AVERAGE_AGG': True, 'AVERAGE_ENTHUSIASM': True, 'AVERAGE_MEANING': True, 'AVERAGE_PRIDE': True, 'AVERAGE_CHALLENGE': True, 'AVERAGE_ENERGY': True, 'AVERAGE_STRENGTH': True, 'AVERAGE_RECOVERY': True, 'AVERAGE_ENDURANCE': True}
+        title = 'Average Morale by Staff and Month'
     else:
         morale_df = morale_df
         grouped_morale_df = morale_df[['LEVEL', 'MONTH', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']].groupby(['LEVEL', 'MONTH'], as_index=False).agg(AVERAGE_ENTHUSIASM=('ENTHUSIASM', 'mean'), AVERAGE_MEANING=('MEANING', 'mean'), AVERAGE_PRIDE=('PRIDE', 'mean'), AVERAGE_CHALLENGE=('CHALLENGE', 'mean'), AVERAGE_ENERGY=('ENERGY', 'mean'), AVERAGE_STRENGTH=('STRONG', 'mean'), AVERAGE_RECOVERY=('RECOVERY', 'mean'), AVERAGE_ENDURANCE=('ENDURANCE', 'mean'), AVERAGE_AGG=('AGG', 'mean')).reset_index()
@@ -62,5 +68,5 @@ def level_4_people(st):
 
     morale_viz, morale_tab = st.tabs(['Visual', 'Table'])
 
-    morale_viz.plotly_chart(line(grouped_morale_df, x='MONTH', y='AVERAGE_AGG', color=color_val, markers=True, hover_name=color_val, hover_data=hover_data, title=title), use_container_width=True)    
+    morale_viz.plotly_chart(line(grouped_morale_df, x='MONTH', y='AVERAGE_AGG', color=color_val, markers=True, hover_name=color_val, hover_data=hover_data, title=title).update_xaxes(categoryorder='array', categoryarray=['Jan', 'Feb', 'Mar', 'Apr']), use_container_width=True)    
     morale_tab.dataframe(morale_df[['STAFF_NAME', 'LEVEL', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']])
