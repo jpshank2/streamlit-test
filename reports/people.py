@@ -15,11 +15,21 @@ def level_4_people(st):
     st.markdown('## Staff Reports')
 
     boost_df = get_rows("""select case when staff = 264 then 'Alan Carter' else 'Cameron Patterson' end as EMPLOYEE, 
-        p.*
-        from people.demo_boost p;""")
+        p.*,
+        WIP.TOTAL_HOURS
+        ,WIP.UTILIZATION
+        from people.demo_boost p
+            INNER JOIN (SELECT STAFFINDEX
+            ,MONTH(WIPDATE) AS WIPMONTH
+            ,SUM(WIPHOURS) AS TOTAL_HOURS
+            ,ROUND(SUM(CASE WHEN BILLABLE = 'True' THEN WIPHOURS ELSE 0 END) / SUM(WIPHOURS) * 100, 2) AS UTILIZATION
+        FROM trans_wip
+        WHERE wipdate >= '2023-01-01'
+        GROUP BY STAFFINDEX, month(WIPDATE)) WIP ON WIP.STAFFINDEX = P.STAFF AND WIP.WIPMONTH = MONTH(P.DATE) 
+        ORDER BY STAFF, DATE;""")
 
-    boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, hover_name='EMPLOYEE', hover_data={'EMPLOYEE': False, 'AGG': True, 'ENTHUSIASM': True, 'MEANING': True, 'PRIDE': True, 'CHALLENGE': True, 'ENERGY': True, 'STRONG': True, 'RECOVERY': True, 'ENDURANCE': True})
+    boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, hover_name='EMPLOYEE', hover_data={'EMPLOYEE': False, 'AGG': True, 'ENTHUSIASM': True, 'MEANING': True, 'PRIDE': True, 'CHALLENGE': True, 'ENERGY': True, 'STRONG': True, 'RECOVERY': True, 'ENDURANCE': True}, title='Staff with Significant Morale Drops')
 
     boost_viz, boost_tab = st.tabs(['Visual', 'Table'])
     boost_viz.plotly_chart(boost_fig, use_container_width=True)
-    boost_tab.dataframe(boost_df[['EMPLOYEE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']])
+    boost_tab.dataframe(boost_df[['EMPLOYEE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG', 'TOTAL_HOURS', 'UTILIZATION']])
