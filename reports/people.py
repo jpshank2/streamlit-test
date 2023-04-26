@@ -86,7 +86,7 @@ def level_4_people(st):
     from people.review r
         inner join dim_staff_master s on s.staffindex = r.sender
         inner join dim_staff_master rec on rec.staffindex = r.recipient
-    where r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['fym'], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['fym'], 1)}'
+    where r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""")
 
     review_pie, review_tab = st.columns(2)
