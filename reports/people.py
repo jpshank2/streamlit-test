@@ -2,8 +2,17 @@ from plotly.express import line
 from utilities.queries import get_rows
 from utilities.click_handlers import go_to_top
 
+def level_1_people(st):
+    st.write('people 1')
+
+def level_2_people(st):
+    st.write('people 2')
+
+def level_3_people(st):
+    st.write('people 3')
+
 def level_4_people(st):
-    st.markdown('## People Metrics')
+    st.markdown('## Staff Reports')
 
     boost_df = get_rows("""select case when staff = 264 then 'Alan Carter' else 'Cameron Patterson' end as EMPLOYEE, 
         p.*

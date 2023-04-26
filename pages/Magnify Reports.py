@@ -33,6 +33,7 @@ if 'company' in st.session_state:
     if st.session_state['level'] == 4:
         st.markdown('[AR Reports](#ar-reports)')
         st.markdown('[WIP Reports](#wip-reports)')
+        st.markdown('[Staff Reports](#staff-reports)')
     # else:
     #     st.markdown('[WIP Reports](#wip-reports)')
 
@@ -65,5 +66,7 @@ if 'company' in st.session_state:
         exec(f"""from reports.AR import level_{st.session_state['level']}_ar as level_ar\nlevel_ar(st)""")
 
         exec(f"""from reports.WIP import level_{st.session_state['level']}_wip as level_wip\nlevel_wip(st)""")
+
+        exec(f"""from reports.people import level_{st.session_state['level']}_people as level_people\nlevel_people(st)""")
     except Exception as e:
         st.write(e)
