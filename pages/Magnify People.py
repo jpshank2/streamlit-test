@@ -28,7 +28,6 @@ if 'company' in st.session_state:
         if session not in st.session_state['master_states']:
             del st.session_state[session]
 
-    
     st.markdown('# Magnify People')
     if 'req_link' not in st.session_state:
         st.session_state['req_link'] = 0

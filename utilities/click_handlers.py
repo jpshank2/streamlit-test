@@ -1,7 +1,7 @@
 from utilities.queries import insert_rows, update_rows, get_rows
 from random import randint
 from json import loads
-from streamlit import cache_resource
+from streamlit import cache_resource, write
 
 def create_new_client(st):
     state_client = st.session_state['newclient']
@@ -109,6 +109,7 @@ def fill_request(df, session):
     session['project_input'] = project
 
     session['req_link'] = df['IDX']
+    write(session)
 
 def submit_review(session):
     # session = st.session_state
