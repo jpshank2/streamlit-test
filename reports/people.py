@@ -4,13 +4,13 @@ from utilities.click_handlers import go_to_top
 from datetime import datetime
 
 def level_1_people(st):
-    st.write('people 1')
+    return True
 
 def level_2_people(st):
-    st.write('people 2')
+    return True
 
 def level_3_people(st):
-    st.write('people 3')
+    return True
 
 def level_4_people(st):
     st.markdown('## Staff Reports')
@@ -37,7 +37,7 @@ def level_4_people(st):
 
     morale_df = get_rows("""select s.staff_name, s.level, m.*, enthusiasm + meaning + pride + challenge + energy + strong + recovery + endurance as agg, monthname(m.date) as month
         from people.morale m
-            inner join PE.DIM_STAFF_MASTER s on s.staffindex = m.staff
+            inner join PE.DIM_ANON_STAFF s on s.staffindex = m.staff
         where s.staff_status = 'Active' and
             s.level not in ('No Selection', 'Unknown');""", st.session_state['today'])
 
@@ -84,8 +84,8 @@ def level_4_people(st):
         r.see_more,
         r.see_less
     from people.review r
-        inner join PE.DIM_STAFF_MASTER s on s.staffindex = r.sender
-        inner join PE.DIM_STAFF_MASTER rec on rec.staffindex = r.recipient
+        inner join PE.DIM_ANON_STAFF s on s.staffindex = r.sender
+        inner join PE.DIM_ANON_STAFF rec on rec.staffindex = r.recipient
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""", st.session_state['today'])
 
