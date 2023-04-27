@@ -13,4 +13,4 @@ MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').cont
 one, two, three= st.columns(3)
 two.image(MainHeaderImage, use_column_width = True)
 
-st.write('<iframe src="https://api.bmss.com/cpa"></iframe>', unsafe_allow_html=True)
+st.write('<iframe src="https://api.bmss.com/cpa" width="800"></iframe>', unsafe_allow_html=True)
