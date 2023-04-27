@@ -34,8 +34,6 @@ if 'company' in st.session_state:
 
     st.markdown("# Magnify Reports")
 
-    st.write(st.session_state['level'])
-
     if st.session_state['level'] == 4:
         st.markdown('[AR Reports](#ar-reports)')
         st.markdown('[WIP Reports](#wip-reports)')
