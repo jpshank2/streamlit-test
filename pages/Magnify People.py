@@ -26,6 +26,7 @@ if 'staff' not in st.session_state:
     st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
 
 if 'company' in st.session_state:
+    st.markdown('# Magnify People')
     if 'req_link' not in st.session_state:
         st.session_state['req_link'] = 0
 

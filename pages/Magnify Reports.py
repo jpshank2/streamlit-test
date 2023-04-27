@@ -28,7 +28,7 @@ if 'company' in st.session_state:
 #     domain = 'demo' if st.experimental_user.email == None else st.experimental_user.email.split('@')[-1]
 #     st.session_state['switches'] = get_rows(f"SELECT * FROM STREAMLITAPP.MANAGED_IDENTITY_TEST WHERE DOMAIN = '{domain}'")
 
-    st.markdown("# Hello, Reports! :wave:")
+    st.markdown("# Magnify Reports")
 
     if st.session_state['level'] == 4:
         st.markdown('[AR Reports](#ar-reports)')
