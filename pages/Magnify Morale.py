@@ -35,3 +35,5 @@ if 'company' in st.session_state:
         st.radio('In my team, I feel fit and strong', (1, 2, 3, 4, 5, 6, 7))
         st.radio('In my team, I quickly recover from setbacks', (1, 2, 3, 4, 5, 6, 7))
         st.radio('In my team, I can keep going for a long time', (1, 2, 3, 4, 5, 6, 7))
+
+        st.form_submit_button('Submit')
