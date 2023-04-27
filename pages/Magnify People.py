@@ -18,22 +18,17 @@ MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').cont
 one, two, three= st.columns(3)
 two.image(MainHeaderImage, use_column_width = True)
 
-def fill_request(df):
-    staff = df['EMPLOYEE']
+def fill_request(selection, requests):
+
+    df = requests[requests['REQUEST_STRING'] == selection]
+
+    staff = df['EMPLOYEE'].iloc[0]
     st.session_state['staff_select'] = [staff]
     # st.session_state['review_employee'] = [staff]
-    project = df['PROJECT']
+    project = df['PROJECT'].iloc[0]
     st.session_state['project_input'] = project
 
-    st.session_state['req_link'] = df['IDX']
-
-# def create_requests_with_button(i):
-#     st.write(st.session_state['received_requests'])
-#     st.write(st.session_state['received_requests'].iloc[i])
-#     review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
-#     this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
-#     remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
-
+    st.session_state['req_link'] = df['IDX'].iloc[0]
 
 if 'company' not in st.session_state:
     loading(st)
@@ -81,7 +76,7 @@ if 'company' in st.session_state:
             ,S.EMPLOYEE
             ,R.PROJECT
             ,R.IDX
-            ,CONCAT(r.project, '** from **', s.employee, '**') as request_string
+            ,CONCAT(r.project, ' from ', s.employee) as request_string
         from people.requests R
             INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
         WHERE R.REVIEW_LINK IS NULL
@@ -95,11 +90,10 @@ if 'company' in st.session_state:
     if requests.empty:
         request.markdown('No outstanding receieved requests!')
     else:
-        
         recieve_options = (i[1][4] for i in requests.iterrows())
         with request.form('received_requests'):
             outstanding_receieved = st.radio('hidden label', options=recieve_options, label_visibility='hidden')
-            st.form_submit_button('Submit')
+            st.form_submit_button('Review this Request', on_click=fill_request, args=(outstanding_receieved, requests))
         # for i in range(st.session_state['received_requests'].shape[0]):
             # create_requests_with_button(i)
 
