@@ -9,7 +9,7 @@ def loading(st):
     elif st.experimental_user.email == 'imesser@abacustechnologies.com':
         email = 'kfluker@bmss.com'
     else:
-        email = 'jgray@bmss.com'#st.experimental_user.email
+        email = 'fsmith@bmss.com'#st.experimental_user.email
         
     domain = email.split('@')[-1]
 
