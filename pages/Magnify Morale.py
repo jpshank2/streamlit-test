@@ -27,13 +27,13 @@ if 'company' in st.session_state:
 
     with st.form('morale_form'):
         st.markdown('## Rate your morale within your team:')
-        st.radio('I am enthusiastic about the owth that I do for my team', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('I find the work that I do for my team of meaning and purpose', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('I am proud of the work that I do for my team', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('To me, the work that I do for my team is appropriately challenging', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('I am energized by working with my team', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('In my team, I feel fit and strong', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('In my team, I quickly recover from setbacks', (1, 2, 3, 4, 5, 6, 7))
-        st.radio('In my team, I can keep going for a long time', (1, 2, 3, 4, 5, 6, 7))
+        st.radio('I am enthusiastic about the owth that I do for my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('I find the work that I do for my team of meaning and purpose', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('I am proud of the work that I do for my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('To me, the work that I do for my team is appropriately challenging', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('I am energized by working with my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('In my team, I feel fit and strong', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('In my team, I quickly recover from setbacks', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('In my team, I can keep going for a long time', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
 
         st.form_submit_button('Submit')
