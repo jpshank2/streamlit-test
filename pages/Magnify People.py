@@ -81,7 +81,7 @@ if 'company' in st.session_state:
             ,S.EMPLOYEE
             ,R.PROJECT
             ,R.IDX
-            ,CONCAT('**', r.project, '** from **', s.employee, '**') as request_string
+            ,CONCAT(r.project, ' from ', s.employee, '**') as request_string
         from people.requests R
             INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
         WHERE R.REVIEW_LINK IS NULL
@@ -96,7 +96,7 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         
-        recieve_options = (i[1] for i in requests.iterrows())
+        recieve_options = (i[1][3] for i in requests.iterrows())
         with request.form('received_requests'):
             outstanding_receieved = st.radio('hidden label', options=recieve_options, label_visibility='hidden')
             st.form_submit_button('Submit')
