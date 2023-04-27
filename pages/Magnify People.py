@@ -26,9 +26,10 @@ def fill_request(df):
     st.session_state['project_input'] = project
 
     st.session_state['req_link'] = df['IDX']
-    st.write(st.session_state)
 
 def create_requests_with_button(i):
+    st.write(st.session_state['received_requests'])
+    st.write(st.session_state['received_requests'].iloc[i])
     review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
     this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
     remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
