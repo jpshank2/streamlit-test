@@ -27,12 +27,12 @@ def fill_request(df):
 
     st.session_state['req_link'] = df['IDX']
 
-def create_requests_with_button(i):
-    st.write(st.session_state['received_requests'])
-    st.write(st.session_state['received_requests'].iloc[i])
-    review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
-    this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
-    remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
+# def create_requests_with_button(i):
+#     st.write(st.session_state['received_requests'])
+#     st.write(st.session_state['received_requests'].iloc[i])
+#     review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
+#     this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
+#     remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
 
 
 if 'company' not in st.session_state:
@@ -86,15 +86,18 @@ if 'company' in st.session_state:
             AND R.RECIPIENT = {st.session_state['user']['STAFFINDEX'].iloc[0]}
         ORDER BY R.DATE;""")
 
-    request.markdown('#### My Recieved Outstanding Requests:')
+    request.markdown('#### My Received Outstanding Requests:')
 
     review_request, this_request, remove_request = request.columns([1, 3, 1])
 
     if st.session_state['received_requests'].empty:
         request.markdown('No outstanding receieved requests!')
     else:
-        for i in range(st.session_state['received_requests'].shape[0]):
-            create_requests_with_button(i)
+        with request.form('received_requests'):
+            outstanding_receieved = st.radio(options=(i for i in st.session_state['receieved_requests']), label_visibility='hidden')
+            st.form_submit_button('Submit')
+        # for i in range(st.session_state['received_requests'].shape[0]):
+            # create_requests_with_button(i)
 
     sent_requests = get_rows(f"""select R.DATE
         ,S.EMPLOYEE
