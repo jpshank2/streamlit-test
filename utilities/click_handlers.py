@@ -117,20 +117,24 @@ def submit_review(session):
 
     session['project_input'] = ''
 
-    from time import sleep
-    from streamlit import write, session_state
-    from datetime import datetime
+    for each in list(session.keys()):
+        if each not in session['master_states']:
+            del session[each]
 
-    sleep(3)
+    # from time import sleep
+    # from streamlit import write, session_state
+    # from datetime import datetime
 
-    session['received_requests'] = get_new_data(f"""select R.DATE
-            ,S.EMPLOYEE
-            ,R.PROJECT
-            ,R.IDX
-        from people.requests R
-            INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
-        WHERE R.REVIEW_LINK IS NULL
-            AND R.RECIPIENT = {session['user']['STAFFINDEX'].iloc[0]}
-        ORDER BY R.DATE;""", datetime.now())
+    # sleep(3)
+
+    # session['received_requests'] = get_new_data(f"""select R.DATE
+    #         ,S.EMPLOYEE
+    #         ,R.PROJECT
+    #         ,R.IDX
+    #     from people.requests R
+    #         INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
+    #     WHERE R.REVIEW_LINK IS NULL
+    #         AND R.RECIPIENT = {session['user']['STAFFINDEX'].iloc[0]}
+    #     ORDER BY R.DATE;""", datetime.now())
     
-    write(session['received_requests'])
+    # write(session['received_requests'])
