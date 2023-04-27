@@ -3,10 +3,6 @@ from PIL import Image
 from requests import get
 from io import BytesIO
 from utilities.loading_screen import loading
-from utilities.queries import get_rows
-from utilities.click_handlers import fill_request, submit_review
-from datetime import datetime
-from plotly.express import pie
 
 st.set_page_config(
     page_title='Magnify | Morale',
@@ -24,13 +20,13 @@ if 'company' not in st.session_state:
 
 if 'company' in st.session_state:
     
-    for session in list(st.session_state.keys()):
-        if session not in st.session_state['master_states']:
-            del st.session_state[session]
+    # for session in list(st.session_state.keys()):
+    #     if session not in st.session_state['master_states']:
+    #         del st.session_state[session]
 
     st.markdown('# Magnify Morale')
 
-    with st.form('morale_form'):
+    with st.form('morale_form', clear_on_submit=True):
         st.markdown('## Rate your morale within your team:')
         st.radio('I am enthusiastic about the owth that I do for my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
         st.radio('I find the work that I do for my team of meaning and purpose', (1, 2, 3, 4, 5, 6, 7), horizontal=True)

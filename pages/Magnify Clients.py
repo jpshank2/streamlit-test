@@ -22,9 +22,9 @@ if 'company' not in st.session_state:
 
 if 'company' in st.session_state:
     
-    for session in list(st.session_state.keys()):
-        if session not in st.session_state['master_states']:
-            del st.session_state[session]
+    # for session in list(st.session_state.keys()):
+    #     if session not in st.session_state['master_states']:
+    #         del st.session_state[session]
 
     st.markdown("# Enter a new client")
     # ncto.clientTakeOn(st, conn)

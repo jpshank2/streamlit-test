@@ -18,8 +18,8 @@ if 'company' not in st.session_state:
 
 if 'company' in st.session_state:
     
-    for session in list(st.session_state.keys()):
-        if session not in st.session_state['master_states']:
-            del st.session_state[session]
+    # for session in list(st.session_state.keys()):
+    #     if session not in st.session_state['master_states']:
+    #         del st.session_state[session]
 
     st.write('<iframe src="https://api.bmss.com/cpa" width="1500" height="900"></iframe>', unsafe_allow_html=True)
