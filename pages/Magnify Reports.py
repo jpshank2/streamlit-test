@@ -63,7 +63,7 @@ if 'company' in st.session_state:
 #     D.AGING_PERIOD_SORT, 
 #     D.AGING_PERIOD as OG_PERIOD, 
 #     D.MONTH_NAME AS MONTH
-# from trans_ar ar
+# from PE.TRANS_AR ar
 #     inner join dim_client_master c on c.contindex = ar.contindex
 #     inner join dim_dates d on d.calendar_date = ar.debttrandate
 # where DEBTTRANDATE >= date_from_parts(year(current_timestamp) - 3, 1, 1);""")

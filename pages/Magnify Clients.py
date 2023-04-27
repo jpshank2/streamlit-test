@@ -47,7 +47,7 @@ if 'company' in st.session_state:
         if 'industries' not in st.session_state:
             st.session_state['industries'] = get_rows("SELECT * FROM DIM_INDUSTRIES WHERE ACTIVE = true;", st.session_state['today'])
         if 'contacts' not in st.session_state:
-            st.session_state['contacts'] = get_rows("SELECT * FROM DIM_CONTACTS WHERE CONTTYPE = 1;", st.session_state['today'])
+            st.session_state['contacts'] = get_rows("SELECT * FROM PE.DIM_CONTACTS WHERE CONTTYPE = 1;", st.session_state['today'])
         if 'services' not in st.session_state:
             st.session_state['services'] = get_rows("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE", st.session_state['today'])
         if 'newclient' not in st.session_state:

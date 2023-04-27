@@ -13,7 +13,7 @@ pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 def create_ar_reports(st):
     try:
         rows = get_rows("""SELECT AR.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
-            from TRANS_AR AR 
+            from PE.TRANS_AR AR 
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE 
             WHERE DEBTTRANUNPAID <> 0;""", st.session_state['today'])
@@ -83,7 +83,7 @@ def level_4_ar(st):
     D.AGING_PERIOD_SORT, 
     D.AGING_PERIOD as OG_PERIOD, 
     D.MONTH_NAME AS MONTH
-from TRANS_AR AR
+from PE.TRANS_AR AR
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
 WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
