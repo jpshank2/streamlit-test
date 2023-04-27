@@ -86,7 +86,7 @@ if 'company' in st.session_state:
             INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
         WHERE R.REVIEW_LINK IS NULL
             AND R.RECIPIENT = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-        ORDER BY R.DATE;""", st.session_state['today'])
+        ORDER BY R.DATE;""")
 
     request.markdown('#### My Received Outstanding Requests:')
 
