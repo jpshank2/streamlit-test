@@ -28,7 +28,7 @@ if 'company' in st.session_state:
 
     with st.form('morale_form', clear_on_submit=True):
         st.markdown('## Rate your morale within your team:')
-        st.radio('I am enthusiastic about the owth that I do for my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
+        st.radio('I am enthusiastic about the work that I do for my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
         st.radio('I find the work that I do for my team of meaning and purpose', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
         st.radio('I am proud of the work that I do for my team', (1, 2, 3, 4, 5, 6, 7), horizontal=True)
         st.radio('To me, the work that I do for my team is appropriately challenging', (1, 2, 3, 4, 5, 6, 7), horizontal=True)

@@ -15,7 +15,7 @@ def screen(st):
         with warnings:
             st.warning('Please select either new or existing client!')
 
-    rightCol.selectbox('Client Office', [''] + [i for i in st.session_state.offices.OFFICENAME], key='general_office')
+    rightCol.selectbox('Client Office', ['', 'ATL', 'NYC', 'LAS'], key='general_office')#[''] + [i for i in st.session_state.offices.OFFICENAME], key='general_office')
     st.session_state.valid[1] = validate_dropdown(st.session_state.general_office, [''])
 
     if not st.session_state.valid[1]:

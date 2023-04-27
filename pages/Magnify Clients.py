@@ -38,8 +38,8 @@ if 'company' in st.session_state:
             st.session_state['valid'] = [True]
         if 'switches' not in st.session_state:
             st.session_state['switches'] = get_rows(f"SELECT * FROM CONFIGURATIONS.NCTO;", st.session_state['today'])
-        if 'offices' not in st.session_state:
-            st.session_state['offices'] = get_rows('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;', st.session_state['today'])
+        # if 'offices' not in st.session_state:
+        #     st.session_state['offices'] = get_rows('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;', st.session_state['today'])
         if 'clients' not in st.session_state:
             st.session_state['clients'] = get_rows("""SELECT a.name as CLIENT, concat(a.name, ' - ', code) as CLIENTDISPLAY, CODE, CONTINDEX, STATUS, OFFICE, CLIENT_ORIGINATOR_INDEX, strtok_to_array(code, '-')[0]::string parent, strtok_to_array(code, '-')[1]::string child FROM DIM_CLIENT_MASTER C
     inner join anonymous.dim_client_anonymous a on a.contidx = c.contindex and a.name is not null
