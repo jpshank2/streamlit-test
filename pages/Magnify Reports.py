@@ -21,6 +21,10 @@ if 'company' not in st.session_state:
     loading(st)
 
 if 'company' in st.session_state:
+    
+    for session in list(st.session_state.key()):
+        if session not in st.session_state['master_states']:
+            del st.session_state[session]
 
 # if 'conn' not in st.session_state:
 #     st.session_state['conn'] = init_connection()

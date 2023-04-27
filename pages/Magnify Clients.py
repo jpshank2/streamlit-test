@@ -21,6 +21,11 @@ if 'company' not in st.session_state:
     loading(st)
 
 if 'company' in st.session_state:
+    
+    for session in list(st.session_state.key()):
+        if session not in st.session_state['master_states']:
+            del st.session_state[session]
+
     st.markdown("# Enter a new client")
     # ncto.clientTakeOn(st, conn)
 
@@ -37,8 +42,6 @@ if 'company' in st.session_state:
             st.session_state['offices'] = get_rows('SELECT * FROM DIM_OFFICES WHERE OFFICEINDEX BETWEEN 1 AND 4;')
         if 'clients' not in st.session_state:
             st.session_state['clients'] = get_rows("SELECT CLIENT, CLIENTDISPLAY, CODE, CONTINDEX, STATUS, OFFICE, CLIENT_ORIGINATOR_INDEX, strtok_to_array(code, '-')[0]::string parent, strtok_to_array(code, '-')[1]::string child FROM DIM_CLIENT_MASTER WHERE NOT RLIKE(CODE, '.*[a-z].*', 'i');")
-        if 'staff' not in st.session_state:
-            st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
         if 'entities' not in st.session_state:
             st.session_state['entities'] = get_rows("SELECT * FROM DIM_ENTITIES;")
         if 'industries' not in st.session_state:
@@ -48,6 +51,6 @@ if 'company' in st.session_state:
         if 'services' not in st.session_state:
             st.session_state['services'] = get_rows("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE")
         if 'newclient' not in st.session_state:
-            st.session_state['newclient'] = loads(st.session_state['switches'].SESSION.iloc[0])#{'general': [], 'client': [], 'contact': [], 'billings': [], 'attributes': [], 'services': [], 'review': []}
-
+            st.session_state['newclient'] = loads(st.session_state['switches'].SESSION.iloc[0])
+            
     clientTakeOn(st)

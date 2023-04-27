@@ -36,3 +36,7 @@ def loading(st):
                 st.session_state['fye'] = st.session_state['today'].year if st.session_state['today'].month < st.session_state['company'].FISCAL_MONTH.iloc[0] else st.session_state['today'].year + 1
             if 'color_map' not in st.session_state:
                 st.session_state['color_map'] = get_rows(f"SELECT * FROM CONFIGURATIONS.SERVICE_COLORS")
+            if 'master_states' not in st.session_state:
+                st.session_state['master_states'] = ['company', 'conn', 'user', 'level', 'today', 'fye', 'color_map', 'master_states', 'staff']
+            if 'staff' not in st.session_state:
+                st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")

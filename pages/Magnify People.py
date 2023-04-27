@@ -22,10 +22,13 @@ two.image(MainHeaderImage, use_column_width = True)
 if 'company' not in st.session_state:
     loading(st)
 
-if 'staff' not in st.session_state:
-    st.session_state['staff'] = get_rows("SELECT * FROM DIM_STAFF_MASTER WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';")
-
 if 'company' in st.session_state:
+    
+    for session in list(st.session_state.key()):
+        if session not in st.session_state['master_states']:
+            del st.session_state[session]
+
+    
     st.markdown('# Magnify People')
     if 'req_link' not in st.session_state:
         st.session_state['req_link'] = 0
