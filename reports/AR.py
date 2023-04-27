@@ -16,7 +16,7 @@ def create_ar_reports(st):
             from TRANS_AR AR 
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE 
-            WHERE DEBTTRANUNPAID <> 0;""")
+            WHERE DEBTTRANUNPAID <> 0;""", st.session_state['today'])
 
         office_office_AR = rows[['OFFICE', 'DEBTTRANUNPAID']]
         office_office_AR = office_office_AR.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
@@ -87,7 +87,7 @@ from TRANS_AR AR
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
 WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
-""")
+""", st.session_state['today'])
 
     try:
         static_one, static_two, static_three, static_four, static_five = st.columns(5)

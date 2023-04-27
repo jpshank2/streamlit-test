@@ -1,4 +1,4 @@
-from utilities.queries import insert_rows, update_rows, get_rows
+from utilities.queries import insert_rows, update_rows, get_rows, get_new_data
 from random import randint
 from json import loads
 from streamlit import cache_resource, write
@@ -118,10 +118,12 @@ def submit_review(session):
     session['project_input'] = ''
 
     from time import sleep
+    from streamlit import write, session_state
+    from datetime import datetime
 
     sleep(3)
 
-    session['received_requests'] = get_rows(f"""select R.DATE
+    session['received_requests'] = get_new_data(f"""select R.DATE
             ,S.EMPLOYEE
             ,R.PROJECT
             ,R.IDX
@@ -129,6 +131,6 @@ def submit_review(session):
             INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
         WHERE R.REVIEW_LINK IS NULL
             AND R.RECIPIENT = {session['user']['STAFFINDEX'].iloc[0]}
-        ORDER BY R.DATE;""")
-    from streamlit import write
+        ORDER BY R.DATE;""", datetime.now())
+    
     write(session['received_requests'])

@@ -34,10 +34,12 @@ def validation_company(domain):
         conn.close()
         return {'process': 'validation_company getting company data', 'error': e}
     
-
+def get_new_data(query):
+    update_timestamp = 1
+    return get_rows(query, update_timestamp)
 
 @cache_data(ttl=3600)
-def get_rows(query):
+def get_rows(query, timestamp):
 
     if 'conn' in session_state:
         conn = session_state['conn']

@@ -115,7 +115,8 @@ from TRANS_WIP WIP
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = WIP.STAFFINDEX
 WHERE TRANSTYPE = 1
-    AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""")
+    AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""", st.session_state['today'])
+
     try:
         benchmark_df = wip_df[['STAFFINDEX', 'LEVEL', 'BILLABLEHOURS', 'WIPHOURS', 'WIPDATE', 'WIPBILLED', 'WIPAMOUNT', 'BILLABLE']].copy()
         wip_df = wip_df[wip_df['STAFFINDEX'] == st.session_state['user']['STAFFINDEX'].iloc[0]]
@@ -233,7 +234,7 @@ from TRANS_WIP WIP
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN DIM_STAFF_MASTER S ON S.STAFFINDEX = WIP.STAFFINDEX
-WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3);""")
+WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3);""", st.session_state['today'])
 
     try:
         static_one, static_two, static_three, static_four, static_five = st.columns(5)

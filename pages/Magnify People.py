@@ -85,7 +85,7 @@ if 'company' in st.session_state:
             INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
         WHERE R.REVIEW_LINK IS NULL
             AND R.RECIPIENT = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-        ORDER BY R.DATE;""")
+        ORDER BY R.DATE;""", st.session_state['today'])
 
     request.markdown('#### My Received Outstanding Requests:')
 
@@ -95,7 +95,8 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         with request.form('received_requests'):
-            outstanding_receieved = st.radio('hidden label', options=(i[0][4] for i in st.session_state['received_requests'].iterrows()), label_visibility='hidden')
+            recieve_options = (i[0][4] for i in st.session_state['received_requests'].iterrows())
+            outstanding_receieved = st.radio('hidden label', options=recieve_options, label_visibility='hidden')
             st.form_submit_button('Submit')
         # for i in range(st.session_state['received_requests'].shape[0]):
             # create_requests_with_button(i)
@@ -107,7 +108,7 @@ if 'company' in st.session_state:
         INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.RECIPIENT
     WHERE R.REVIEW_LINK IS NULL
         AND R.SENDER = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-    ORDER BY R.DATE;""")
+    ORDER BY R.DATE;""", st.session_state['today'])
     
     request.markdown('#### My Sent Outstanding Requests')
     if sent_requests.empty:
@@ -129,7 +130,7 @@ if 'company' in st.session_state:
         inner join dim_staff_master s on s.staffindex = r.sender
     where r.recipient = {st.session_state['user']['STAFFINDEX'].iloc[0]}
         AND r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
-    ORDER BY R.DATE;""")
+    ORDER BY R.DATE;""", st.session_state['today'])
     
     review_table.dataframe(reviews, use_container_width=True)
 

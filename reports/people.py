@@ -27,7 +27,7 @@ def level_4_people(st):
         FROM trans_wip
         WHERE wipdate >= '2023-01-01'
         GROUP BY STAFFINDEX, month(WIPDATE)) WIP ON WIP.STAFFINDEX = P.STAFF AND WIP.WIPMONTH = MONTH(P.DATE) 
-        ORDER BY STAFF, DATE;""")
+        ORDER BY STAFF, DATE;""", st.session_state['today'])
 
     boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, hover_name='EMPLOYEE', hover_data={'EMPLOYEE': False, 'AGG': True, 'ENTHUSIASM': True, 'MEANING': True, 'PRIDE': True, 'CHALLENGE': True, 'ENERGY': True, 'STRONG': True, 'RECOVERY': True, 'ENDURANCE': True}, title='Staff with Significant Morale Drops')
 
@@ -39,7 +39,7 @@ def level_4_people(st):
         from people.morale m
             inner join dim_staff_master s on s.staffindex = m.staff
         where s.staff_status = 'Active' and
-            s.level not in ('No Selection', 'Unknown');""")
+            s.level not in ('No Selection', 'Unknown');""", st.session_state['today'])
 
     from pandas import to_datetime
     morale_df['DATE'] = to_datetime(morale_df['DATE'])
@@ -87,7 +87,7 @@ def level_4_people(st):
         inner join dim_staff_master s on s.staffindex = r.sender
         inner join dim_staff_master rec on rec.staffindex = r.recipient
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
-    ORDER BY R.DATE;""")
+    ORDER BY R.DATE;""", st.session_state['today'])
 
     review_pie, review_tab = st.columns(2)
 
