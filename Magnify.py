@@ -40,7 +40,4 @@ if 'company' in st.session_state:
     else:
         st.session_state['level'] = 4
 
-    st.write(level_pick)
-    st.write(st.session_state['level'])
-
     st.markdown("This is the Abacus Technologies test site for creating streamlit apps for Business Intelligence. If you are interested in our services, please [email us](mailto:bizintel@abacustechnologies.com?subject=Streamlit).")
