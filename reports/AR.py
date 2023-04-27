@@ -12,9 +12,10 @@ pie_style = {'legend_font_size': 18, 'title_font_size': 24, 'font_size': 18}
 
 def create_ar_reports(st):
     try:
-        rows = get_rows("""SELECT AR.*, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
+        rows = get_rows("""SELECT AR.*, A.NAME AS CLIENT_NAME, C.*, D.AGING_PERIOD_SORT, D.AGING_PERIOD as OG_PERIOD 
             from PE.TRANS_AR AR 
                 INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+                INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX
                 INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE 
             WHERE DEBTTRANUNPAID <> 0;""", st.session_state['today'])
 
@@ -41,9 +42,9 @@ def create_ar_reports(st):
 
             if levels[1] != 'All':
                 office_AR_DF = rows[(rows['OFFICE'] == levels[0]) & (rows['CLIENTPARTNER'] == levels[1])]
-                office_AR_DF = office_AR_DF[['CLIENT', 'DEBTTRANUNPAID']]
-                office_AR_DF = office_AR_DF.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
-                yVal = 'CLIENT'
+                office_AR_DF = office_AR_DF[['CLIENT_NAME', 'DEBTTRANUNPAID']]
+                office_AR_DF = office_AR_DF.groupby('CLIENT_NAME', as_index=False).agg(OUTSTANDING_AR = ('DEBTTRANUNPAID', 'sum')).reset_index()
+                yVal = 'CLIENT_NAME'
                 title = f'{levels[1]}\'s {levels[0]} AR by Client w/ drilldown'
                 
         st.write(bar(office_AR_DF, x='OUTSTANDING_AR', y=yVal, orientation='h', barmode='group', title=title, text='OUTSTANDING_AR'))
@@ -77,14 +78,22 @@ def level_4_ar(st):
     AR.DEBTTRANTYPE,
     AR.CONTINDEX, 
     AR.DEBTTRANDATE AS AR_DATE, 
-    C.CLIENT_PARTNER, 
-    C.CLIENT, 
-    C.OFFICE, 
+    CP.STAFFNAME AS CLIENT_PARTNER, 
+    A.NAME AS CLIENT, 
+    CASE 
+        WHEN C.OFFICE = 'BHM' THEN 'ATL'
+        WHEN C.OFFICE = 'GAD' THEN 'LAS'
+        WHEN C.OFFICE = 'HSV' THEN 'NYC'
+        WHEN C.OFFICE = 'AO' THEN 'MPS'
+        ELSE C.OFFICE
+    END AS OFFICE, 
     D.AGING_PERIOD_SORT, 
     D.AGING_PERIOD as OG_PERIOD, 
     D.MONTH_NAME AS MONTH
 from PE.TRANS_AR AR
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+    INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
+    INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
 WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
 """, st.session_state['today'])

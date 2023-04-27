@@ -22,4 +22,4 @@ if 'company' in st.session_state:
     #     if session not in st.session_state['master_states']:
     #         del st.session_state[session]
 
-    st.write('<iframe src="https://api.bmss.com/cpa" width="1500" height="900"></iframe>', unsafe_allow_html=True)
+    st.write('<iframe src="https://app.powerbi.com/view?r=eyJrIjoiYmFhZDMyZDYtZDU4Mi00NTViLWFjYzYtZTJlMjJiMjExN2ZkIiwidCI6IjU2N2NmMjc1LTQ1NGUtNGI1ZC04ZTI1LTliMTQ5MGJkZTFiNCIsImMiOjN9" width="1500" height="900"></iframe>', unsafe_allow_html=True)
