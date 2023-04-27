@@ -94,7 +94,7 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         with request.form('received_requests'):
-            outstanding_receieved = st.radio(options=(i for i in st.session_state['received_requests']), label_visibility='hidden')
+            outstanding_receieved = st.radio('hidden label', options=(i for i in st.session_state['received_requests']), label_visibility='hidden')
             st.form_submit_button('Submit')
         # for i in range(st.session_state['received_requests'].shape[0]):
             # create_requests_with_button(i)
