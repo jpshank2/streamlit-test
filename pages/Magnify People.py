@@ -80,6 +80,7 @@ if 'company' in st.session_state:
             ,S.EMPLOYEE
             ,R.PROJECT
             ,R.IDX
+            ,CONCAT('**', r.project, '** from **', s.employee, '**') as request_string
         from people.requests R
             INNER JOIN dim_staff_master S ON S.STAFFINDEX = R.SENDER
         WHERE R.REVIEW_LINK IS NULL
@@ -94,7 +95,7 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         with request.form('received_requests'):
-            outstanding_receieved = st.radio('hidden label', options=(f"**{i['PROJECT']}** from **{i['EMPLOYEE']}**" for i in st.session_state['received_requests']), label_visibility='hidden')
+            outstanding_receieved = st.radio('hidden label', options=(i[0][4] for i in st.session_state['received_requests'].iterrows()), label_visibility='hidden')
             st.form_submit_button('Submit')
         # for i in range(st.session_state['received_requests'].shape[0]):
             # create_requests_with_button(i)
