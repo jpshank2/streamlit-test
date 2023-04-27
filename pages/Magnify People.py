@@ -3,7 +3,7 @@ from PIL import Image
 from requests import get
 from io import BytesIO
 from utilities.loading_screen import loading
-from utilities.queries import get_rows
+from utilities.queries import get_rows, get_new_data
 from utilities.click_handlers import submit_review
 from datetime import datetime
 from plotly.express import pie
@@ -77,7 +77,7 @@ if 'company' in st.session_state:
 
     # if 'received_requests' not in st.session_state:
         #st.session_state['received_requests'] 
-    requests = get_rows(f"""select R.DATE
+    requests = get_new_data(f"""select R.DATE
             ,S.EMPLOYEE
             ,R.PROJECT
             ,R.IDX
@@ -92,7 +92,7 @@ if 'company' in st.session_state:
 
     review_request, this_request, remove_request = request.columns([1, 3, 1])
 
-    if st.session_state['received_requests'].empty:
+    if requests.empty:
         request.markdown('No outstanding receieved requests!')
     else:
         # requests = st.session_state['received_requests'].copy()
