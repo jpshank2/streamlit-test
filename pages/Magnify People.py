@@ -4,7 +4,7 @@ from requests import get
 from io import BytesIO
 from utilities.loading_screen import loading
 from utilities.queries import get_rows
-from utilities.click_handlers import fill_request, submit_review
+from utilities.click_handlers import submit_review
 from datetime import datetime
 from plotly.express import pie
 
@@ -17,6 +17,16 @@ st.set_page_config(
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
 one, two, three= st.columns(3)
 two.image(MainHeaderImage, use_column_width = True)
+
+def fill_request(df):
+    staff = df['EMPLOYEE']
+    st.session_state['staff_select'] = [staff]
+    # st.session_state['review_employee'] = [staff]
+    project = df['PROJECT']
+    st.session_state['project_input'] = project
+
+    st.session_state['req_link'] = df['IDX']
+    st.write(st.session_state)
 
 
 if 'company' not in st.session_state:
@@ -78,7 +88,7 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         for i in range(st.session_state['received_requests'].shape[0]):
-            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i], st.session_state))
+            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
             this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
             remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
 

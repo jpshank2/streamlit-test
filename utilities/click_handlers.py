@@ -101,16 +101,6 @@ def convert_df(df):
 def go_to_top(markdown):
     return markdown('[Top of Page](#hello-reports)')
 
-def fill_request(df, session):
-    staff = df['EMPLOYEE']
-    session['staff_select'] = [staff]
-    # session['review_employee'] = [staff]
-    project = df['PROJECT']
-    session['project_input'] = project
-
-    session['req_link'] = df['IDX']
-    write(session)
-
 def submit_review(session):
     # session = st.session_state
 
