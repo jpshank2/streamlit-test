@@ -22,7 +22,7 @@ if 'company' not in st.session_state:
 
 if 'company' in st.session_state:
     
-    for session in list(st.session_state.key()):
+    for session in list(st.session_state.keys()):
         if session not in st.session_state['master_states']:
             del st.session_state[session]
 
@@ -52,5 +52,5 @@ if 'company' in st.session_state:
             st.session_state['services'] = get_rows("SELECT * FROM DIM_SERVICES WHERE SERVNON = FALSE")
         if 'newclient' not in st.session_state:
             st.session_state['newclient'] = loads(st.session_state['switches'].SESSION.iloc[0])
-            
+
     clientTakeOn(st)
