@@ -75,8 +75,9 @@ if 'company' in st.session_state:
         st.text_input('What Job or Project?', key='request_project')
         st.form_submit_button('Request a Review')
 
-    if 'received_requests' not in st.session_state:
-        st.session_state['received_requests'] = get_rows(f"""select R.DATE
+    # if 'received_requests' not in st.session_state:
+        #st.session_state['received_requests'] 
+    requests = get_rows(f"""select R.DATE
             ,S.EMPLOYEE
             ,R.PROJECT
             ,R.IDX
@@ -94,7 +95,7 @@ if 'company' in st.session_state:
     if st.session_state['received_requests'].empty:
         request.markdown('No outstanding receieved requests!')
     else:
-        requests = st.session_state['received_requests'].copy()
+        # requests = st.session_state['received_requests'].copy()
         recieve_options = (i[0][4] for i in requests.iterrows())
         with request.form('received_requests'):
             outstanding_receieved = st.radio('hidden label', options=recieve_options, label_visibility='hidden')
