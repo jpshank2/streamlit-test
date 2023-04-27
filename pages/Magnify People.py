@@ -28,6 +28,11 @@ def fill_request(df):
     st.session_state['req_link'] = df['IDX']
     st.write(st.session_state)
 
+def create_requests_with_button(i):
+    review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
+    this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
+    remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
+
 
 if 'company' not in st.session_state:
     loading(st)
@@ -88,9 +93,7 @@ if 'company' in st.session_state:
         request.markdown('No outstanding receieved requests!')
     else:
         for i in range(st.session_state['received_requests'].shape[0]):
-            review_request.button(":heavy_check_mark:", help='Fill out this requested review!', key=f'review_{i}', on_click=fill_request(st.session_state['received_requests'].iloc[i]))
-            this_request.markdown(f"**{st.session_state['received_requests'].iloc[i]['PROJECT']}** from **{st.session_state['received_requests'].iloc[i]['EMPLOYEE']}**")
-            remove_request.button(":x:", help='Remove this requested review', key=f'remove_{i}')
+            create_requests_with_button(i)
 
     sent_requests = get_rows(f"""select R.DATE
         ,S.EMPLOYEE
