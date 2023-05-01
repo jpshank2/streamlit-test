@@ -28,10 +28,11 @@ def loading(st):
             if 'user' not in st.session_state:
                 st.session_state['user'] = get_rows(f"SELECT S.*, L.LEVEL_PERMISSION FROM PE.DIM_ANON_STAFF S INNER JOIN CONFIGURATIONS.LEVELS L ON L.LEVEL_DESC = S.LEVEL WHERE STAFF_EMAIL = '{email}'", st.session_state['today'])
             if 'level' not in st.session_state:
-                if st.session_state['user'].LEVEL_PERMISSION.iloc[0] == 4 and st.session_state['user'].DEPARTMENT.iloc[0] == 'Steering Committee':
-                    st.session_state['level'] = 5
-                else:
-                    st.session_state['level'] = st.session_state['user'].LEVEL_PERMISSION.iloc[0]
+                st.session_state['level'] = 4
+                # if st.session_state['user'].LEVEL_PERMISSION.iloc[0] == 4 and st.session_state['user'].DEPARTMENT.iloc[0] == 'Steering Committee':
+                #     st.session_state['level'] = 5
+                # else:
+                #     st.session_state['level'] = st.session_state['user'].LEVEL_PERMISSION.iloc[0]
             if 'fye' not in st.session_state:
                 st.session_state['fye'] = st.session_state['today'].year if st.session_state['today'].month < st.session_state['company'].FISCAL_MONTH.iloc[0] else st.session_state['today'].year + 1
             if 'color_map' not in st.session_state:
