@@ -127,8 +127,8 @@ WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
         static_four.metric(label='Target < 10%', value='{:.2f}%'.format(AR_60_90), delta=('% AR in 61-90 Days' if AR_60_90 < 10 else '-% AR in 61-90 Days'))
         static_five.metric(label='Target < 5%', value='{:.2f}%'.format(overdue_AR), delta=('% AR over 90 Days' if overdue_AR < 5 else '-% AR over 90 Days'))
 
-        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in ar_df.CLIENT_PARTNER.sort_values().unique()])
-        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in ar_df.OFFICE.unique()])
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in ar_df.CLIENT_PARTNER.sort_values().unique()], key='ar_partner_filter')
+        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in ar_df.OFFICE.unique()], key='ar_office_filter')
 
         if partner_filter == 'All' and office_filter == 'All':
             filtered_df = ar_df.copy()

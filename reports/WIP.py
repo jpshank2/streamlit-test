@@ -282,8 +282,8 @@ WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3);""", st.session_state['toda
         static_four.metric(label='Target < 15%', value='{:.2f}%'.format(wip_60_90), delta=('% WIP in 61-90 Days' if wip_60_90 < 15 else '-% WIP in 61-90 Days'))
         static_five.metric(label='Target < 5%', value='{:.2f}%'.format(overdue_wip), delta=('% WIP over 90 Days' if overdue_wip < 5 else '-% WIP over 90 Days'))
 
-        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENT_PARTNER.sort_values().unique()])
-        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()])
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in wip_df.CLIENT_PARTNER.sort_values().unique()], key='wip_partner_filter')
+        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in wip_df.OFFICE.unique()], key='wip_office_filter')
 
         if partner_filter == 'All' and office_filter == 'All':
             filtered_df = wip_df.copy()
