@@ -99,7 +99,7 @@ def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
 
 def go_to_top(markdown):
-    return markdown('[Top of Page](#hello-reports)')
+    return markdown('[Top of Page](#magnify-reports)')
 
 def submit_review(session):
     # session = st.session_state

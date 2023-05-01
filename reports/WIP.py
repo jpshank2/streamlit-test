@@ -16,7 +16,7 @@ def my_hours_month_service(wip, st):
     fye_sort = ['May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April']
     fye = st.session_state['fye']
 
-    fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 1, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye, fym, 1)) & (wip['BILLABLE'] == 'True')]
+    fy_wip_df = wip[(wip['WIPDATE'] >= datetime(fye - 2, fym, 1).strftime('%Y-%m-%d')) & (wip['WIPDATE'] < datetime(fye -1, fym, 1)) & (wip['BILLABLE'] == 'True')]
     
     fye_wip_service_df = fy_wip_df[['WIPHOURS', 'SERVICETITLE', 'MONTH']].groupby(['MONTH', 'SERVICETITLE'], as_index=False).agg(WIP_HOURS=('WIPHOURS', 'sum')).reset_index()[['MONTH', 'SERVICETITLE', 'WIP_HOURS']]
 
@@ -104,16 +104,24 @@ def level_1_wip(st):
     CASE WHEN WIP.BILLABLE = 'True' THEN WIP.WIPHOURS ELSE 0 END AS BILLABLEHOURS, 
     CASE WHEN WIP.BILLABLE = 'False' THEN WIP.WIPHOURS ELSE 0 END AS NONBILLABLEHOURS,
     WIP.BILLABLE,
-    C.CLIENT_PARTNER, 
-    C.CLIENT, 
-    C.OFFICE, 
+    CP.EMPLOYEE AS CLIENT_PARTNER, 
+    A.NAME AS CLIENT, 
+    CASE 
+        WHEN C.OFFICE = 'BHM' THEN 'ATL'
+        WHEN C.OFFICE = 'GAD' THEN 'LAS'
+        WHEN C.OFFICE = 'HSV' THEN 'NYC'
+        WHEN C.OFFICE = 'AO' THEN 'MPS'
+        ELSE C.OFFICE
+    END AS OFFICE, 
     D.AGING_PERIOD_SORT, 
     D.AGING_PERIOD as OG_PERIOD, 
     D.MONTH_NAME AS MONTH
 from PE.TRANS_WIP WIP
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
+    INNER JOIN anonymous.dim_client_anonymous A ON C.CONTINDEX = A.CONTIDX AND A.NAME IS NOT NULL
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN PE.DIM_ANON_STAFF S ON S.STAFFINDEX = WIP.STAFFINDEX
+    INNER JOIN PE.DIM_ANON_STAFF CP ON CP.STAFFINDEX = C.CLIENT_PARTNER_IDX
 WHERE TRANSTYPE = 1
     AND S.LEVEL = '{st.session_state['user']['LEVEL'].iloc[0]}';""", st.session_state['today'])
 
@@ -224,16 +232,24 @@ def level_4_wip(st):
     CASE WHEN WIP.BILLABLE = 'True' THEN WIP.WIPHOURS ELSE 0 END AS BILLABLEHOURS, 
     CASE WHEN WIP.BILLABLE = 'False' THEN WIP.WIPHOURS ELSE 0 END AS NONBILLABLEHOURS,
     WIP.BILLABLE,
-    C.CLIENT_PARTNER, 
-    C.CLIENT, 
-    C.OFFICE, 
+    CP.EMPLOYEE AS CLIENT_PARTNER, 
+    A.NAME AS CLIENT, 
+    CASE 
+        WHEN C.OFFICE = 'BHM' THEN 'ATL'
+        WHEN C.OFFICE = 'GAD' THEN 'LAS'
+        WHEN C.OFFICE = 'HSV' THEN 'NYC'
+        WHEN C.OFFICE = 'AO' THEN 'MPS'
+        ELSE C.OFFICE
+    END AS OFFICE, 
     D.AGING_PERIOD_SORT, 
     D.AGING_PERIOD as OG_PERIOD, 
     D.MONTH_NAME AS MONTH
 from PE.TRANS_WIP WIP
     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = WIP.ContIndex 
+    INNER JOIN anonymous.dim_client_anonymous A ON C.CONTINDEX = A.CONTIDX AND A.NAME IS NOT NULL
     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = WIP.WIPDATE
     INNER JOIN PE.DIM_ANON_STAFF S ON S.STAFFINDEX = WIP.STAFFINDEX
+    INNER JOIN PE.DIM_ANON_STAFF CP ON CP.STAFFINDEX = C.CLIENT_PARTNER_IDX
 WHERE WIPOUTSTANDING <> 0 AND TRANSTYPE IN (1, 2, 3);""", st.session_state['today'])
 
     try:

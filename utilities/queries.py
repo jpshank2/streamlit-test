@@ -5,7 +5,7 @@ from rsa import decrypt, PrivateKey
 from base64 import b64decode
 from ast import literal_eval
 
-@cache_resource(ttl=3600)
+@cache_resource(ttl=43200)
 def init_connection():
     key = ['-----BEGIN RSA PRIVATE KEY-----', secrets['snowflake-encrypted']['secret'].replace(' ', '\n'),'-----END RSA PRIVATE KEY-----']
     conn_string = decrypt(b64decode(session_state['company']['CONNECTION'].iloc[0]), PrivateKey.load_pkcs1(bytes(''.join(key), 'utf-8')))
@@ -38,7 +38,7 @@ def get_new_data(query):
     update_timestamp = 1
     return get_rows(query, update_timestamp)
 
-@cache_data(ttl=3600)
+@cache_data(ttl=43200)
 def get_rows(query, timestamp):
 
     if 'conn' in session_state:
