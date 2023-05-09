@@ -89,6 +89,8 @@ if 'company' in st.session_state:
     review.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
 
     review.button('Submit', key='review_submit')
+
+    review.write(st.session_state)
         
         # st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'session': st.session_state})
     
