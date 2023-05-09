@@ -39,39 +39,6 @@ if 'company' in st.session_state:
     #     if session not in st.session_state['master_states']:
     #         del st.session_state[session]
 
-    st.markdown('# Magnify People')
-    if 'req_link' not in st.session_state:
-        st.session_state['req_link'] = 0
-
-    if 'staff_select' not in st.session_state:
-        st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
-
-    if 'project_input' not in st.session_state:
-        st.session_state['project_input'] = ''
-
-    review, request = st.columns(2)
-    with review.form('review_form', clear_on_submit=True):
-        st.markdown('#### Review a fellow staff')
-        st.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
-
-        st.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
-        
-        st.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
-        
-        st.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
-
-        st.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
-        
-        st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'session': st.session_state})
-    
-    with request.form('request_from', clear_on_submit=True):
-        st.markdown('#### Request a review')
-        st.selectbox('Staff to be reviewed by', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='request_employee')
-        st.text_input('What Job or Project?', key='request_project')
-        st.form_submit_button('Request a Review')
-
-    # if 'received_requests' not in st.session_state:
-        #st.session_state['received_requests'] 
     requests = get_new_data(f"""select R.DATE
             ,S.EMPLOYEE
             ,R.PROJECT
@@ -83,17 +50,68 @@ if 'company' in st.session_state:
             AND R.RECIPIENT = {st.session_state['user']['STAFFINDEX'].iloc[0]}
         ORDER BY R.DATE;""")
 
+    st.markdown('# Magnify People')
+
+    if 'req_link' not in st.session_state:
+        if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
+            st.session_state['req_link'] = 0
+        else:
+            st.session_state['req_link'] = requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].IDX
+
+    if 'staff_select' not in st.session_state:
+        if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
+            st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
+        else:
+            st.session_state['staff_select'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].EMPLOYEE]
+
+    if 'project_input' not in st.session_state:
+        if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
+            st.session_state['project_input'] = ''
+        else:
+            st.session_state['project_input'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].PROJECT]
+
+    review, request = st.columns(2)
+    # with review.form('review_form', clear_on_submit=True):
+    review.markdown('#### Review a fellow staff')
+    review.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
+
+    review.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
+
+    if not requests.empty:
+        review.markdown(' -- OR --')
+
+        review.selectbox('Select a requested review', ['New'] + [i for i in requests.iloc[0].REQUEST_STRING], key='review_request')
+    
+    review.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
+    
+    review.text_area('See more', placeholder='What did this co-worker do well that you\'d like to see more?', key='review_more')
+
+    review.text_area('See less', placeholder='What did this co-worker do that you\'d like to see less?', key='review_less')
+
+    review.button('Submit', key='review_submit')
+        
+        # st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'session': st.session_state})
+    
+    with request.form('request_from', clear_on_submit=True):
+        st.markdown('#### Request a review')
+        st.selectbox('Staff to be reviewed by', [''] + [i for i in st.session_state.staff.EMPLOYEE], key='request_employee')
+        st.text_input('What Job or Project?', key='request_project')
+        st.form_submit_button('Request a Review')
+
+    # if 'received_requests' not in st.session_state:
+        #st.session_state['received_requests'] 
+
     request.markdown('#### My Received Outstanding Requests:')
 
     review_request, this_request, remove_request = request.columns([1, 3, 1])
 
-    if requests.empty:
-        request.markdown('No outstanding receieved requests!')
-    else:
-        recieve_options = (i[1][4] for i in requests.iterrows())
-        with request.form('received_requests'):
-            outstanding_receieved = st.radio('hidden label', options=recieve_options, label_visibility='hidden')
-            st.form_submit_button('Review this Request', on_click=fill_request, args=(outstanding_receieved, requests))
+    # if requests.empty:
+    #     request.markdown('No outstanding receieved requests!')
+    # else:
+    #     recieve_options = (i[1][4] for i in requests.iterrows())
+    #     with request.form('received_requests'):
+    #         outstanding_receieved = st.radio('hidden label', options=recieve_options, label_visibility='hidden')
+    #         st.form_submit_button('Review this Request', on_click=fill_request, args=(outstanding_receieved, requests))
         # for i in range(st.session_state['received_requests'].shape[0]):
             # create_requests_with_button(i)
 
