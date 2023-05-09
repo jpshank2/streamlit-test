@@ -80,7 +80,7 @@ if 'company' in st.session_state:
     if not requests.empty:
         review.markdown(' -- OR --')
 
-        review.selectbox('Select a requested review', ['New'] + [i for i in requests.iloc[0].REQUEST_STRING], key='review_request')
+        review.selectbox('Select a requested review', ['New'] + [i for i in requests.REQUEST_STRING], key='review_request')
     
     review.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
     
@@ -101,9 +101,9 @@ if 'company' in st.session_state:
     # if 'received_requests' not in st.session_state:
         #st.session_state['received_requests'] 
 
-    request.markdown('#### My Received Outstanding Requests:')
+    # request.markdown('#### My Received Outstanding Requests:')
 
-    review_request, this_request, remove_request = request.columns([1, 3, 1])
+    # review_request, this_request, remove_request = request.columns([1, 3, 1])
 
     # if requests.empty:
     #     request.markdown('No outstanding receieved requests!')
