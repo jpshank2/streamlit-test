@@ -147,6 +147,31 @@ def level_4_ar(st):
         static_four.metric(label='Target < 10%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_61_90'].iloc[0]), delta=('% AR in 61-90 Days' if static_metric_ar_df['PERCENT_61_90'].iloc[0] < 10 else '-% AR in 61-90 Days'))
         static_five.metric(label='Target < 5%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_OVERDUE'].iloc[0]), delta=('% AR over 90 Days' if static_metric_ar_df['PERCENT_OVERDUE'].iloc[0] < 5 else '-% AR over 90 Days'))
 
+        unpaid_ar_df = get_rows("""SELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
+            CP.STAFFNAME AS CLIENT_PARTNER, 
+            A.NAME AS CLIENT, 
+            CASE 
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END AS OFFICE
+        from PE.TRANS_AR AR
+            INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+            INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
+            INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
+        WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6)
+        GROUP BY CP.STAFFNAME, 
+            A.NAME, 
+            CASE 
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END;""", st.session_state['today'])
+
     except Exception as e:
         st.write(e)
 
@@ -180,31 +205,6 @@ def level_4_ar(st):
         st.write(e)
     
     try:
-
-        unpaid_ar_df = get_rows("""SELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
-            CP.STAFFNAME AS CLIENT_PARTNER, 
-            A.NAME AS CLIENT, 
-            CASE 
-                WHEN C.OFFICE = 'BHM' THEN 'ATL'
-                WHEN C.OFFICE = 'GAD' THEN 'LAS'
-                WHEN C.OFFICE = 'HSV' THEN 'NYC'
-                WHEN C.OFFICE = 'AO' THEN 'MPS'
-                ELSE C.OFFICE
-            END AS OFFICE
-        from PE.TRANS_AR AR
-            INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
-            INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
-            INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
-        WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6)
-        GROUP BY CP.STAFFNAME, 
-            A.NAME, 
-            CASE 
-                WHEN C.OFFICE = 'BHM' THEN 'ATL'
-                WHEN C.OFFICE = 'GAD' THEN 'LAS'
-                WHEN C.OFFICE = 'HSV' THEN 'NYC'
-                WHEN C.OFFICE = 'AO' THEN 'MPS'
-                ELSE C.OFFICE
-            END;""", st.session_state['today'])
 
         if partner_filter == 'All' and office_filter == 'All':
             filtered_df = unpaid_ar_df.copy()
