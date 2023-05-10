@@ -345,6 +345,7 @@ def level_4_ar(st):
 
         current_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
 
+        filtered_df['CURRENTAR'] = filtered_df['UNPAID_INVOICE'] if filtered_df['AGING_PERIOD'] == '0-30 Days' else 0
         current_df = filtered_df[['UNPAID_INVOICE', 'CURRENTAR', 'OFFICE']]
         current_df = current_df.groupby(['OFFICE']).agg(CURRENT_AR= ('CURRENTAR', 'sum'), OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()
         current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_AR'] / current_df['OUTSTANDING_AR']) * 100, 2)
