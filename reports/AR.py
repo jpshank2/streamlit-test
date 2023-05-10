@@ -271,10 +271,55 @@ def level_4_ar(st):
             key='AR_office_table_download'
         )
     
-    # except Exception as e:
-    #     st.write(e)
+    except Exception as e:
+        st.write(e)
 
-    # try:
+    try:
+
+        aging_df = get_rows("""SELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
+            CP.STAFFNAME AS CLIENT_PARTNER, 
+            A.NAME AS CLIENT, 
+            CASE 
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END AS OFFICE,
+            CASE WHEN D.AGING_PERIOD_SORT > 3 THEN 'Overdue AR'
+                ELSE D.AGING_PERIOD
+            END AS AGING_PERIOD
+        from PE.TRANS_AR AR
+            INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+            INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
+            INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
+            INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
+        WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6)
+        GROUP BY CP.STAFFNAME, 
+            A.NAME, 
+            CASE 
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END,
+            CASE WHEN D.AGING_PERIOD_SORT > 3 THEN 'Overdue AR'
+                ELSE D.AGING_PERIOD
+            END;""", st.session_state['today'])
+        
+        if partner_filter == 'All' and office_filter == 'All':
+            filtered_df = aging_df.copy()
+
+        elif partner_filter == 'All' and office_filter != 'All':
+            filtered_df = aging_df[aging_df['OFFICE'] == office_filter].copy()
+            
+        elif partner_filter != 'All' and office_filter == 'All':
+            filtered_df = aging_df[aging_df['CLIENT_PARTNER'] == partner_filter].copy()
+            
+        else:
+            filtered_df = aging_df[(aging_df['CLIENT_PARTNER'] == partner_filter) & (aging_df['OFFICE'] == office_filter)]
+            
 
         aging_AR = filtered_df[['AGING_PERIOD', 'UNPAID_INVOICE']]
         aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()
