@@ -74,64 +74,140 @@ def level_3_ar(st):
 
 def level_4_ar(st):
     st.markdown('## AR Reports')
-    ar_df = get_rows(f"""SELECT AR.DEBTTRANUNPAID AS UNPAID_INVOICE, 
-    AR.DEBTTRANTYPE,
-    AR.CONTINDEX, 
-    AR.DEBTTRANDATE AS AR_DATE, 
-    CP.STAFFNAME AS CLIENT_PARTNER, 
-    A.NAME AS CLIENT, 
-    CASE 
-        WHEN C.OFFICE = 'BHM' THEN 'ATL'
-        WHEN C.OFFICE = 'GAD' THEN 'LAS'
-        WHEN C.OFFICE = 'HSV' THEN 'NYC'
-        WHEN C.OFFICE = 'AO' THEN 'MPS'
-        ELSE C.OFFICE
-    END AS OFFICE, 
-    D.AGING_PERIOD_SORT, 
-    D.AGING_PERIOD as OG_PERIOD, 
-    D.MONTH_NAME AS MONTH
-from PE.TRANS_AR AR
-    INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
-    INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
-    INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
-    INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
-WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
-""", st.session_state['today'])
+#     ar_df = get_rows(f"""SELECT AR.DEBTTRANUNPAID AS UNPAID_INVOICE, 
+#     AR.DEBTTRANTYPE,
+#     AR.CONTINDEX, 
+#     AR.DEBTTRANDATE AS AR_DATE, 
+#     CP.STAFFNAME AS CLIENT_PARTNER, 
+#     A.NAME AS CLIENT, 
+#     CASE 
+#         WHEN C.OFFICE = 'BHM' THEN 'ATL'
+#         WHEN C.OFFICE = 'GAD' THEN 'LAS'
+#         WHEN C.OFFICE = 'HSV' THEN 'NYC'
+#         WHEN C.OFFICE = 'AO' THEN 'MPS'
+#         ELSE C.OFFICE
+#     END AS OFFICE, 
+#     D.AGING_PERIOD_SORT, 
+#     D.AGING_PERIOD as OG_PERIOD, 
+#     D.MONTH_NAME AS MONTH
+# from PE.TRANS_AR AR
+#     INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+#     INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
+#     INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
+#     INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
+# WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
+# """, st.session_state['today'])
+
+    static_one, static_two, static_three, static_four, static_five = st.columns(5)
+    filter_one, filter_two = st.columns(2)
+    visuals_one, visuals_two = st.columns(2, gap='medium')
+    partner_visual, partner_table = visuals_one.tabs(['Visual', 'Table'])
+    current_visual, current_table = visuals_one.tabs(['Visual', 'Table'])
+    office_visual, office_table = visuals_two.tabs(['Visual', 'Table'])
+    aging_visual, aging_table = visuals_two.tabs(['Visual', 'Table'])
+    dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
+
+        # ar_df['UNPAID_INVOICE'] = ar_df['UNPAID_INVOICE'].round(2)
+        # ar_df['AGING_PERIOD'] = where(ar_df['AGING_PERIOD_SORT'] < 4, ar_df['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
+        # ar_df['CURRENTAR'] = where(ar_df['AGING_PERIOD'] == '0-30 Days AR', ar_df['UNPAID_INVOICE'], 0)
+        # ar_df['30_TO_60'] = where(ar_df['AGING_PERIOD'] == '31-60 Days AR', ar_df['UNPAID_INVOICE'], 0)
+        # ar_df['60_TO_90'] = where(ar_df['AGING_PERIOD'] == '61-90 Days AR', ar_df['UNPAID_INVOICE'], 0)
+        # ar_df['OVERDUEAR'] = where(ar_df['AGING_PERIOD'] == 'Overdue 90+ AR', ar_df['UNPAID_INVOICE'], 0)
+
+        # total_outstanding_AR = round(ar_df['UNPAID_INVOICE'].sum(), 2)
+        # percent_current = round((ar_df['CURRENTAR'].sum() / total_outstanding_AR) * 100, 2)
+        # AR_30_60 = round((ar_df['30_TO_60'].sum() / total_outstanding_AR) * 100, 2)
+        # AR_60_90 = round((ar_df['60_TO_90'].sum() / total_outstanding_AR) * 100, 2)
+        # overdue_AR = round((ar_df['OVERDUEAR'].sum() / total_outstanding_AR) * 100, 2)
+    try:
+        static_metric_ar_df = get_rows("""SELECT SUM(DEBTTRANUNPAID) AS UNPAID_INVOICE
+                ,ROUND(SUM(
+                    CASE WHEN D.AGING_PERIOD_SORT = 1 THEN AR.DEBTTRANUNPAID
+                    ELSE 0 END
+                ) / SUM(DEBTTRANUNPAID), 4) * 100 AS PERCENT_CURR
+                ,ROUND(SUM(
+                    CASE WHEN D.AGING_PERIOD_SORT = 2 THEN AR.DEBTTRANUNPAID
+                    ELSE 0 END
+                ) / SUM(DEBTTRANUNPAID), 4) * 100 AS PERCENT_31_60
+                ,ROUND(SUM(
+                    CASE WHEN D.AGING_PERIOD_SORT = 3 THEN AR.DEBTTRANUNPAID
+                    ELSE 0 END
+                ) / SUM(DEBTTRANUNPAID), 4) * 100 AS PERCENT_61_90
+                ,ROUND(SUM(
+                    CASE WHEN D.AGING_PERIOD_SORT > 3 THEN AR.DEBTTRANUNPAID
+                    ELSE 0 END
+                ) / SUM(DEBTTRANUNPAID), 4) * 100 AS PERCENT_OVERDUE
+            FROM PE.TRANS_AR AR
+                INNER JOIN DIM_DATES D ON D.CALENDAR_DATE = AR.DEBTTRANDATE
+            WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
+
+        static_one.metric(label='Target < $2M', value='${:,.2f}'.format(static_metric_ar_df['UNPAID_INVOICE'].iloc[0]), delta=('Outstanding AR' if static_metric_ar_df['UNPAID_INVOICE'].iloc[0] < 2000000 else '-Outstanding AR'))
+        static_two.metric(label='Target > 75%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_CURR'].iloc[0]), delta=('% AR in Current' if static_metric_ar_df['PERCENT_CURR'].iloc[0] > 75 else '-% AR in Current'))
+        static_three.metric(label='Target < 15%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_31_60'].iloc[0]), delta=('% AR in 31-60 Days' if static_metric_ar_df['PERCENT_31_60'].iloc[0] < 15 else '-% AR in 31-60 Days'))
+        static_four.metric(label='Target < 10%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_61_90'].iloc[0]), delta=('% AR in 61-90 Days' if static_metric_ar_df['PERCENT_61_90'].iloc[0] < 10 else '-% AR in 61-90 Days'))
+        static_five.metric(label='Target < 5%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_OVERDUE'].iloc[0]), delta=('% AR over 90 Days' if static_metric_ar_df['PERCENT_OVERDUE'].iloc[0] < 5 else '-% AR over 90 Days'))
+
+    except Exception as e:
+        st.write(e)
 
     try:
-        static_one, static_two, static_three, static_four, static_five = st.columns(5)
-        filter_one, filter_two = st.columns(2)
-        visuals_one, visuals_two = st.columns(2, gap='medium')
-        partner_visual, partner_table = visuals_one.tabs(['Visual', 'Table'])
-        current_visual, current_table = visuals_one.tabs(['Visual', 'Table'])
-        office_visual, office_table = visuals_two.tabs(['Visual', 'Table'])
-        aging_visual, aging_table = visuals_two.tabs(['Visual', 'Table'])
-        dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
+        partner_df = get_rows("""SELECT DISTINCT CP.STAFFNAME
+            FROM PE.TRANS_AR AR
+                INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
+                INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX
+            WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
 
-        ar_df['UNPAID_INVOICE'] = ar_df['UNPAID_INVOICE'].round(2)
-        ar_df['AGING_PERIOD'] = where(ar_df['AGING_PERIOD_SORT'] < 4, ar_df['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
-        ar_df['CURRENTAR'] = where(ar_df['AGING_PERIOD'] == '0-30 Days AR', ar_df['UNPAID_INVOICE'], 0)
-        ar_df['30_TO_60'] = where(ar_df['AGING_PERIOD'] == '31-60 Days AR', ar_df['UNPAID_INVOICE'], 0)
-        ar_df['60_TO_90'] = where(ar_df['AGING_PERIOD'] == '61-90 Days AR', ar_df['UNPAID_INVOICE'], 0)
-        ar_df['OVERDUEAR'] = where(ar_df['AGING_PERIOD'] == 'Overdue 90+ AR', ar_df['UNPAID_INVOICE'], 0)
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in partner_df.STAFFNAME], key='ar_partner_filter')
+    except Exception as e:
+        st.write(e)
+    
+    try:
+        office_df = get_rows("""SELECT DISTINCT 
+            CASE
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END AS OFFICE
+        FROM PE.TRANS_AR AR
+            INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
+        WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
 
-        total_outstanding_AR = round(ar_df['UNPAID_INVOICE'].sum(), 2)
-        percent_current = round((ar_df['CURRENTAR'].sum() / total_outstanding_AR) * 100, 2)
-        AR_30_60 = round((ar_df['30_TO_60'].sum() / total_outstanding_AR) * 100, 2)
-        AR_60_90 = round((ar_df['60_TO_90'].sum() / total_outstanding_AR) * 100, 2)
-        overdue_AR = round((ar_df['OVERDUEAR'].sum() / total_outstanding_AR) * 100, 2)
+        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in office_df.OFFICE], key='ar_office_filter')
 
-        static_one.metric(label='Target < $2M', value='${:,.2f}'.format(total_outstanding_AR), delta=('Outstanding AR' if total_outstanding_AR < 2000000 else '-Outstanding AR'))
-        static_two.metric(label='Target > 75%', value='{:.2f}%'.format(percent_current), delta=('% AR in Current' if percent_current > 75 else '-% AR in Current'))
-        static_three.metric(label='Target < 15%', value='{:.2f}%'.format(AR_30_60), delta=('% AR in 31-60 Days' if AR_30_60 < 15 else '-% AR in 31-60 Days'))
-        static_four.metric(label='Target < 10%', value='{:.2f}%'.format(AR_60_90), delta=('% AR in 61-90 Days' if AR_60_90 < 10 else '-% AR in 61-90 Days'))
-        static_five.metric(label='Target < 5%', value='{:.2f}%'.format(overdue_AR), delta=('% AR over 90 Days' if overdue_AR < 5 else '-% AR over 90 Days'))
+    except Exception as e:
+        st.write(e)
+    
+    try:
 
-        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in ar_df.CLIENT_PARTNER.sort_values().unique()], key='ar_partner_filter')
-        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in ar_df.OFFICE.unique()], key='ar_office_filter')
+        unpaid_ar_df = get_rows("""SELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
+            CP.STAFFNAME AS CLIENT_PARTNER, 
+            A.NAME AS CLIENT, 
+            CASE 
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END AS OFFICE
+        from PE.TRANS_AR AR
+            INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
+            INNER JOIN ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
+            INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
+        WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6)
+        GROUP BY CP.STAFFNAME, 
+            A.NAME, 
+            CASE 
+                WHEN C.OFFICE = 'BHM' THEN 'ATL'
+                WHEN C.OFFICE = 'GAD' THEN 'LAS'
+                WHEN C.OFFICE = 'HSV' THEN 'NYC'
+                WHEN C.OFFICE = 'AO' THEN 'MPS'
+                ELSE C.OFFICE
+            END;""", st.session_state['today'])
 
         if partner_filter == 'All' and office_filter == 'All':
-            filtered_df = ar_df.copy()
+            filtered_df = unpaid_ar_df.copy()
 
             partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER']]
             partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
@@ -141,7 +217,7 @@ WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
             office_df = office_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
             office_y_val = 'OFFICE'
         elif partner_filter == 'All' and office_filter != 'All':
-            filtered_df = ar_df[ar_df['OFFICE'] == office_filter].copy()
+            filtered_df = unpaid_ar_df[unpaid_ar_df['OFFICE'] == office_filter].copy()
             partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER']]
             partner_df = partner_df.groupby('CLIENT_PARTNER', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
             partner_y_val = 'CLIENT_PARTNER'
@@ -149,7 +225,7 @@ WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
             office_df = partner_df
             office_y_val = partner_y_val
         elif partner_filter != 'All' and office_filter == 'All':
-            filtered_df = ar_df[ar_df['CLIENT_PARTNER'] == partner_filter].copy()
+            filtered_df = unpaid_ar_df[unpaid_ar_df['CLIENT_PARTNER'] == partner_filter].copy()
             partner_df = filtered_df[['UNPAID_INVOICE', 'OFFICE']]
             partner_df = partner_df.groupby('OFFICE', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
             partner_y_val = 'OFFICE'
@@ -157,7 +233,7 @@ WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
             office_df = partner_df
             office_y_val = partner_y_val
         else:
-            filtered_df = ar_df[(ar_df['CLIENT_PARTNER'] == partner_filter) & (ar_df['OFFICE'] == office_filter)]
+            filtered_df = unpaid_ar_df[(unpaid_ar_df['CLIENT_PARTNER'] == partner_filter) & (unpaid_ar_df['OFFICE'] == office_filter)]
             partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT']]
             partner_df = partner_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
             partner_y_val = 'CLIENT'
@@ -200,6 +276,11 @@ WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6);
             file_name='Outstanding AR by Client Office.csv',
             key='AR_office_table_download'
         )
+    
+    # except Exception as e:
+    #     st.write(e)
+
+    # try:
 
         aging_AR = filtered_df[['AGING_PERIOD', 'UNPAID_INVOICE']]
         aging_AR = aging_AR.groupby('AGING_PERIOD', as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()
