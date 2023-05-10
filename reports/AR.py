@@ -172,34 +172,27 @@ def level_4_ar(st):
                 ELSE C.OFFICE
             END;""", st.session_state['today'])
 
-    except Exception as e:
-        st.write(e)
+        # partner_df = get_rows("""SELECT DISTINCT CP.STAFFNAME
+        #     FROM PE.TRANS_AR AR
+        #         INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
+        #         INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX
+        #     WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
 
-    try:
-        partner_df = get_rows("""SELECT DISTINCT CP.STAFFNAME
-            FROM PE.TRANS_AR AR
-                INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
-                INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX
-            WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
+        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in unpaid_ar_df.CLIENT_PARTNER.unique()], key='ar_partner_filter')
 
-        partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in partner_df.STAFFNAME], key='ar_partner_filter')
-    except Exception as e:
-        st.write(e)
-    
-    try:
-        office_df = get_rows("""SELECT DISTINCT 
-            CASE
-                WHEN C.OFFICE = 'BHM' THEN 'ATL'
-                WHEN C.OFFICE = 'GAD' THEN 'LAS'
-                WHEN C.OFFICE = 'HSV' THEN 'NYC'
-                WHEN C.OFFICE = 'AO' THEN 'MPS'
-                ELSE C.OFFICE
-            END AS OFFICE
-        FROM PE.TRANS_AR AR
-            INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
-        WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
+        # office_df = get_rows("""SELECT DISTINCT 
+        #     CASE
+        #         WHEN C.OFFICE = 'BHM' THEN 'ATL'
+        #         WHEN C.OFFICE = 'GAD' THEN 'LAS'
+        #         WHEN C.OFFICE = 'HSV' THEN 'NYC'
+        #         WHEN C.OFFICE = 'AO' THEN 'MPS'
+        #         ELSE C.OFFICE
+        #     END AS OFFICE
+        # FROM PE.TRANS_AR AR
+        #     INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
+        # WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
 
-        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in office_df.OFFICE], key='ar_office_filter')
+        office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in unpaid_ar_df.OFFICE.unique()], key='ar_office_filter')
 
     except Exception as e:
         st.write(e)
@@ -235,7 +228,8 @@ def level_4_ar(st):
         else:
             filtered_df = unpaid_ar_df[(unpaid_ar_df['CLIENT_PARTNER'] == partner_filter) & (unpaid_ar_df['OFFICE'] == office_filter)]
             partner_df = filtered_df[['UNPAID_INVOICE', 'CLIENT']]
-            partner_df = partner_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
+            partner_df.columns = ['OUTSTANDING_AR', 'CLIENT']
+            # partner_df = partner_df.groupby('CLIENT', as_index=False).agg(OUTSTANDING_AR = ('UNPAID_INVOICE', 'sum')).reset_index()
             partner_y_val = 'CLIENT'
 
             office_df = partner_df
