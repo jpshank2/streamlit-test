@@ -345,7 +345,11 @@ def level_4_ar(st):
 
         current_csv = convert_df(filtered_df[['UNPAID_INVOICE', 'CLIENT_PARTNER', 'CLIENT', 'OFFICE']].groupby(['CLIENT_PARTNER', 'CLIENT', 'OFFICE'], as_index=False).agg(OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index())
 
-        filtered_df['CURRENTAR'] = where(filtered_df['AGING_PERIOD'] == '0-30 Days', filtered_df['UNPAID_INVOICE'], 0)#filtered_df['UNPAID_INVOICE'].where(filtered_df['AGING_PERIOD'] == '0-30 Days' else 0
+        filtered_df['CURRENTAR'] = where(filtered_df['AGING_PERIOD'] == '0-30 Days', filtered_df['UNPAID_INVOICE'], 0)
+        filtered_df['30_TO_60'] = where(filtered_df['AGING_PERIOD'] == '31-60 Days', filtered_df['UNPAID_INVOICE'], 0)
+        filtered_df['60_TO_90'] = where(filtered_df['AGING_PERIOD'] == '61-90 Days', filtered_df['UNPAID_INVOICE'], 0)
+        filtered_df['OVERDUEAR'] = where(filtered_df['AGING_PERIOD'] == 'Overdue AR', filtered_df['UNPAID_INVOICE'], 0)
+
         current_df = filtered_df[['UNPAID_INVOICE', 'CURRENTAR', 'OFFICE']]
         current_df = current_df.groupby(['OFFICE']).agg(CURRENT_AR= ('CURRENTAR', 'sum'), OUTSTANDING_AR=('UNPAID_INVOICE', 'sum')).reset_index()
         current_df['PERCENT_CURRENT'] = round((current_df['CURRENT_AR'] / current_df['OUTSTANDING_AR']) * 100, 2)
