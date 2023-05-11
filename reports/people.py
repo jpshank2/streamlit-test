@@ -121,6 +121,6 @@ def level_4_people(st):
     review_tab.dataframe(review_df)
     review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING', title='Reviews Ratings').update_layout({'legend_orientation': "h"}))
 
-    st.plotly_chart(scatter(review_df, x=review_df['DATE'], y=review_df['PROJECT'], markers=True, title='Reviews Timeline'), use_container_width=True)
+    st.plotly_chart(scatter(review_df, x=review_df['DATE'], y=review_df['PROJECT'], title='Reviews Timeline'), use_container_width=True)
 
     go_to_top(st.markdown)
