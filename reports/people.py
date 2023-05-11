@@ -78,6 +78,7 @@ def level_4_people(st):
     morale_tab.dataframe(morale_df[['STAFF_NAME', 'LEVEL', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']])
 
     review_df = get_rows(f"""select r.Date,
+        date_trunc('MONTH', r.DATE) as MONTH_YEAR,
         r.project,
         s.employee as Sender,
         rec.employee as Recipient,
@@ -90,8 +91,8 @@ def level_4_people(st):
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 2, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""", st.session_state['today'])
 
-    review_df['MONTH_YEAR'] = to_datetime(review_df['DATE'])
-    review_df['MONTH_YEAR'] = review_df['MONTH_YEAR'].dt.strftime('%m / %Y')
+    # review_df['MONTH_YEAR'] = to_datetime(review_df['DATE'])
+    # review_df['MONTH_YEAR'] = review_df['MONTH_YEAR'].dt.strftime('%m / %Y')
 
     st.markdown('### Review Reports')
     
@@ -103,24 +104,24 @@ def level_4_people(st):
     if sender_select == 'All' and recipient_select == 'All':
         review_df = review_df
 
-        grouped_review_df = review_df[['PROJECT', 'DATE']].groupby('DATE', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     elif sender_select == 'All' and recipient_select != 'All':
         review_df = review_df[review_df['RECIPIENT'] == recipient_select]
 
-        grouped_review_df = review_df[['PROJECT', 'DATE']].groupby('DATE', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     elif sender_select != 'All' and recipient_select == 'All':
         review_df = review_df[review_df['SENDER'] == sender_select]
 
-        grouped_review_df = review_df[['PROJECT', 'DATE']].groupby('DATE', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     else:
         review_df = review_df[(review_df['SENDER'] == sender_select) & (review_df['RECIPIENT'] == recipient_select)]
 
-        grouped_review_df = review_df[['PROJECT', 'DATE']].groupby('DATE', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
 
 
     review_tab.dataframe(review_df)
     review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING', title='Reviews Ratings').update_layout({'legend_orientation': "h"}))
 
-    st.plotly_chart(line(grouped_review_df, x='DATE', y='TOTAL_REVIEWS', markers=True, title='Reviews Timeline'), use_container_width=True)
+    st.plotly_chart(line(grouped_review_df, x='MONTH_YEAR', y='TOTAL_REVIEWS', markers=True, title='Reviews Timeline'), use_container_width=True)
 
     go_to_top(st.markdown)
