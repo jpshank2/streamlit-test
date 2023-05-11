@@ -92,5 +92,20 @@ def level_4_people(st):
 
     review_pie, review_tab = st.columns(2)
 
+    sender_select = review_pie.selectbox('Sender', ['All'] + [i for i in review_df.SENDER.sort_values().unique()])
+    recipient_select = review_tab.selectbox('Recipient', ['All'] + [i for i in review_df.RECIPIENT.sort_values().unique()])
+
+    if sender_select == 'All' and recipient_select == 'All':
+        review_df = review_df
+    elif sender_select == 'All' and recipient_select != 'All':
+        review_df = review_df[review_df['RECIPIENT'] == recipient_select]
+    elif sender_select != 'All' and recipient_select == 'All':
+        review_df = review_df[review_df['SENDER'] == sender_select]
+    else:
+        review_df = review_df[(review_df['SENDER'] == sender_select) & (review_df['RECIPIENT'] == recipient_select)]
+
+
     review_tab.dataframe(review_df)
     review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
+
+    go_to_top(st.markdown)
