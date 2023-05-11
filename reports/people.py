@@ -90,6 +90,11 @@ def level_4_people(st):
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 2, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""", st.session_state['today'])
 
+    morale_df['MONTH_YEAR'] = to_datetime(morale_df['DATE'])
+    morale_df['MONTH_YEAR'] = morale_df['MONTH_YEAR'].dt.strftime('%m / %Y')
+
+    st.markdown('### Review Reports')
+    
     review_pie, review_tab = st.columns(2)
 
     sender_select = review_pie.selectbox('Sender', ['All'] + [i for i in review_df.SENDER.sort_values().unique()])
@@ -97,15 +102,25 @@ def level_4_people(st):
 
     if sender_select == 'All' and recipient_select == 'All':
         review_df = review_df
+
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     elif sender_select == 'All' and recipient_select != 'All':
         review_df = review_df[review_df['RECIPIENT'] == recipient_select]
+
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     elif sender_select != 'All' and recipient_select == 'All':
         review_df = review_df[review_df['SENDER'] == sender_select]
+
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     else:
         review_df = review_df[(review_df['SENDER'] == sender_select) & (review_df['RECIPIENT'] == recipient_select)]
 
+        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+
 
     review_tab.dataframe(review_df)
-    review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
+    review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING', title='Reviews Ratings').update_layout({'legend_orientation': "h"}))
+
+    st.plotly_chart(line(grouped_review_df, x='MONTH_YEAR', y='TOTAL_REVIEWS', markers=True, title='Reviews Timeline'), use_container_width=True)
 
     go_to_top(st.markdown)
