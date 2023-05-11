@@ -90,8 +90,8 @@ def level_4_people(st):
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 2, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""", st.session_state['today'])
 
-    morale_df['MONTH_YEAR'] = to_datetime(morale_df['DATE'])
-    morale_df['MONTH_YEAR'] = morale_df['MONTH_YEAR'].dt.strftime('%m / %Y')
+    review_df['MONTH_YEAR'] = to_datetime(review_df['DATE'])
+    review_df['MONTH_YEAR'] = review_df['MONTH_YEAR'].dt.strftime('%m / %Y')
 
     st.markdown('### Review Reports')
     
