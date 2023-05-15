@@ -73,14 +73,15 @@ if 'company' in st.session_state:
     review, request = st.columns(2)
     # with review.form('review_form', clear_on_submit=True):
     review.markdown('#### Review a fellow staff')
+
+    if not requests.empty:
+        review.selectbox('Select a requested review', ['New'] + [i for i in requests.REQUEST_STRING], key='review_request')
+
+        review.markdown(' -- OR --')
+        
     review.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
 
     review.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
-
-    if not requests.empty:
-        review.markdown(' -- OR --')
-
-        review.selectbox('Select a requested review', ['New'] + [i for i in requests.REQUEST_STRING], key='review_request')
     
     review.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
     

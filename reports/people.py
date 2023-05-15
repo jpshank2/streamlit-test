@@ -104,22 +104,23 @@ def level_4_people(st):
     if sender_select == 'All' and recipient_select == 'All':
         review_df = review_df
 
-        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        # grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     elif sender_select == 'All' and recipient_select != 'All':
         review_df = review_df[review_df['RECIPIENT'] == recipient_select]
 
-        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        # grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     elif sender_select != 'All' and recipient_select == 'All':
         review_df = review_df[review_df['SENDER'] == sender_select]
 
-        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        # grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
     else:
         review_df = review_df[(review_df['SENDER'] == sender_select) & (review_df['RECIPIENT'] == recipient_select)]
 
-        grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
+        
+    grouped_review_df = review_df[['PROJECT', 'MONTH_YEAR']].groupby('MONTH_YEAR', as_index=False).agg(TOTAL_REVIEWS=('PROJECT', 'count')).reset_index()
 
 
-    review_tab.dataframe(review_df)
+    review_tab.dataframe(review_df[['DATE', 'PROJECT', 'SENDER', 'RECIPIENT', 'RATING', 'SEE_MORE', 'SEE_LESS']])
     review_pie.plotly_chart(pie(review_df.groupby('RATING', as_index=False).agg(TOTAL=('RATING', 'count')).reset_index(), values='TOTAL', names='RATING', title='Reviews Ratings').update_layout({'legend_orientation': "h"}))
 
     st.plotly_chart(line(grouped_review_df, x='MONTH_YEAR', y='TOTAL_REVIEWS', markers=True, title='Reviews Timeline'), use_container_width=True)
