@@ -78,7 +78,7 @@ if 'company' in st.session_state:
         review.selectbox('Select a requested review', ['New'] + [i for i in requests.REQUEST_STRING], key='review_request')
 
         review.markdown(' -- OR --')
-        
+
     review.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
 
     review.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
@@ -91,7 +91,7 @@ if 'company' in st.session_state:
 
     review.button('Submit', key='review_submit')
 
-    review.write(st.session_state)
+    # review.write(st.session_state)
         
         # st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'session': st.session_state})
     
