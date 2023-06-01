@@ -6,6 +6,7 @@ from utilities.loading_screen import loading
 from utilities.queries import get_rows, get_new_data
 from utilities.click_handlers import submit_review
 from utilities.session_handlers import create_session
+from utilities.validators import validate_dropdown
 from datetime import datetime
 from plotly.express import pie
 
@@ -53,25 +54,7 @@ if 'company' in st.session_state:
 
     st.markdown('# Magnify People')
 
-    create_session([('req_link', 0), ('staff_select', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]), ('project_input', '')])
-
-    # if 'req_link' not in st.session_state:
-    #     if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
-    #         st.session_state['req_link'] = 0
-    #     else:
-    #         st.session_state['req_link'] = requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].IDX
-
-    # if 'staff_select' not in st.session_state:
-    #     if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
-    #         st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
-    #     else:
-    #         st.session_state['staff_select'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].EMPLOYEE]
-
-    # if 'project_input' not in st.session_state:
-    #     if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
-    #         st.session_state['project_input'] = ''
-    #     else:
-    #         st.session_state['project_input'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].PROJECT]
+    create_session([('req_link', 0), ('staff_select', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]), ('project_input', ''), ('requested_review', False)])
 
     review, request = st.columns(2)
     
@@ -79,10 +62,11 @@ if 'company' in st.session_state:
 
     if not requests.empty:
         review.selectbox('Select a requested review', ['New'] + [i for i in requests.REQUEST_STRING], key='review_request')
+        st.session_state['requested_review'] = validate_dropdown(st.session_state['review_request'], ['New'])
 
         review.markdown(' -- OR --')
 
-    review.selectbox('Staff to review', st.session_state['staff_select'], key='review_employee')
+    review.selectbox('Staff to review', st.session_state['staff_select'] if st.session_state['requested_review'] == False else [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].EMPLOYEE.iloc[0]], key='review_employee')
 
     review.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'], key='review_project')
     
