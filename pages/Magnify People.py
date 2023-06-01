@@ -70,7 +70,7 @@ if 'company' in st.session_state:
 
     review.selectbox('Staff to review', st.session_state['staff_select'] if st.session_state['requested_review'] == False else [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].EMPLOYEE.iloc[0]], key='review_employee')
 
-    review.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'] if st.session_state['requested_review'] == False else [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].Project.iloc[0]], key='review_project')
+    review.text_input('What Job or Project are you reviewing?', value=st.session_state['project_input'] if st.session_state['requested_review'] == False else requests[requests['REQUEST_STRING'] == st.session_state['review_request']].PROJECT.iloc[0], key='review_project')
     
     review.radio('How did this staff do on the project?', ('Thumbs up', 'Okay', 'Thumbs down'), key='review_rating', horizontal=True)
     
