@@ -5,6 +5,7 @@ from io import BytesIO
 from utilities.loading_screen import loading
 from utilities.queries import get_rows, get_new_data
 from utilities.click_handlers import submit_review
+from utilities.session_handlers import create_session
 from datetime import datetime
 from plotly.express import pie
 
@@ -52,26 +53,28 @@ if 'company' in st.session_state:
 
     st.markdown('# Magnify People')
 
-    if 'req_link' not in st.session_state:
-        if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
-            st.session_state['req_link'] = 0
-        else:
-            st.session_state['req_link'] = requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].IDX
+    create_session([('req_link', 0), ('staff_select', [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]), ('project_input', '')])
 
-    if 'staff_select' not in st.session_state:
-        if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
-            st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
-        else:
-            st.session_state['staff_select'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].EMPLOYEE]
+    # if 'req_link' not in st.session_state:
+    #     if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
+    #         st.session_state['req_link'] = 0
+    #     else:
+    #         st.session_state['req_link'] = requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].IDX
 
-    if 'project_input' not in st.session_state:
-        if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
-            st.session_state['project_input'] = ''
-        else:
-            st.session_state['project_input'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].PROJECT]
+    # if 'staff_select' not in st.session_state:
+    #     if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
+    #         st.session_state['staff_select'] = [''] + [i for i in st.session_state.staff[st.session_state.staff['STAFFINDEX'] != st.session_state['user']['STAFFINDEX'].iloc[0]].EMPLOYEE]
+    #     else:
+    #         st.session_state['staff_select'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].EMPLOYEE]
+
+    # if 'project_input' not in st.session_state:
+    #     if 'review_request' not in st.session_state or st.session_state['review_request'] == 'New':
+    #         st.session_state['project_input'] = ''
+    #     else:
+    #         st.session_state['project_input'] = [requests[requests['REQUEST_STRING'] == st.session_state['review_request']].iloc[0].PROJECT]
 
     review, request = st.columns(2)
-    # with review.form('review_form', clear_on_submit=True):
+    
     review.markdown('#### Review a fellow staff')
 
     if not requests.empty:
