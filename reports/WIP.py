@@ -204,7 +204,7 @@ WHERE TRANSTYPE = 1
             real.metric('Avg Realization for Level CY', '{:.2f}%'.format(cy_benchmarks['real']['average']), '{:,.2f}%'.format(cy_benchmarks['real']['diff']))
             rate.metric('Avg Effective Rate for Level CY', '${:,.2f}'.format(cy_benchmarks['rate']['average']), '{:,.2f}'.format(cy_benchmarks['rate']['diff']))
 
-            st.markdown('#### Prior Year Billable Hours and Realization by Client')
+            st.markdown('#### Current Year Billable Hours and Realization by Client')
             my_hours_real_client(cy_wip_df[cy_wip_df['BILLABLE'] == 'True'][['CLIENT', 'BILLABLEHOURS', 'WIPBILLED', 'WIPAMOUNT']], st, 'CY')
         
         go_to_top(st.markdown)

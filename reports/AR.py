@@ -107,18 +107,6 @@ def level_4_ar(st):
     aging_visual, aging_table = visuals_two.tabs(['Visual', 'Table'])
     dynamic_one, dynamic_two, dynamic_three, dynamic_four, dynamic_five = st.columns(5)
 
-        # ar_df['UNPAID_INVOICE'] = ar_df['UNPAID_INVOICE'].round(2)
-        # ar_df['AGING_PERIOD'] = where(ar_df['AGING_PERIOD_SORT'] < 4, ar_df['OG_PERIOD'] + ' AR', 'Overdue 90+ AR')
-        # ar_df['CURRENTAR'] = where(ar_df['AGING_PERIOD'] == '0-30 Days AR', ar_df['UNPAID_INVOICE'], 0)
-        # ar_df['30_TO_60'] = where(ar_df['AGING_PERIOD'] == '31-60 Days AR', ar_df['UNPAID_INVOICE'], 0)
-        # ar_df['60_TO_90'] = where(ar_df['AGING_PERIOD'] == '61-90 Days AR', ar_df['UNPAID_INVOICE'], 0)
-        # ar_df['OVERDUEAR'] = where(ar_df['AGING_PERIOD'] == 'Overdue 90+ AR', ar_df['UNPAID_INVOICE'], 0)
-
-        # total_outstanding_AR = round(ar_df['UNPAID_INVOICE'].sum(), 2)
-        # percent_current = round((ar_df['CURRENTAR'].sum() / total_outstanding_AR) * 100, 2)
-        # AR_30_60 = round((ar_df['30_TO_60'].sum() / total_outstanding_AR) * 100, 2)
-        # AR_60_90 = round((ar_df['60_TO_90'].sum() / total_outstanding_AR) * 100, 2)
-        # overdue_AR = round((ar_df['OVERDUEAR'].sum() / total_outstanding_AR) * 100, 2)
     try:
         static_metric_ar_df = get_rows("""SELECT SUM(DEBTTRANUNPAID) AS UNPAID_INVOICE
                 ,ROUND(SUM(
@@ -172,25 +160,7 @@ def level_4_ar(st):
                 ELSE C.OFFICE
             END;""", st.session_state['today'])
 
-        # partner_df = get_rows("""SELECT DISTINCT CP.STAFFNAME
-        #     FROM PE.TRANS_AR AR
-        #         INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
-        #         INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX
-        #     WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
-
         partner_filter = filter_one.selectbox('Client Partner', ['All'] + [i for i in unpaid_ar_df.CLIENT_PARTNER.unique()], key='ar_partner_filter')
-
-        # office_df = get_rows("""SELECT DISTINCT 
-        #     CASE
-        #         WHEN C.OFFICE = 'BHM' THEN 'ATL'
-        #         WHEN C.OFFICE = 'GAD' THEN 'LAS'
-        #         WHEN C.OFFICE = 'HSV' THEN 'NYC'
-        #         WHEN C.OFFICE = 'AO' THEN 'MPS'
-        #         ELSE C.OFFICE
-        #     END AS OFFICE
-        # FROM PE.TRANS_AR AR
-        #     INNER JOIN DIM_CLIENT_MASTER C ON C.CONTINDEX = AR.CONTINDEX
-        # WHERE AR.DEBTTRANUNPAID <> 0 AND DEBTTRANTYPE IN (3, 6);""", st.session_state['today'])
 
         office_filter = filter_two.selectbox('Client Office', ['All'] + [i for i in unpaid_ar_df.OFFICE.unique()], key='ar_office_filter')
 
