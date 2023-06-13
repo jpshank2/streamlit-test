@@ -1,4 +1,6 @@
 -r https://raw.githubusercontent.com/snowflakedb/snowflake-connector-python/v2.7.9/tested_requirements/requirements_39.reqs
+# streamlit
+pyarrow==6.0.0
 pandas
 numpy
 plotly==5.13.0

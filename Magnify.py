@@ -3,6 +3,7 @@
 #
 
 import streamlit as st
+# from streamlit.web.server.websocket_headers import _get_websocket_headers
 from utilities.loading_screen import loading
 from PIL import Image
 from requests import get
@@ -17,6 +18,11 @@ st.set_page_config(
 MainHeaderImage = Image.open(BytesIO(get('https://i.imgur.com/khnCmv8.png').content))
 one, two, three= st.columns(3)
 two.image(MainHeaderImage, use_column_width = True)
+
+# headers = _get_websocket_headers()
+# if "X-Ms-Client-Principal-Name" in headers:
+#     user_email = headers["X-Ms-Client-Principal-Name"]
+#     st.write(f"logged in user is {user_email}")
 
 if 'company' not in st.session_state:
     loading(st)

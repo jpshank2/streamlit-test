@@ -2,3 +2,4 @@
 /config.toml
 /Dockerfile
 /docker-compose.yml
+/.streamlit

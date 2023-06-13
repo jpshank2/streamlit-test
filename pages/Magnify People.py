@@ -80,7 +80,7 @@ if 'company' in st.session_state:
 
     review.button('Submit', key='review_submit')
 
-    review.write(st.session_state)
+    # review.write(st.session_state)
         
         # st.form_submit_button('Submit', type='primary', on_click=submit_review, kwargs={'session': st.session_state})
     
