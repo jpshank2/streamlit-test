@@ -144,4 +144,4 @@ if 'company' in st.session_state:
 
     review_pie.plotly_chart(pie(review_pie_df, values='TOTAL', names='RATING').update_layout({'legend_orientation': "h"}))
 
-    review_pie_df = None
+    # review_pie_df = None
