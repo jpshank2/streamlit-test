@@ -135,7 +135,7 @@ if 'company' in st.session_state:
     from people.review r
         inner join PE.DIM_ANON_STAFF s on s.staffindex = r.sender
     where r.recipient = {st.session_state['user']['STAFFINDEX'].iloc[0]}
-        AND r.Date BETWEEN '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
+        AND r.Date BETWEEN '{datetime(st.session_state['fye'] - 2, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'], st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""", st.session_state['today'])
     
     review_table.dataframe(reviews, use_container_width=True)
