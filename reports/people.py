@@ -35,10 +35,9 @@ def level_4_people(st):
     boost_viz.plotly_chart(boost_fig, use_container_width=True)
     boost_tab.dataframe(boost_df[['EMPLOYEE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG', 'TOTAL_HOURS', 'UTILIZATION']])
 
-    morale_df = get_rows("""select s.staff_name, s.level, l.level_experience, m.*, enthusiasm + meaning + pride + challenge + energy + strong + recovery + endurance as agg, monthname(m.date) as month
+    morale_df = get_rows("""select s.staff_name, s.level, m.*, enthusiasm + meaning + pride + challenge + energy + strong + recovery + endurance as agg, monthname(m.date) as month
         from people.morale m
             inner join PE.DIM_ANON_STAFF s on s.staffindex = m.staff
-            inner join configurations.levels l on l.level_desc = s.level
         where s.staff_status = 'Active' and
             s.level not in ('No Selection', 'Unknown');""", st.session_state['today'])
 
@@ -67,9 +66,9 @@ def level_4_people(st):
         title = 'Average Morale by Staff and Month'
     else:
         morale_df = morale_df
-        grouped_morale_df = morale_df[['LEVEL_EXPERIENCE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']].groupby(['LEVEL_EXPERIENCE', 'DATE'], as_index=False).agg(AVERAGE_ENTHUSIASM=('ENTHUSIASM', 'mean'), AVERAGE_MEANING=('MEANING', 'mean'), AVERAGE_PRIDE=('PRIDE', 'mean'), AVERAGE_CHALLENGE=('CHALLENGE', 'mean'), AVERAGE_ENERGY=('ENERGY', 'mean'), AVERAGE_STRENGTH=('STRONG', 'mean'), AVERAGE_RECOVERY=('RECOVERY', 'mean'), AVERAGE_ENDURANCE=('ENDURANCE', 'mean'), AVERAGE_AGG=('AGG', 'mean')).reset_index()
-        color_val = 'LEVEL_EXPERIENCE'
-        hover_data = {'LEVEL_EXPERIENCE': False, 'AVERAGE_AGG': True, 'AVERAGE_ENTHUSIASM': True, 'AVERAGE_MEANING': True, 'AVERAGE_PRIDE': True, 'AVERAGE_CHALLENGE': True, 'AVERAGE_ENERGY': True, 'AVERAGE_STRENGTH': True, 'AVERAGE_RECOVERY': True, 'AVERAGE_ENDURANCE': True}
+        grouped_morale_df = morale_df[['LEVEL', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG']].groupby(['LEVEL', 'DATE'], as_index=False).agg(AVERAGE_ENTHUSIASM=('ENTHUSIASM', 'mean'), AVERAGE_MEANING=('MEANING', 'mean'), AVERAGE_PRIDE=('PRIDE', 'mean'), AVERAGE_CHALLENGE=('CHALLENGE', 'mean'), AVERAGE_ENERGY=('ENERGY', 'mean'), AVERAGE_STRENGTH=('STRONG', 'mean'), AVERAGE_RECOVERY=('RECOVERY', 'mean'), AVERAGE_ENDURANCE=('ENDURANCE', 'mean'), AVERAGE_AGG=('AGG', 'mean')).reset_index()
+        color_val = 'LEVEL'
+        hover_data = {'LEVEL': False, 'AVERAGE_AGG': True, 'AVERAGE_ENTHUSIASM': True, 'AVERAGE_MEANING': True, 'AVERAGE_PRIDE': True, 'AVERAGE_CHALLENGE': True, 'AVERAGE_ENERGY': True, 'AVERAGE_STRENGTH': True, 'AVERAGE_RECOVERY': True, 'AVERAGE_ENDURANCE': True}
         title = 'Average Morale by Level and Month'
 
     morale_viz, morale_tab = st.tabs(['Visual', 'Table'])
