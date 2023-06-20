@@ -28,7 +28,7 @@ def loading(st):
             if 'conn' not in st.session_state:
                 st.session_state['conn'] = init_connection()
             if 'user' not in st.session_state:
-                st.session_state['user'] = get_rows(f"SELECT S.*, L.LEVEL_PERMISSION FROM PE.DIM_ANON_STAFF S INNER JOIN CONFIGURATIONS.LEVELS L ON L.LEVEL_DESC = S.LEVEL WHERE STAFF_EMAIL = '{email}'", st.session_state['today'])
+                st.session_state['user'] = get_rows(f"SELECT S.* FROM PE.DIM_ANON_STAFF S WHERE STAFF_EMAIL = '{email}'", st.session_state['today'])
             st.write(st.session_state['user'])
             if 'level' not in st.session_state:
                 st.session_state['level'] = 4
