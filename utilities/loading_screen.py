@@ -10,6 +10,8 @@ def loading(st):
         email = 'kfluker@bmss.com'
     else:
         email = 'fsmith@bmss.com'#st.experimental_user.email
+
+    email = 'fsmith@bmss.com'
         
     domain = email.split('@')[-1]
 
@@ -27,6 +29,7 @@ def loading(st):
                 st.session_state['conn'] = init_connection()
             if 'user' not in st.session_state:
                 st.session_state['user'] = get_rows(f"SELECT S.*, L.LEVEL_PERMISSION FROM PE.DIM_ANON_STAFF S INNER JOIN CONFIGURATIONS.LEVELS L ON L.LEVEL_DESC = S.LEVEL WHERE STAFF_EMAIL = '{email}'", st.session_state['today'])
+            st.write(st.session_state['user'])
             if 'level' not in st.session_state:
                 st.session_state['level'] = 4
                 # if st.session_state['user'].LEVEL_PERMISSION.iloc[0] == 4 and st.session_state['user'].DEPARTMENT.iloc[0] == 'Steering Committee':
