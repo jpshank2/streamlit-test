@@ -135,7 +135,7 @@ def level_4_ar(st):
         static_four.metric(label='Target < 10%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_61_90'].iloc[0]), delta=('% AR in 61-90 Days' if static_metric_ar_df['PERCENT_61_90'].iloc[0] < 10 else '-% AR in 61-90 Days'))
         static_five.metric(label='Target < 5%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_OVERDUE'].iloc[0]), delta=('% AR over 90 Days' if static_metric_ar_df['PERCENT_OVERDUE'].iloc[0] < 5 else '-% AR over 90 Days'))
 
-        unpaid_ar_df = get_rows("""SsELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
+        unpaid_ar_df = get_rows("""SELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
             CP.EMPLOYEE AS CLIENT_PARTNER, 
             A.NAME AS CLIENT, 
             CASE 
