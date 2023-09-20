@@ -24,7 +24,7 @@ def level_4_people(st):
             ,MONTH(WIPDATE) AS WIPMONTH
             ,SUM(WIPHOURS) AS TOTAL_HOURS
             ,ROUND(SUM(CASE WHEN BILLABLE = 'True' THEN WIPHOURS ELSE 0 END) / SUM(WIPHOURS) * 100, 2) AS UTILIZATION
-        FROM PE.TRANS_WIP
+        FROM TRANS_WIP
         WHERE wipdate >= '2023-01-01'
         GROUP BY STAFFINDEX, month(WIPDATE)) WIP ON WIP.STAFFINDEX = P.STAFF AND WIP.WIPMONTH = MONTH(P.DATE) 
         ORDER BY STAFF, DATE;""", st.session_state['today'])
@@ -37,7 +37,7 @@ def level_4_people(st):
 
     morale_df = get_rows("""select s.staff_name, s.level, m.*, enthusiasm + meaning + pride + challenge + energy + strong + recovery + endurance as agg, monthname(m.date) as month
         from people.morale m
-            inner join PE.DIM_ANON_STAFF s on s.staffindex = m.staff
+            inner join CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF s on s.staffindex = m.staff
         where s.staff_status = 'Active' and
             s.level not in ('No Selection', 'Unknown');""", st.session_state['today'])
 
@@ -85,8 +85,8 @@ def level_4_people(st):
         r.see_more,
         r.see_less
     from people.review r
-        inner join PE.DIM_ANON_STAFF s on s.staffindex = r.sender
-        inner join PE.DIM_ANON_STAFF rec on rec.staffindex = r.recipient
+        inner join CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF s on s.staffindex = r.sender
+        inner join CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF rec on rec.staffindex = r.recipient
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 2, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
     ORDER BY R.DATE;""", st.session_state['today'])
 

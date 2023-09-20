@@ -132,7 +132,7 @@ def submit_review(session):
     #         ,R.PROJECT
     #         ,R.IDX
     #     from people.requests R
-    #         INNER JOIN PE.DIM_ANON_STAFF S ON S.STAFFINDEX = R.SENDER
+    #         INNER JOIN CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF S ON S.STAFFINDEX = R.SENDER
     #     WHERE R.REVIEW_LINK IS NULL
     #         AND R.RECIPIENT = {session['user']['STAFFINDEX'].iloc[0]}
     #     ORDER BY R.DATE;""", datetime.now())

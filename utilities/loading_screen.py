@@ -28,7 +28,7 @@ def loading(st):
             if 'conn' not in st.session_state:
                 st.session_state['conn'] = init_connection()
             if 'user' not in st.session_state:
-                st.session_state['user'] = get_rows(f"SELECT S.* FROM PE.DIM_ANON_STAFF S WHERE STAFF_EMAIL = '{email}'", st.session_state['today'])
+                st.session_state['user'] = get_rows(f"SELECT S.* FROM CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF S WHERE STAFF_EMAIL = '{email}'", st.session_state['today'])
             if 'level' not in st.session_state:
                 st.session_state['level'] = 4
                 # if st.session_state['user'].LEVEL_PERMISSION.iloc[0] == 4 and st.session_state['user'].DEPARTMENT.iloc[0] == 'Steering Committee':
@@ -42,4 +42,4 @@ def loading(st):
             if 'master_states' not in st.session_state:
                 st.session_state['master_states'] = ['company', 'conn', 'user', 'level', 'today', 'fye', 'color_map', 'master_states', 'staff']
             if 'staff' not in st.session_state:
-                st.session_state['staff'] = get_rows("SELECT * FROM PE.DIM_ANON_STAFF WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';", st.session_state['today'])
+                st.session_state['staff'] = get_rows("SELECT * FROM CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF WHERE STAFF_STATUS = 'Active' AND DEPARTMENT <> 'No Selection';", st.session_state['today'])
