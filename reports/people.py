@@ -19,7 +19,7 @@ def level_4_people(st):
         p.*,
         WIP.TOTAL_HOURS
         ,WIP.UTILIZATION
-        from people.demo_boost p
+        from client_bmss_sandbox_db.people.demo_boost p
             INNER JOIN (SELECT STAFFINDEX
             ,MONTH(WIPDATE) AS WIPMONTH
             ,SUM(WIPHOURS) AS TOTAL_HOURS
@@ -36,7 +36,7 @@ def level_4_people(st):
     boost_tab.dataframe(boost_df[['EMPLOYEE', 'DATE', 'ENTHUSIASM', 'MEANING', 'PRIDE', 'CHALLENGE', 'ENERGY', 'STRONG', 'RECOVERY', 'ENDURANCE', 'AGG', 'TOTAL_HOURS', 'UTILIZATION']])
 
     morale_df = get_rows("""select s.staff_name, s.level, m.*, enthusiasm + meaning + pride + challenge + energy + strong + recovery + endurance as agg, monthname(m.date) as month
-        from people.morale m
+        from CLIENT_BMSS_SANDBOX_DB.people.morale m
             inner join CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF s on s.staffindex = m.staff
         where s.staff_status = 'Active' and
             s.level not in ('No Selection', 'Unknown');""", st.session_state['today'])
@@ -84,7 +84,7 @@ def level_4_people(st):
         r.rating,
         r.see_more,
         r.see_less
-    from people.review r
+    from CLIENT_BMSS_SANDBOX_DB.people.review r
         inner join CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF s on s.staffindex = r.sender
         inner join CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF rec on rec.staffindex = r.recipient
     where r.Date BETWEEN '{datetime(st.session_state['fye'] - 2, st.session_state['company'].FISCAL_MONTH.iloc[0], 1).strftime('%Y-%m-%d')}' AND '{datetime(st.session_state['fye'] - 1, st.session_state['company'].FISCAL_MONTH.iloc[0], 1)}'
