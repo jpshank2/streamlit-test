@@ -29,7 +29,7 @@ def level_4_people(st):
         GROUP BY STAFFINDEX, month(WIPDATE)) WIP ON WIP.STAFFINDEX = P.STAFF AND WIP.WIPMONTH = MONTH(P.DATE) 
         ORDER BY STAFF, DATE;""", st.session_state['today'])
 
-    boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, hover_name='EMPLOYEE', hover_data={'EMPLOYEE': False, 'AGG': True, 'ENTHUSIASM': True, 'MEANING': True, 'PRIDE': True, 'CHALLENGE': True, 'ENERGY': True, 'STRONG': True, 'RECOVERY': True, 'ENDURANCE': True}, title='Staff with Significant Morale Drops')
+    boost_fig = line(boost_df, x='DATE', y='AGG', color='EMPLOYEE', markers=True, title='Staff with Significant Morale Drops')
 
     boost_viz, boost_tab = st.tabs(['Visual', 'Table'])
     boost_viz.plotly_chart(boost_fig, use_container_width=True)

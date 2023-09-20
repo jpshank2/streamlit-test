@@ -135,8 +135,8 @@ def level_4_ar(st):
         static_four.metric(label='Target < 10%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_61_90'].iloc[0]), delta=('% AR in 61-90 Days' if static_metric_ar_df['PERCENT_61_90'].iloc[0] < 10 else '-% AR in 61-90 Days'))
         static_five.metric(label='Target < 5%', value='{:.2f}%'.format(static_metric_ar_df['PERCENT_OVERDUE'].iloc[0]), delta=('% AR over 90 Days' if static_metric_ar_df['PERCENT_OVERDUE'].iloc[0] < 5 else '-% AR over 90 Days'))
 
-        unpaid_ar_df = get_rows("""SELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
-            CP.STAFFNAME AS CLIENT_PARTNER, 
+        unpaid_ar_df = get_rows("""SsELECT SUM(AR.DEBTTRANUNPAID) AS UNPAID_INVOICE, 
+            CP.EMPLOYEE AS CLIENT_PARTNER, 
             A.NAME AS CLIENT, 
             CASE 
                 WHEN C.OFFICE = 'BHM' THEN 'ATL'
@@ -147,10 +147,10 @@ def level_4_ar(st):
             END AS OFFICE
         from TRANS_AR AR
             INNER JOIN DIM_CLIENT_MASTER C ON C.ContIndex = AR.ContIndex 
-            INNER JOIN CLIENT_BMSS_SANDBOX_DB.ANONYMOUS.DIM_CLIENT_ANONYMOUS A ON A.CONTIDX = C.CONTINDEX AND A.NAME IS NOT NULL
-            INNER JOIN ANONYMOUS.DIM_STAFF_ANONYMOUS CP ON CP.STAFFIDX = C.CLIENT_PARTNER_IDX AND CP.STAFFNAME IS NOT NULL
+    INNER JOIN CLIENT_BMSS_SANDBOX_DB.ANONYMOUS.DIM_CLIENT_ANONymous A ON C.CONTINDEX = A.CONTIDX AND A.NAME IS NOT NULL
+    INNER JOIN CLIENT_BMSS_SANDBOX_DB.PE.DIM_ANON_STAFF CP ON CP.STAFFINDEX = C.CLIENT_PARTNER_IDX
         WHERE AR.DEBTTRANUNPAID <> 0 AND AR.DEBTTRANTYPE IN (3, 6)
-        GROUP BY CP.STAFFNAME, 
+        GROUP BY CP.EMPLOYEE, 
             A.NAME, 
             CASE 
                 WHEN C.OFFICE = 'BHM' THEN 'ATL'
